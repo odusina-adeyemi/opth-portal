@@ -1,0 +1,284 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // for production db on GCP and "local" db on Vercel
+}
+
+// TODO document the schema in Confluence
+model Action_Item {
+  id         String    @id @default(cuid())
+  action     String? // Surgeon visit
+  completed  Boolean?  @default(false)
+  createdAt  DateTime? @default(now())
+  dueDate    DateTime? @db.Date // date the action item is due
+  notes      String? // details of custom action item
+  provider   Provider? @relation(fields: [providerId], references: [id])
+  providerId String?   @unique
+  updatedAt  DateTime? @updatedAt
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     String?   @unique
+
+  @@map("action_items")
+}
+
+model Clinic {
+  id                     String           @id @default(cuid())
+  address                String?
+  city                   String?
+  email                  String?
+  faxNumber              String?
+  files                  File[]
+  state                  String?
+  name                   String?
+  notes                  String?
+  organization           Organization?    @relation(fields: [organizationId], references: [id])
+  organizationId         String?
+  patientReferrals       Patient[]        @relation("PatientToReferringClinic") // patients referred by this clinic
+  patients               Patient[] // m-m relationship between clinics and patients
+  patientContact         PatientContact[] // 1-m relationship between patientPreOpContact and patients
+  preOperations          PreOperation[]
+  postOperations         PostOperation[]
+  phoneNumber            String?
+  providers              Provider[] // m-m relationship between clinics and providers
+  providerClinics        ProviderClinic[]
+  referralManager        String? // name of person who makes referrals to oph provider
+  referrerStatusTimeline Json?            @db.Json // rn every clinic tied to a user will be affected
+  surgeonClinics         Patient[]        @relation("PatientToSurgeonClinic") // patients referred by this clinic
+  type                   String? // used to differentiate between optometrists and ophthalmologists
+  zipCode                String?
+  createdAt              DateTime?        @default(now())
+  updatedAt              DateTime?        @updatedAt
+
+  @@map("clinics")
+}
+
+model File {
+  id         String    @id @default(cuid())
+  clinic     Clinic?   @relation(fields: [clinicId], references: [id])
+  clinicId   String?
+  createdAt  DateTime? @default(now())
+  isArchived Boolean?  @default(false)
+  name       String? // name of the field that relates to the file
+  provider   Provider? @relation(fields: [providerId], references: [id])
+  providerId String?
+  url        String? // filepath in the cloud storage
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     String?
+  updatedAt  DateTime? @updatedAt
+
+  @@map("files")
+}
+
+model InsuranceCompanies {
+  id             String        @id @default(cuid())
+  isCommercial   Boolean?      @default(false)
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  name           String?
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @updatedAt
+
+  @@map("insurance_companies")
+}
+
+// Organizations represent the Viewpoint customers e.g. oph clinic groups (providers, users, clinics)
+// under one umbrella.  E.g. Brimhall Eye is an organization that has multiple clinics and providers and users
+model Organization {
+  id                 String               @id @default(cuid())
+  clinics            Clinic[] // 1-m relationship between organizations and clinics
+  insuranceCompanies InsuranceCompanies[]
+  name               String?
+  patients           Patient[] // 1-m relationship between organizations and patients
+  providers          Provider[] // 1-m relationship between organizations and providers
+  providerStatuses   ProviderStatus[] // 1-m relationship between organizations and provider statuses
+  users              User[] // 1-m relationship between organizations and users
+  createdAt          DateTime?            @default(now())
+  updatedAt          DateTime?            @updatedAt
+
+  @@map("organizations")
+}
+
+model Patient {
+  id                  String           @id @default(cuid())
+  clinics             Clinic[]
+  consentFormSigned   Boolean?         @default(false)
+  dob                 String // ISO 8601 date string 'YYYY-MM-DD'
+  email               String?
+  firstName           String?
+  generalNotes        String?
+  lastName            String?
+  organization        Organization?    @relation(fields: [organizationId], references: [id])
+  organizationId      String?
+  patientContacts     PatientContact[] // 1-m relationship between patientPreOpContact and patients
+  phoneNumber         String?
+  preOperations       PreOperation[]
+  postOperations      PostOperation[]
+  providers           Provider[] // m-m relationship between patients and providers
+  referringClinic     Clinic?          @relation("PatientToReferringClinic", fields: [referringClinicId], references: [id])
+  referringClinicId   String?
+  referringProvider   Provider?        @relation("PatientToReferringProvider", fields: [referringProviderId], references: [id])
+  referringProviderId String?
+  surgeon             Provider?        @relation("PatientToSurgeon", fields: [surgeonId], references: [id])
+  surgeonId           String?
+  surgeonClinic       Clinic?          @relation("PatientToSurgeonClinic", fields: [surgeonClinicId], references: [id])
+  surgeonClinicId     String?
+  createdAt           DateTime?        @default(now())
+  updatedAt           DateTime?        @updatedAt
+
+  @@map("patients")
+}
+
+model PatientContact {
+  id                              String     @id @default(cuid())
+  clinics                         Clinic[]
+  contactNotes                    String?
+  dateAttemptedFirstContact       DateTime?  @db.Timestamp
+  dateComanagerAware              DateTime?  @db.Timestamp
+  dateInitialAppointmentScheduled DateTime?  @db.Date
+  dateReferralReceived            DateTime?  @db.Timestamp
+  patient                         Patient?   @relation(fields: [patientId], references: [id])
+  patientId                       String?    @unique
+  providers                       Provider[] // m-m relationship between preOperations and providers
+  createdAt                       DateTime?  @default(now())
+  updatedAt                       DateTime?  @updatedAt
+
+  @@map("patientContacts")
+}
+
+model PreOperation {
+  id                          String     @id @default(cuid())
+  clinics                     Clinic[] // m-m relationship between operations and clinics
+  consultationReportSent      Boolean?
+  delayInSurgery              Boolean?
+  delayReason                 String?
+  delayLetterSent             Boolean?
+  eyesToBeDone                String?
+  firstEyeSurgeryDate         DateTime?  @db.Date
+  firstEyeSurgeryType         String?
+  initialAppointmentCompleted Boolean?
+  isComanage                  Boolean?
+  isMedicare                  Boolean?
+  patient                     Patient?   @relation(fields: [patientId], references: [id])
+  patientId                   String?    @unique
+  providers                   Provider[] // m-m relationship between operations and providers
+  reasonNotComanage           String?
+  reasonNoSurgeryScheduled    String?
+  secondEyeSurgeryDate        DateTime?  @db.Date
+  secondEyeSurgeryType        String?
+  surgeryScheduled            Boolean?
+  createdAt                   DateTime?  @default(now())
+  updatedAt                   DateTime?  @updatedAt
+
+  @@map("preOperations")
+}
+
+// Ophthalmologist or Optometrist
+model Provider {
+  id                    String           @id @default(cuid())
+  actionItem            Action_Item?
+  clinics               Clinic[] // an optom can work for multiple clinics
+  consentFormOnFile     Boolean?         @default(false)
+  dateVisitedByLiaison  String? // @db.Date wasn't working
+  dateVisitedByProvider String? // DateTime type wasn't working??
+  email                 String? // email address is optional
+  files                 File[]
+  firstName             String?
+  hasDemographics       Boolean?         @default(false)
+  hasW9                 Boolean?         @default(false)
+  image                 String?
+  lastName              String?
+  notes                 String?
+  organization          Organization?    @relation(fields: [organizationId], references: [id])
+  organizationId        String?
+  patients              Patient[] // patients referred by this provider
+  patientContact        PatientContact[] // 1-m relationship between patientPreOpContact and patients
+  patientsReferred      Patient[]        @relation("PatientToReferringProvider") // patients referred by this provider
+  phoneNumber           String?
+  preOperations         PreOperation[]
+  providerClinics       ProviderClinic[]
+  postOperations        PostOperation[]
+  specialties           String[]         @default([])
+  status                String?
+  surgeons              Patient[]        @relation("PatientToSurgeon") // surgeon for patients
+  type                  String? // optometrist or ophthalmologist
+  createdAt             DateTime?        @default(now())
+  updatedAt             DateTime?        @updatedAt
+
+  @@map("providers")
+}
+
+model ProviderClinic {
+  clinic            Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  clinicId          String
+  consentFormOnFile Boolean
+  hasDemographics   Boolean
+  hasW9             Boolean
+  provider          Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  providerId        String
+
+  @@id([providerId, clinicId]) // Composite primary key
+  @@map("provider_clinics")
+}
+
+model ProviderStatus {
+  id             String        @id @default(cuid())
+  description    String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  status         String?
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @updatedAt
+
+  @@map("provider_statuses")
+}
+
+model PostOperation {
+  id                           String     @id @default(cuid())
+  amountToBePaidFromInsurance  Decimal?
+  amountToPayProvider          Decimal?
+  clinics                      Clinic[] // m-m relationship between postOperations and clinics
+  checkNumber                  Int?
+  checkDelivered               Boolean?
+  checkDeliveryPaperwork       Boolean?
+  contactedReferrer            Boolean?
+  reasonNotReferredBack        String?
+  receivedOptomPostOpNotes     Boolean?
+  referredBackToOriginalClinic Boolean?
+  referralCompleted            Boolean?
+  referralCanceled             Boolean?
+  referralCanceledReason       String?
+  paidOptomDate                DateTime?  @db.Date
+  patient                      Patient?   @relation(fields: [patientId], references: [id])
+  patientId                    String?    @unique
+  providers                    Provider[] // m-m relationship between postOperations and providers
+  postOpVisitDate              DateTime?  @db.Date
+  postOpVisitType              String? // TODO ask if this is a relevant field
+  transferOfCare               Boolean?
+  transferOfCareDate           DateTime?  @db.Date
+  typeOfInsurance              String? // an oph clinic ONLY pays out on commercial insurance
+  createdAt                    DateTime?  @default(now())
+  updatedAt                    DateTime?  @updatedAt
+
+  @@map("postOperations")
+}
+
+// App user 
+model User {
+  id             String        @id @default(cuid())
+  actionItem     Action_Item?
+  email          String?       @unique
+  files          File[]
+  firstName      String?
+  lastName       String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  role           String?       @default("specialist")
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @updatedAt
+
+  @@map("users")
+}

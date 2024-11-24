@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { Organization } from '../../../../constants/types/types';
-import { query } from '../../_apolloClient/apolloClientServerSide';
+import client from '../../_apolloClient/apolloClientServerSide';
 
 export const GET_ORGANIZATION = gql`
   query organization($id: ID!) {
@@ -26,7 +26,7 @@ export const fetchOrganization = async (
   try {
     const {
       data: { organization },
-    } = await query({
+    } = await client.query({
       query: GET_ORGANIZATION,
       variables: { id },
     });
@@ -35,3 +35,5 @@ export const fetchOrganization = async (
     return {} as Organization;
   }
 };
+
+

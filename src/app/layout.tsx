@@ -12,6 +12,8 @@ import { getLoggedInUser } from '../lib/getLoggedInUser';
 import LayoutUseClient from './LayoutUseClient';
 import TopBar from '../ui/components/TopBar';
 import { validateJwtToken } from '../lib/utils/utils';
+import OptometristDashboard from "../app/optometrist/optometristLayout"
+import './globals.css';
 
 // The build would fail if this was not here
 export const dynamic = 'force-dynamic'; // Disables static pre-rendering
@@ -39,7 +41,7 @@ export default async function RootLayout({
     getLoggedInUser(),
     getAccessTokenRaw(),
   ]);
-
+console.log(user)
   let layout = null;
 
   if (!isAuth) {
@@ -49,11 +51,19 @@ export default async function RootLayout({
   const isValidToken = await validateJwtToken(token);
 
   if (isAuth && user?.id && isValidToken) {
+    const isOptometrist = user?.role?.includes('optometrist');
+
     layout = (
       <AppRouterCacheProvider>
         <ApolloWrapper token={token} user={user}>
           <CssBaseline>
-            <LayoutUseClient user={user}>{children}</LayoutUseClient>
+            {/* <OptometristDashboard user={user}>{children}</OptometristDashboard>
+            <LayoutUseClient user={user}>{children}</LayoutUseClient> */}
+            {isOptometrist ? (
+                <OptometristDashboard user={user}>{children}</OptometristDashboard>
+              ) : (
+                <LayoutUseClient user={user}>{children}</LayoutUseClient>
+              )}
             <MuiXLicense />
           </CssBaseline>
         </ApolloWrapper>

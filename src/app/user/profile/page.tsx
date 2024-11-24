@@ -17,7 +17,7 @@ console.log('user', user);
           fullWidth
           label="Name"
           margin={'normal'}
-          value={`${user.firstName} ${user.lastName}`}
+          value={`${user?.firstName} ${user?.lastName}`}
           variant="standard"
         />
         <TextField
@@ -25,7 +25,7 @@ console.log('user', user);
           fullWidth
           label="Email"
           margin={'normal'}
-          value={`${user.email}`}
+          value={`${user?.email}`}
           variant="standard"
         />
         <TextField
@@ -33,7 +33,7 @@ console.log('user', user);
           fullWidth
           label="Role"
           margin={'normal'}
-          value={`${user.role}`}
+          value={`${user?.role}`}
           variant="standard"
         />
         <TextField

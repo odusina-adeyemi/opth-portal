@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "baseUrl": "ophthalm-comanagement/src",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,12 +23,23 @@
       }
     ],
     "paths": {
-      "@/app": ["app/*"],
-      "@/api": ["app/api/*"],
-      "@/clinics": ["app/clinics/*"],
-      "@/providers": ["app/providers/*"],
-      "@/referrals": ["app/referrals/*"]
-    }
+      "@/app": [
+        "app/*"
+      ],
+      "@/api": [
+        "app/api/*"
+      ],
+      "@/clinics": [
+        "app/clinics/*"
+      ],
+      "@/providers": [
+        "app/providers/*"
+      ],
+      "@/referrals": [
+        "app/referrals/*"
+      ]
+    },
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
@@ -33,5 +48,7 @@
     ".next/types/**/*.ts",
     "src/lib/placeholder-data.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

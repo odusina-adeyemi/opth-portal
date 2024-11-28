@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Grid, Paper, Typography } from '@mui/material';
+import Image from 'next/image';
 import UsersListExpand from './_components/UsersListExpand';
 import Link from 'next/link';
 import { getLoggedInUser } from '../../../../lib/getLoggedInUser';
@@ -21,6 +22,15 @@ const UserMyAccountPage = async () => {
       justifyContent={'center'}
       pt={2}
       suppressHydrationWarning>
+<div> 
+  <Image
+    src="/assets/users.svg"
+    alt="Users"
+    width={50}
+    height={50}
+  />
+</div>
+<div></div>
       <PageTitleHeader title="My Account" />
       <Grid item xs={9} pt={1}>
         <Grid container>

@@ -51,7 +51,8 @@ console.log(user)
   const isValidToken = await validateJwtToken(token);
 
   if (isAuth && user?.id && isValidToken) {
-    const isOptometrist = user?.role?.includes('optometrist');
+    // const isOptometrist = user?.role?.includes('optometrist');
+    const isOptometrist = typeof user?.role === 'string' && user.role.toLowerCase() === 'optometrist';
 
     layout = (
       <AppRouterCacheProvider>

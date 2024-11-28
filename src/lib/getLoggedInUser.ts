@@ -85,3 +85,4 @@ export const getLoggedInUser = async (): Promise<User> => {
     return {} as User; // Return empty object on error
   }
 };
+

@@ -18,12 +18,12 @@ const UserSettings = ({ orgName }: { orgName: string }) => {
   return (
     <>
       <Box display={'flex'} alignItems={'center'}>
-        <Typography color={'white'} variant="caption">
+        <Typography>
           {orgName}
         </Typography>
       </Box>
       <IconButton onClick={handleClick}>
-        <AccountCircleIcon style={{ fill: 'white' }} />
+        <AccountCircleIcon  />
       </IconButton>
       <Menu
         id="basic-menu"

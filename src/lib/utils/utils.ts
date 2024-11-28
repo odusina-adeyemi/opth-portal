@@ -123,14 +123,37 @@ export const valueGetterFormatDbDate = (date: number): Date => {
   return new Date(slashFormatDate);
 };
 
+// export const validateJwtToken = async (token: string): Promise<boolean> => {
+//   // Verify and decode the JWT
+//   if (!token) return false;
+
+//   const validationResult: jwtValidationResponse = await validateToken({
+//     token,
+//     domain: process.env.KINDE_ISSUER_URL,
+//   });
+
+//   return validationResult.valid;
+// };
+
+
+
 export const validateJwtToken = async (token: string): Promise<boolean> => {
-  // Verify and decode the JWT
-  if (!token) return false;
+  if (!token) {
+    console.error("JWT validation failed: No token provided");
+    return false;
+  }
 
-  const validationResult: jwtValidationResponse = await validateToken({
-    token,
-    domain: process.env.KINDE_ISSUER_URL,
-  });
+  try {
+    console.log("Validating token with domain:", process.env.KINDE_ISSUER_URL);
+    const validationResult: jwtValidationResponse = await validateToken({
+      token,
+      domain: process.env.KINDE_ISSUER_URL,
+    });
 
-  return validationResult.valid;
+    console.log("Token validation result:", validationResult);
+    return validationResult?.valid || false;
+  } catch (error) {
+    console.error("JWT validation error:", error);
+    return false;
+  }
 };

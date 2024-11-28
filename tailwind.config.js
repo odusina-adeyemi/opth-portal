@@ -11,7 +11,7 @@ export const theme = {
   extend: {
     colors: {
       primary: {
-        light: '#7EC2D5', // A lighter shade of #4BA7C1
+        light: '#CDF7FF', // A lighter shade of #4BA7C1
         default: '#4BA7C1', // Main color
         dark: '#357A8A', // A darker shade of #4BA7C1
       },

@@ -19,6 +19,7 @@ import { useSnackbar } from '../../../../_components/SnackbarProvider';
 import { useModal } from '../../../../_components/ModalProvider';
 import CustomDialogContent from '../../../../_components/CustomDialogContent';
 import CenterLoadingIcon from '../../../../../ui/components/CenterLoadingIcon';
+import Image from 'next/image';
 
 const UsersListExpand = ({
   loggedInUser,
@@ -71,6 +72,7 @@ const UsersListExpand = ({
 
   return (
     <>
+    
       <CenterLoadingIcon show={deleteUserLoading} />
       <Typography variant="h6">
         Total users: {currentUsers.length}{' '}

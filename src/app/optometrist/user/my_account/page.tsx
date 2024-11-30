@@ -10,27 +10,70 @@ import InsuranceCompanyContainer from './_components/InsuranceCompanyContainer';
 import PageTitleHeader from '../../../../ui/components/PageTitleHeader';
 import { fetchOrganizationUsers } from '../../../api/graphql/queries/users';
 import ArchivedFilesTable from './_components/ArchivedFilesTable';
+import UsersTables from './_components/UserTable';
 
 const UserMyAccountPage = async () => {
   const user = await getLoggedInUser();
   const users = await fetchOrganizationUsers(user?.organizationId);
 
+  const optometristUsersCount = users.filter(
+    user => user.role === 'optometrist',
+  ).length;
+
   return (
-    <Grid
-      container
-      display={'flex'}
-      justifyContent={'center'}
-      pt={2}
+    <div
+      // container
+      // display={'flex'}
+      // justifyContent={'center'}
+      // pt={2}
       suppressHydrationWarning>
-<div> 
-  <Image
-    src="/assets/users.svg"
-    alt="Users"
-    width={50}
-    height={50}
-  />
-</div>
-<div></div>
+      <div className="flex flex-row p-6 gap-4 w-full mt-6">
+        <div className="flex bg-[#6D7FE1] h-36 w-full p-4 gap-3 rounded-md text-white">
+          <div>
+            <Image
+              className="fill-white"
+              src="/assets/users.svg"
+              alt="Users"
+              width={60}
+              height={50}
+            />
+          </div>
+          <div className=" text-white">
+            <Typography className=" !text-white" variant="h6">
+              Total Practice Users
+            </Typography>
+            <Typography className=" !text-white" variant="h4">
+              {users.length}
+            </Typography>
+          </div>
+        </div>
+
+        {/* bg-[#6D7FE1] */}
+        <div className="flex bg-[#6DC5E1] h-36 w-full p-4 gap-3 rounded-md text-white">
+          <div>
+            <Image
+              className="fill-white"
+              src="/assets/users.svg"
+              alt="Users"
+              width={60}
+              height={50}
+            />
+          </div>
+          <div className=" !text-white">
+            <Typography className=" !text-white" variant="h6">
+              Total Optometrist Users
+            </Typography>
+            <Typography className=" !text-white" variant="h4">
+              {optometristUsersCount}
+            </Typography>
+          </div>
+        </div>
+
+      </div>
+
+      <div className='p-6'>
+        <UsersTables />
+      </div>
       <PageTitleHeader title="My Account" />
       <Grid item xs={9} pt={1}>
         <Grid container>
@@ -69,7 +112,7 @@ const UserMyAccountPage = async () => {
           <ArchivedFilesTable />
         </Paper>
       </Grid>
-    </Grid>
+    </div>
   );
 };
 export default UserMyAccountPage;

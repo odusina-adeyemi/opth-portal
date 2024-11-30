@@ -1,8 +1,4 @@
-
-
-
-
-"use client"
+'use client';
 
 import React, { useCallback, useEffect, useMemo } from 'react';
 import {
@@ -39,7 +35,10 @@ interface OptometristDashboardProps {
 
 const drawerWidth = 240;
 
-export default function OptometristDashboard({ children, user }: OptometristDashboardProps) {
+export default function OptometristDashboard({
+  children,
+  user,
+}: OptometristDashboardProps) {
   const router = useRouter();
 
   // Role check: Redirect if the user is not an optometrist
@@ -52,13 +51,21 @@ export default function OptometristDashboard({ children, user }: OptometristDash
   // Navigation links for the sidebar
   const menuItems = useMemo(
     () => [
-      { text: 'Dashboard', icon: <Dashboard />, path: '/optometrist/dashboard' },
+      {
+        text: 'Dashboard',
+        icon: <Dashboard />,
+        path: '/optometrist/dashboard',
+      },
       { text: 'Patients', icon: <People />, path: '/optometrist/patients' },
-      { text: 'Appointments', icon: <Event />, path: '/optometrist/appointments' },
+      {
+        text: 'Appointments',
+        icon: <Event />,
+        path: '/optometrist/appointments',
+      },
       { text: 'Reports', icon: <Assessment />, path: '/optometrist/reports' },
       { text: 'Profile', icon: <Profile />, path: '/optometrist/user/profile' },
     ],
-    []
+    [],
   );
 
   // Handle navigation
@@ -66,7 +73,7 @@ export default function OptometristDashboard({ children, user }: OptometristDash
     (path: string) => {
       router.push(path);
     },
-    [router]
+    [router],
   );
 
   // Determine active route
@@ -82,8 +89,7 @@ export default function OptometristDashboard({ children, user }: OptometristDash
           <AppBar
             className="!bg-white text-gray-200" // Custom styles
             position="fixed"
-            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          >
+            sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
             <Toolbar>
               <Typography variant="h6" className="" noWrap sx={{ flexGrow: 1 }}>
                 Opt Dashboard
@@ -103,18 +109,21 @@ export default function OptometristDashboard({ children, user }: OptometristDash
             sx={{
               width: drawerWidth,
               flexShrink: 0,
-              [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-            }}
-          >
+              [`& .MuiDrawer-paper`]: {
+                width: drawerWidth,
+                boxSizing: 'border-box',
+              },
+            }}>
             <Toolbar />
             <Box sx={{ overflow: 'auto' }}>
               <List>
-                {menuItems.map((item) => (
+                {menuItems.map(item => (
                   <ListItem
                     key={item.text}
                     onClick={() => handleNavigation(item.path)}
                     sx={{
-                      backgroundColor: currentPath === item.path ? '#4BA7C1' : 'white', // Default and darker shade
+                      backgroundColor:
+                        currentPath === item.path ? '#4BA7C1' : 'white', // Default and darker shade
                       color: currentPath === item.path ? 'white' : '#4BA7C1', // Contrast with default color
                       '&:hover': {
                         backgroundColor: '#67B8D1', // Lighter shade for hover effect
@@ -128,16 +137,14 @@ export default function OptometristDashboard({ children, user }: OptometristDash
                       },
                       borderRadius: 1, // Adds a slight rounded effect
                       cursor: 'pointer',
-                    }}
-                  >
+                    }}>
                     <ListItemIcon
                       sx={{
                         color: currentPath === item.path ? 'white' : '#4BA7C1',
-                      }}
-                    >
+                      }}>
                       {item.icon}
                     </ListItemIcon>
-                    <ListItemText  primary={item.text} />
+                    <ListItemText primary={item.text} />
                   </ListItem>
                 ))}
               </List>
@@ -145,11 +152,15 @@ export default function OptometristDashboard({ children, user }: OptometristDash
           </Drawer>
 
           {/* Main Content */}
-          <div
+          {/* <div
             className="bg-[#f2f6f8] h-[100vh] w-full align-middle mt-8 p-0"
           >
             {children}
-          </div>
+          </div> */}
+          
+          <Box className="mt-8 p-0 bg-[#f2f6f8] h-[100vh]" sx={{ flexGrow: 1, maxWidth: 'calc(100% - 240px)' }}>
+            {children}
+          </Box>
         </Box>
       </ModalProvider>
     </SnackbarProvider>

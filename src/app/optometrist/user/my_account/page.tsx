@@ -72,46 +72,46 @@ const UserMyAccountPage = async () => {
       </div>
 
       <div className='p-6'>
-        <UsersTables />
+        <UsersTables users={users}/>
       </div>
-      <PageTitleHeader title="My Account" />
-      <Grid item xs={9} pt={1}>
+      {/* <PageTitleHeader title="My Account" /> */}
+      {/* <Grid item xs={9} pt={1}>
         <Grid container>
           <Grid item xs={6} mb={2} pr={1}>
-            <Paper sx={{ p: 2 }}>
-              <UsersListExpand loggedInUser={user} users={users} />
-              <Link href={'/user/new'}>
+            <Paper sx={{ p: 2 }}> */}
+              {/* <UsersListExpand loggedInUser={user} users={users} /> */}
+              {/* <Link href={'/user/new'}>
                 <Button variant="outlined" color="primary">
                   + New User
                 </Button>
-              </Link>
-            </Paper>
+              </Link> */}
+            {/* </Paper>
           </Grid>
-          <Grid item xs={6} mb={2} pl={1}>
-            <InsuranceCompanyContainer orgId={user.organizationId} />
-          </Grid>
+          <Grid item xs={6} mb={2} pl={1}> */}
+            {/* <InsuranceCompanyContainer orgId={user.organizationId} /> */}
+          {/* </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
 
-      <Grid item xs={9} mb={2}>
+      {/* <Grid item xs={9} mb={2}>
         <Paper sx={{ p: 2 }}>
           <Grid container>
+            <Grid item xs={6}> */}
+              {/* <Typography variant="h6">Provider statuses</Typography>
+              <ProviderStatusList orgId={user.organizationId} /> */}
+            {/* </Grid>
             <Grid item xs={6}>
-              <Typography variant="h6">Provider statuses</Typography>
-              <ProviderStatusList orgId={user.organizationId} />
-            </Grid>
-            <Grid item xs={6}>
-              <ProviderStatusFormContainer orgId={user.organizationId} />
-            </Grid>
-          </Grid>
-        </Paper>
-      </Grid>
-      <Grid item xs={12}>
+              {/* <ProviderStatusFormContainer orgId={user.organizationId} /> */}
+            {/* </Grid> */}
+          {/* </Grid> */}
+         {/* </Paper> */}
+      {/* </Grid> */} 
+      {/* <Grid item xs={12}>
         <Paper sx={{ p: 2 }}>
           <Typography variant="h6">Archived uploaded files</Typography>
           <ArchivedFilesTable />
         </Paper>
-      </Grid>
+      // </Grid> */}
     </div>
   );
 };

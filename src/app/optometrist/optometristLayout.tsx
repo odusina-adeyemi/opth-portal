@@ -63,7 +63,7 @@ export default function OptometristDashboard({
         path: '/optometrist/appointments',
       },
       { text: 'Reports', icon: <Assessment />, path: '/optometrist/reports' },
-      { text: 'Profile', icon: <Profile />, path: '/optometrist/user/profile' },
+      { text: 'Referrals', icon: <Profile />, path: '/optometrist/referrals' },
     ],
     [],
   );

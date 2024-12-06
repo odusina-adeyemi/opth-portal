@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { Clinic } from '../../../../constants/types/types';
-import { query } from '../../_apolloClient/apolloClientServerSide';
+import query from '../../_apolloClient/apolloClientServerSide';
 
 export const GET_CLINIC = gql`
   query clinic($id: ID!) {
@@ -58,7 +58,7 @@ export const fetchOrganizationClinics = async (
   try {
     const {
       data: { organizationClinics },
-    } = await query({
+    } = await query.query({
       query: GET_ORGANIZATION_CLINICS,
       variables: { organizationId },
     });
@@ -72,7 +72,7 @@ export const fetchClinic = async (id: string): Promise<Clinic> => {
   try {
     const {
       data: { clinic },
-    } = await query({
+    } = await query.query({
       fetchPolicy: 'network-only',
       query: GET_CLINIC,
       variables: { id },

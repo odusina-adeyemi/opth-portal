@@ -20,20 +20,20 @@ import {
   Patient,
   Provider,
   User,
-} from '../../../../constants/types/types';
-import AddProvider from '../../../_components/AddProvider';
-import AddClinic from '../../../_components/AddClinic';
-import { useSnackbar } from '../../../_components/SnackbarProvider';
+} from '../../../../../constants/types/types';
+import AddProvider from '../../../../_components/AddProvider';
+import AddClinic from '../../../../_components/AddClinic';
+import { useSnackbar } from '../../../../_components/SnackbarProvider';
 import {
   ADD_PATIENT,
   UPDATE_PATIENT,
-} from '../../../api/graphql/mutations/patientMutations';
+} from '../../../../api/graphql/mutations/patientMutations';
 import { useMutation } from '@apollo/client';
 import {
   formatPhoneNumber,
   required,
   undoPhoneNumberFormat,
-} from '../../../../lib/utils/utils';
+} from '../../../../../lib/utils/utils';
 
 interface ReferralFormProps {
   patient?: Patient;
@@ -50,7 +50,7 @@ interface FormValuesProps {
   patientLastName: string;
   patientDOB: string;
   phoneNumber: string;
-  provider: string; 
+  provider: string;
   surgeon: string;
   surgeonClinic: string;
 }

@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client';
+import { gql, FetchPolicy } from '@apollo/client';
 import { Provider } from '../../../../constants/types/types';
-import { query } from '../../_apolloClient/apolloClientServerSide';
+import client from '../../_apolloClient/apolloClientServerSide';
 export interface ProviderWithReferral extends Provider {
   lastReferralDate: Date | null | undefined;
 }
@@ -67,7 +67,7 @@ export const fetchOrganizationProviders = async (
   try {
     const {
       data: { organizationProviders },
-    } = await query({
+    } = await client.query({
       query: GET_ORGANIZATION_PROVIDERS,
       variables: { organizationId },
     });
@@ -94,4 +94,18 @@ export const fetchProvider = async (id: string): Promise<Provider> => {
   }
 };
 
-// Can add back fetchProviders where you can pass in state and type as args
+async function query({
+  fetchPolicy,
+  query,
+  variables,
+}: {
+  fetchPolicy: FetchPolicy;
+  query: import('graphql').DocumentNode;
+  variables: { id: string };
+}): Promise<{ data: { provider: any } }> {
+  return client.query({
+    fetchPolicy,
+    query,
+    variables,
+  });
+}

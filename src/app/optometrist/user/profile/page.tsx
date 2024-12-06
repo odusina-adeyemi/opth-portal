@@ -155,16 +155,26 @@ import { getLoggedInUser } from "../../../../lib/getLoggedInUser";
 import { fetchOrganization } from "../../../api/graphql/queries/organizations";
 import OptometristDashboard from "../../optometristLayout";
 import UserProfileCard from "./_component/UserProfileCard";
+import LogoutButton from '../../_components/logOut';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const UserProfilePage = async () => {
+
   const user = await getLoggedInUser();
   const organization = await fetchOrganization(user?.organizationId);
-
+console.log("Organization:", organization) 
   return (
     <OptometristDashboard user={user}>
       <UserProfileCard user={user} organization={organization} />
+      {/* <LogoutButton />  */}
+     
+
     </OptometristDashboard>
   );
 };
 
 export default UserProfilePage;
+
+
+

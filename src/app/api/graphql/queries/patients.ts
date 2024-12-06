@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import prisma from '../../../../../lib/prisma';
 import { Patient } from '../../../../constants/types/types';
-import { query } from '../../_apolloClient/apolloClientServerSide';
+import query from '../../_apolloClient/apolloClientServerSide';
 
 export const GET_PATIENT = gql`
   query GetPatient($id: ID!) {
@@ -163,7 +163,7 @@ export const fetchOrganizationPatients = async (
   try {
     const {
       data: { organizationPatients },
-    } = await query({
+    } = await query.query({
       query: GET_ORGANIZATION_PATIENTS,
       variables: { organizationId },
     });
@@ -178,7 +178,7 @@ export const fetchPatient = async (id: string): Promise<Patient> => {
   try {
     const {
       data: { patient },
-    } = await query({
+    } = await query.query({
       query: GET_PATIENT,
       fetchPolicy: 'network-only',
       variables: { id },

@@ -13,6 +13,7 @@ export const GET_PATIENT = gql`
       dob
       email
       phoneNumber
+      consentFormSigned
       clinics {
         id
         city
@@ -33,25 +34,6 @@ export const GET_PATIENT = gql`
         status
         type
       }
-      referringClinicId
-      referringProviderId
-      surgeonClinicId
-      surgeonId
-    }
-  }
-`;
-
-export const GET_ORGANIZATION_PATIENTS = gql`
-  query GetOrganizationPatients($organizationId: ID!) {
-    organizationPatients(organizationId: $organizationId) {
-      id
-      createdAt
-      dob
-      email
-      firstName
-      generalNotes
-      lastName
-      phoneNumber
       referringClinic {
         id
         city
@@ -74,6 +56,88 @@ export const GET_ORGANIZATION_PATIENTS = gql`
         id
         firstName
         lastName
+      }
+      referralInfo {
+        id
+        referralDate
+        referralReason
+      }
+      insuranceInfo {
+        id
+        insuranceProvider
+        policyNumber
+      }
+      appointmentInfo {
+        id
+        appointmentDate
+        appointmentType
+      }
+      createdAt
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_PATIENTS = gql`
+  query GetOrganizationPatients($organizationId: ID!) {
+    organizationPatients(organizationId: $organizationId) {
+      id
+      createdAt
+      dob
+      email
+      firstName
+      generalNotes
+      lastName
+      phoneNumber
+      consentFormSigned
+      clinics {
+        id
+        city
+        name
+        state
+      }
+      providers {
+        id
+        firstName
+        lastName
+        status
+      }
+      referringClinic {
+        id
+        city
+        name
+        state
+      }
+      referringProvider {
+        id
+        firstName
+        lastName
+        status
+      }
+      surgeonClinic {
+        id
+        city
+        name
+        state
+      }
+      surgeon {
+        id
+        firstName
+        lastName
+      }
+      referralInfo {
+        id
+        referralDate
+        referralReason
+      }
+      insuranceInfo {
+        id
+        insuranceProvider
+        policyNumber
+      }
+      appointmentInfo {
+        id
+        appointmentDate
+        appointmentType
       }
     }
   }

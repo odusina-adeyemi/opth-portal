@@ -2,6 +2,7 @@ import { Patient } from '../../../../constants/types/types';
 import { gql } from '@apollo/client';
 import {
   array,
+  boolean,
   defaulted,
   pattern,
   object,
@@ -18,6 +19,7 @@ import {
 
 export const CreatePatientStruct = object({
   clinics: array(pattern(string(), idRegex)),
+  consentFormSigned: optional(boolean()),
   dob: pattern(string(), dateRegex),
   email: optional(defaulted(emailOrEmpty(), undefined)),
   firstName: pattern(string(), nameRegex),
@@ -30,10 +32,14 @@ export const CreatePatientStruct = object({
   referringProviderId: pattern(string(), idRegex),
   surgeonClinicId: optional(pattern(string(), idRegex)),
   surgeonId: optional(pattern(string(), idRegex)),
+  referralInfoId: optional(pattern(string(), idRegex)),
+  insuranceInfoId: optional(pattern(string(), idRegex)),
+  appointmentInfoId: optional(pattern(string(), idRegex)),
 });
 
 export const UpdatePatientStruct = object({
   clinics: optional(array(pattern(string(), idRegex))),
+  consentFormSigned: optional(boolean()),
   dob: optional(pattern(string(), dateRegex)),
   email: optional(emailOrEmpty()),
   firstName: optional(pattern(string(), nameRegex)),
@@ -46,6 +52,9 @@ export const UpdatePatientStruct = object({
   referringProviderId: optional(pattern(string(), idRegex)),
   surgeonClinicId: optional(pattern(string(), idRegex)),
   surgeonId: optional(pattern(string(), idRegex)),
+  referralInfoId: optional(pattern(string(), idRegex)),
+  insuranceInfoId: optional(pattern(string(), idRegex)),
+  appointmentInfoId: optional(pattern(string(), idRegex)),
 });
 
 export type PatientCreateUpdateInputType = Omit<Patient, 'id'> & {
@@ -63,11 +72,15 @@ export const ADD_PATIENT = gql`
           id
         }
       }
+      consentFormSigned
       dob
       email
       firstName
       lastName
       phoneNumber
+      referralInfoId
+      insuranceInfoId
+      appointmentInfoId
     }
   }
 `;
@@ -90,11 +103,15 @@ export const UPDATE_PATIENT = gql`
           id
         }
       }
+      consentFormSigned
       dob
       email
       firstName
       lastName
       phoneNumber
+      referralInfoId
+      insuranceInfoId
+      appointmentInfoId
     }
   }
 `;

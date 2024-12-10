@@ -3,6 +3,7 @@ export const typeDef = `#graphql
     #  input type for creating a patient
     input PatientInput {
         clinics: [ID]
+        consentFormSigned: Boolean
         dob: String
         email: String
         firstName: String!
@@ -15,11 +16,15 @@ export const typeDef = `#graphql
         referringProviderId: ID
         surgeonClinicId: ID
         surgeonId: ID
+        referralInfoId: ID
+        insuranceInfoId: ID
+        appointmentInfoId: ID
     }
 
     type Patient {
         id: ID!
         clinics: [Clinic]
+        consentFormSigned: Boolean
         createdAt: String
         dob: String
         email: String
@@ -40,8 +45,13 @@ export const typeDef = `#graphql
         referringProviderId: ID
         surgeon: Provider
         surgeonId: ID
+        referralInfo: ReferralInfo
+        referralInfoId: ID
+        insuranceInfo: InsuranceInfo
+        insuranceInfoId: ID
+        appointmentInfo: AppointmentInfo
+        appointmentInfoId: ID
     }
-
 
     type Query {
         organizationPatients(
@@ -55,8 +65,6 @@ export const typeDef = `#graphql
         patient(id: ID!): Patient
     }
 
-    # Note to self: the mutation function found in patientMutation.ts must follow exactly
-    # the same structure as the createPatient mutation below
     type Mutation {
         createPatient(patientInput: PatientInput): Patient @auth
         deletePatient(id: ID!): Patient @auth

@@ -284,34 +284,3 @@ model User {
 }
 
 
-
-
-model referredPatient {
-  id                  String           @id @default(cuid())
-  clinics             Clinic[]
-  consentFormSigned   Boolean?         @default(false)
-  dob                 String // ISO 8601 date string 'YYYY-MM-DD'
-  email               String?
-  firstName           String?
-  generalNotes        String?
-  lastName            String?
-  organization        Organization?    @relation(fields: [organizationId], references: [id])
-  organizationId      String?
-  patientContacts     PatientContact[] // 1-m relationship between patientPreOpContact and patients
-  phoneNumber         String?
-  preOperations       PreOperation[]
-  postOperations      PostOperation[]
-  providers           Provider[] // m-m relationship between patients and providers
-  referringClinic     Clinic?          @relation("PatientToReferringClinic", fields: [referringClinicId], references: [id])
-  referringClinicId   String?
-  referringProvider   Provider?        @relation("PatientToReferringProvider", fields: [referringProviderId], references: [id])
-  referringProviderId String?
-  surgeon             Provider?        @relation("PatientToSurgeon", fields: [surgeonId], references: [id])
-  surgeonId           String?
-  surgeonClinic       Clinic?          @relation("PatientToSurgeonClinic", fields: [surgeonClinicId], references: [id])
-  surgeonClinicId     String?
-  createdAt           DateTime?        @default(now())
-  updatedAt           DateTime?        @updatedAt
-
-  @@map("patients")
-}

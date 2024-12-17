@@ -64,6 +64,7 @@ export default function OptometristDashboard({
       },
       { text: 'Reports', icon: <Assessment />, path: '/optometrist/reports' },
       { text: 'Referrals', icon: <Profile />, path: '/optometrist/referrals' },
+
     ],
     [],
   );

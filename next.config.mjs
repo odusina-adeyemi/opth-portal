@@ -1,6 +1,15 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+
+    experimental: {
+        scrollRestoration: true, // Retains scroll position between navigations
+        externalDir: true,       // Allows accessing files outside the root directory
+      },
+      reactStrictMode: true,      // Enforces React best practices
+           // Enforces React best practices
+
+
     // webpack: (config, { isServer }) => {
     //     if (!isServer) {
     //       config.resolve.fallback = {

@@ -33,7 +33,7 @@ import { pageTitleHeaderBackgroundColor } from '../../../../lib/css/utils';
 const EditToolbar = () => {
   return (
     <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
-      <Link href="/referrals/new">
+      <Link href="/optometrist/referrals/new">
         <Button
           startIcon={<Add />}
           sx={{ color: pageTitleHeaderBackgroundColor, padding: '0 16px' }}>

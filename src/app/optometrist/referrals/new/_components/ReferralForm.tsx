@@ -511,13 +511,19 @@
 import React, { useRef, useState } from 'react';
 import {
   Button,
+  Checkbox,
   CircularProgress,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   FormHelperText,
+  FormLabel,
   Grid,
   InputLabel,
   MenuItem,
   Paper,
+  Radio,
+  RadioGroup,
   Select,
   TextField,
   Typography,
@@ -541,6 +547,9 @@ import {
   required,
   undoPhoneNumberFormat,
 } from '../../../../../lib/utils/utils';
+import AddProvider from '../../../../_components/AddProvider';
+import AddClinic from '../../../../_components/AddClinic';
+import LocationDropdowns from '../../_components/StatesFetch';
 
 interface ReferralFormProps {
   patient?: Patient;
@@ -612,8 +621,6 @@ const ReferralForm = ({
       surgeonId: surgeonIdSelected === '' ? undefined : surgeonIdSelected,
     };
 
-
-
     // const patientData = {
     //   clinics: clinics, // m-m relationship
     //   dob: values.patientDOB,
@@ -634,8 +641,6 @@ const ReferralForm = ({
     //   consultationType: values.consultationType,
     //   comanagement: values.comanagement,
     // };
-
-
 
     if (patient) {
       updatePatient({
@@ -679,82 +684,116 @@ const ReferralForm = ({
       onSubmit={onSubmit}
       render={({ handleSubmit, submitting, values }) => (
         <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
-   {/* Reffering Provider Information       */}
-         <Grid item xs={12}>
+          {/* Reffering Provider Information       */}
+          <Grid item xs={12}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', m: 1 }}>
-            Referring Provider Information 
+              Referring Provider Information
             </Typography>
           </Grid>
 
+          <Grid item xs={6} alignContent={'center'} pr={2}>
+            <Typography sx={{ mt: 1, mx: 1 }} variant="caption">
+              Select an optometrist
+            </Typography>
+          </Grid>
+          <Grid item xs={6} alignContent={'center'}>
+            {!values.provider?.length && (
+              <Typography sx={{ mt: 1, mx: 1 }} variant="caption">
+                Select a provider first
+              </Typography>
+            )}
+          </Grid>
           <Grid item xs={6}>
             <Field
-              name="patientFirstName"
-              initialValue={patient?.firstName ?? ''}
+              name="provider"
+              initialValue={patient ? patient.referringProviderId : undefined}
               validate={required}>
               {({ input, meta }) => (
-                <TextField
-                  error={meta.error && meta.touched}
-                  label="First Name *"
-                  fullWidth
-                  {...input}
-                  variant="outlined"
-                />
+                <FormControl fullWidth error={meta.error && meta.touched}>
+                  <InputLabel id="provider">Provider *</InputLabel>
+                  <Select
+                    id="provider"
+                    label="Provider *"
+                    name={input.name}
+                    onChange={event => {
+                      input.onChange(event);
+                      setOptomIdSelected(event.target.value);
+                    }}
+                    value={optomIdSelected}
+                    variant="outlined">
+                    <MenuItem value={''}>Select a provider</MenuItem>
+                    {optoms?.map(optom => {
+                      return (
+                        <MenuItem key={optom.id} value={optom.id}>
+                          {optom.firstName} {optom.lastName}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  {/* <FormHelperText>
+                          <Link href="/providers/new">
+                            Provider not found?
+                            <AddProvider />
+                          </Link>
+                        </FormHelperText> */}
+                </FormControl>
+              )}
+            </Field>
+          </Grid>
+          <Grid item xs={6}>
+            <Field
+              name="clinic"
+              initialValue={patient?.referringClinicId ?? undefined}
+              validate={required}>
+              {({ input, meta }) => (
+                <FormControl fullWidth error={meta.error && meta.touched}>
+                  <InputLabel id="clinic">Clinic *</InputLabel>
+                  <Select
+                    id="clinic"
+                    disabled={values?.provider ? false : true}
+                    label="Clinic *"
+                    fullWidth
+                    name={input.name}
+                    onChange={input.onChange}
+                    value={input.value}
+                    variant="outlined"
+                    type="text">
+                    <MenuItem value={''}>Select a clinic</MenuItem>
+                    {optom?.clinics?.map((clinic: Clinic) => {
+                      return (
+                        <MenuItem key={clinic.id} value={clinic.id}>
+                          {clinic.name} - {clinic.city}, {clinic.state}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  {/* <FormHelperText>
+                          <Link href={'/clinics/new'}>
+                            Clinic not found?
+                            <AddClinic />
+                          </Link>
+                        </FormHelperText> */}
+                </FormControl>
               )}
             </Field>
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid sx={{ display: 'flex', gap: 1 }} item xs={6}>
             <Field
-              name="patientLastName"
-              initialValue={patient?.lastName ?? ''}
-              validate={required}>
-              {({ input, meta }) => (
-                <TextField
-                  error={meta.error && meta.touched}
-                  label="Last Name *"
-                  fullWidth
-                  {...input}
-                  variant="outlined"
-                />
-              )}
-            </Field>
-          </Grid>
-
-          <Grid item xs={6}>
-            <Field
-              name="patientDOB"
+              name="email"
               initialValue={patient?.dob ?? undefined}
               validate={required}>
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
-                  label="Date of Birth *"
-                  type="date"
+                  label="Email*"
+                  type="email"
                   fullWidth
                   {...input}
                   variant="outlined"
                 />
               )}
             </Field>
-          </Grid>
-
-          <Grid item xs={6}>
-            <Field
-              name="email"
-              initialValue={patient?.email ?? ''}
-              validate={required}>
-              {({ input }) => (
-                <TextField
-                  label="Email *"
-                  fullWidth
-                  {...input}
-                  variant="outlined"
-                />
-              )}
-            </Field>
-          </Grid>
-
-          <Grid item xs={6}>
             <Field
               name="phoneNumber"
               initialValue={patient?.phoneNumber ?? ''}
@@ -769,10 +808,69 @@ const ReferralForm = ({
               )}
             </Field>
           </Grid>
-         
-         
-         
-         
+
+          <Grid item xs={6}>
+            <Field
+              name="fax"
+              initialValue={patient?.email ?? ''}
+              validate={required}>
+              {({ input }) => (
+                <TextField
+                  label="Fax *"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+          <Grid item xs={6}>
+            <Field
+              name="address"
+              initialValue={patient?.email ?? ''}
+              validate={required}>
+              {({ input }) => (
+                <TextField
+                  label="Address *"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+
+          <Grid sx={{ display: 'flex', gap: 1 }} item xs={6}>
+            <Field
+              name="city"
+              initialValue={patient?.dob ?? undefined}
+              validate={required}>
+              {({ input, meta }) => (
+                <TextField
+                  error={meta.error && meta.touched}
+                  label="City*"
+                  type="text"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+            <Field
+              name="zip"
+              initialValue={patient?.phoneNumber ?? ''}
+              validate={required}>
+              {({ input }) => (
+                <TextField
+                  label="Zip *"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+
           <Grid item xs={12}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', m: 1 }}>
               Patient Information
@@ -813,7 +911,7 @@ const ReferralForm = ({
             </Field>
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid sx={{ display: 'flex', gap: 1 }} item xs={6}>
             <Field
               name="patientDOB"
               initialValue={patient?.dob ?? undefined}
@@ -829,9 +927,6 @@ const ReferralForm = ({
                 />
               )}
             </Field>
-          </Grid>
-
-          <Grid item xs={6}>
             <Field
               name="email"
               initialValue={patient?.email ?? ''}
@@ -839,6 +934,7 @@ const ReferralForm = ({
               {({ input }) => (
                 <TextField
                   label="Email *"
+                  typeof="email"
                   fullWidth
                   {...input}
                   variant="outlined"
@@ -863,28 +959,14 @@ const ReferralForm = ({
             </Field>
           </Grid>
 
-          <Grid className='flex gap-2 ' item xs={6}>
+          <Grid item xs={12}>
             <Field
               name="address"
               initialValue={patient?.phoneNumber ?? ''}
               validate={required}>
               {({ input }) => (
                 <TextField
-                  label="Phone Number *"
-                  fullWidth
-                  {...input}
-                  variant="outlined"
-                />
-              )}
-            </Field>
-
-            <Field
-              name="address"
-              initialValue={patient?.phoneNumber ?? ''}
-              validate={required}>
-              {({ input }) => (
-                <TextField
-                  label="Phone Number *"
+                  label="Address *"
                   fullWidth
                   {...input}
                   variant="outlined"
@@ -893,12 +975,135 @@ const ReferralForm = ({
             </Field>
           </Grid>
 
+          <Grid item xs={6}>
+            <Field
+              name="gender"
+              initialValue={patient?.phoneNumber ?? ''}
+              validate={required}>
+              {({ input, meta }) => (
+                <FormControl fullWidth error={meta.error && meta.touched}>
+                  <InputLabel id="gender">Gender *</InputLabel>
+                  <Select
+                    id="gender"
+                    label="Gender *"
+                    {...input}
+                    variant="outlined">
+                    <MenuItem value="male">Male</MenuItem>
+                    <MenuItem value="female">Female</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            </Field>
+          </Grid>
 
+          <Grid className="flex gap-2 " item xs={6}>
+            <Field
+              name="City"
+              initialValue={patient?.phoneNumber ?? ''}
+              validate={required}>
+              {({ input }) => (
+                <TextField
+                  label="City *"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
 
+            <Field
+              name="Zip"
+              initialValue={patient?.phoneNumber ?? ''}
+              validate={required}>
+              {({ input }) => (
+                <TextField
+                  label="Zip *"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+
+          {/* <Grid item xs={12} md={6}>
+          </Grid> */}
+
+          {/* Language Field */}
+          <Grid className="flex gap-12 " item xs={12}>
+            {/* Interpreter Needed - Radio Buttons - interpreterNeeded */}
+            <Field name="interpreterNeeded" initialValue={patient?.email ?? ''}>
+              {({ input }) => (
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Interpreter Needed?</FormLabel>
+                  <RadioGroup {...input} row>
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio color="primary" />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio color="primary" />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              )}
+            </Field>
+            <Grid item xs={6}>
+              <Field
+                name="language"
+                initialValue={patient?.email ?? ''}
+                validate={required}>
+                {({ input }) => (
+                  <TextField
+                    label="Language *"
+                    fullWidth
+                    {...input}
+                    variant="outlined"
+                  />
+                )}
+              </Field>
+            </Grid>
+            {/* Ok to Text - Radio Buttons */}
+            <Field name="okToText" initialValue={patient?.email ?? ''}>
+              {({ input }) => (
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Ok to Text?</FormLabel>
+                  <RadioGroup {...input} row>
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio color="primary" />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio color="primary" />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              )}
+            </Field>
+          </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', m: 1 }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: 'bold', m: 1, marginTop: '4px' }}>
               Insurance Information
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              style={{ marginTop: 'px' }}>
+              If the patient has HMO insurance, we will require an
+              authorization/referral from their PCP before they can be seen.
+              Please send a copy of the patient’s insurance cards and last
+              appointment notes.
             </Typography>
           </Grid>
 
@@ -928,6 +1133,111 @@ const ReferralForm = ({
             </Field>
           </Grid>
 
+          {/* Primary Insurance Fields */}
+          <Grid item xs={12}>
+            <Typography className="mt-4" variant="subtitle1">
+              Primary Insurance Provider
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Field name="primaryInsuranceProvider" validate={required}>
+              {({ input }) => (
+                <TextField
+                  label="Primary Insurance Provider *"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+          <Grid item xs={4}>
+            <Field name="primaryInsuranceIdNumber" validate={required}>
+              {({ input }) => (
+                <TextField
+                  label="Insurance ID Number *"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+          <Grid item xs={4}>
+            <Field name="primaryInsuranceGroupNumber" validate={required}>
+              {({ input }) => (
+                <TextField
+                  label="Insurance Group Number *"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+
+          {/* Secondary Insurance Fields */}
+          <Grid item xs={12}>
+            <Typography variant="subtitle1">
+              Secondary Insurance Provider
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Field name="secondaryInsuranceProvider">
+              {({ input }) => (
+                <TextField
+                  label="Secondary Insurance Provider"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+          <Grid item xs={4}>
+            <Field name="secondaryInsuranceIdNumber">
+              {({ input }) => (
+                <TextField
+                  label="Insurance ID Number"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+          <Grid item xs={4}>
+            <Field name="secondaryInsuranceGroupNumber">
+              {({ input }) => (
+                <TextField
+                  label="Insurance Group Number"
+                  fullWidth
+                  {...input}
+                  variant="outlined"
+                />
+              )}
+            </Field>
+          </Grid>
+
+          {/* Informational Section */}
+          <Grid item xs={12}>
+            <Typography
+              variant="body2"
+              color="#4BA7C1"
+              style={{ marginTop: '16px' }}>
+              Due to certain limitations within our Ambulatory Surgery Centers,
+              and in an attempt to provide the best possible care to your
+              surgical patients, some procedures offered by our providers must
+              be performed at an outside facility. To maintain best practice
+              standards for our patients, an outside facility is best suited for
+              the following: Children under the age of 18, patients that need
+              overnight care, those in need of a Hoyer lift, special lift
+              devices, and extra support when transferring, surgeries done under
+              general anesthesia, procedures that are combined with a Retina
+              physician, and patients with a BMI over 50.
+            </Typography>
+          </Grid>
+
           <Grid item xs={12}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', m: 1 }}>
               Preferred Clinic Location
@@ -952,6 +1262,184 @@ const ReferralForm = ({
                 )}
               </Field>
             </FormControl>
+          </Grid>
+
+          <Grid container spacing={2}>
+            {/* Doctor/Specialty Selection */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle1">Doctor/Specialty</Typography>
+              <Field name="provider" validate={required}>
+                {({ input }) => (
+                  <TextField
+                    select
+                    label="Select a provider *"
+                    fullWidth
+                    variant="outlined"
+                    {...input}>
+                    <MenuItem value="">None selected</MenuItem>
+                    {/* Add options dynamically */}
+                    <MenuItem value="Provider 1">Provider 1</MenuItem>
+                    <MenuItem value="Provider 2">Provider 2</MenuItem>
+                  </TextField>
+                )}
+              </Field>
+            </Grid>
+
+            {/* Preferred Locations */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle1">
+                Select the patient's preferred location(s) *
+              </Typography>
+              <Field name="preferredLocations" validate={required}>
+                {({ input }) => (
+                  <FormGroup>
+                    {[
+                      'Any',
+                      'Camarillo',
+                      'Newbury Park',
+                      'San Luis Obispo',
+                      'Santa Maria',
+                      'Simi Valley',
+                      'Paso Robles',
+                      'Ventura',
+                      'Westlake Village',
+                      'Encino',
+                    ].map(location => (
+                      <FormControlLabel
+                        key={location}
+                        control={
+                          <Checkbox
+                            checked={input.value.includes(location)}
+                            onChange={e => {
+                              const newValue = e.target.checked
+                                ? [...input.value, location]
+                                : (Array.isArray(input.value) ? input.value.filter(val => val !== location) : []);
+                              input.onChange(newValue);
+                            }}
+                          />
+                        }
+                        label={location}
+                      />
+                    ))}
+                  </FormGroup>
+                )}
+              </Field>
+            </Grid>
+<LocationDropdowns/>
+            {/* Consultation Types */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle1">
+                What type of consultation is needed? *
+              </Typography>
+              <Field name="consultationType" validate={required}>
+                {({ input }) => (
+                  <FormGroup>
+                    {[
+                      'Cataract Evaluation',
+                      'Cornea Consult',
+                      'Dry Eye Eval',
+                      'LASIK',
+                      'General',
+                      'Glaucoma Consult',
+                      'Refractive',
+                      'Retina Consult',
+                      'Yag Eval',
+                    ].map(type => (
+                      <FormControlLabel
+                        key={type}
+                        control={
+                          <Checkbox
+                            checked={input.value.includes(type)}
+                            onChange={e => {
+                              const newValue = e.target.checked
+                                ? [...input.value, type]
+                                : (Array.isArray(input.value) ? input.value.filter(val => val !== type) : []);
+                              input.onChange(newValue);
+                            }}
+                          />
+                        }
+                        label={type}
+                      />
+                    ))}
+                    {/* "Other" Option */}
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={input.value.includes('Other')}
+                          onChange={e => {
+                            const newValue = e.target.checked
+                              ? [...input.value, 'Other']
+                              : (Array.isArray(input.value) ? input.value.filter(val => val !== 'Other') : []);
+                            input.onChange(newValue);
+                          }}
+                        />
+                      }
+                      label="Other"
+                    />
+                    <TextField
+                      label="Specify Other"
+                      fullWidth
+                      variant="outlined"
+                      disabled={!input.value.includes('Other')}
+                    />
+                  </FormGroup>
+                )}
+              </Field>
+            </Grid>
+
+            {/* Urgent Referral */}
+            <Grid item xs={12}>
+              <Field name="urgentReferral" type="checkbox">
+                {({ input }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...input} />}
+                    label={
+                      <Typography variant="body1">
+                        <strong>URGENT referral</strong> (ex: pain, severe
+                        redness, flashes of light/new floaters, etc.)
+                      </Typography>
+                    }
+                  />
+                )}
+              </Field>
+            </Grid>
+
+            {/* Notes Section */}
+            <Grid item xs={12}>
+              <Field name="additionalNotes">
+                {({ input }) => (
+                  <TextField
+                    label="Additional conditions to be evaluated or notes to the scheduling team"
+                    multiline
+                    rows={4}
+                    fullWidth
+                    variant="outlined"
+                    {...input}
+                  />
+                )}
+              </Field>
+            </Grid>
+
+            {/* File Upload */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle1">
+                Please attach most recent chart note(s) & describe the
+                conditions to be evaluated and list all patient allergies
+              </Typography>
+              <Field name="attachedFiles">
+                {({ input }) => (
+                  <input
+                    type="file"
+                    multiple
+                    onChange={e => input.onChange(e.target.files)}
+                    style={{ marginTop: '8px' }}
+                  />
+                )}
+              </Field>
+              <Typography variant="caption">
+                File limit: 15mb and 10 files max
+              </Typography>
+            </Grid>
           </Grid>
 
           <Grid item xs={12}>
@@ -1037,7 +1525,6 @@ const ReferralForm = ({
         </Grid>
       )}
     />
-  
   );
 };
 

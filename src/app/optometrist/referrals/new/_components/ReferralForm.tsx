@@ -1244,22 +1244,40 @@ const ReferralForm = ({
             </Typography>
           </Grid>
 
-          <Grid item xs={12}>
-            <FormControl component="fieldset">
+          <Grid item xs={6}>
+            <FormControl component="fieldset" fullWidth>
               <Field name="preferredClinic" validate={required}>
-                {({ input }) => (
-                  <Select
-                    label="Preferred Clinic Location *"
-                    fullWidth
-                    {...input}
-                    variant="outlined">
-                    {optom?.clinics?.map(clinic => (
-                      <MenuItem key={clinic.id} value={clinic.id}>
-                        {clinic.name} - {clinic.city}, {clinic.state}
+                {({ input }) => {
+                  // Deduplicate clinics based on unique identifier (e.g., `id`)
+                  const uniqueClinics = Array.from(
+                    new Map(
+                      optoms
+                        ?.flatMap(optom => optom.clinics)
+                        ?.map(clinic => [clinic.id, clinic]),
+                    ).values(),
+                  );
+
+                  return (
+                    <Select
+                      label="Preferred Clinic Location *"
+                      fullWidth
+                      {...input}
+                      variant="outlined"
+                      value={input.value || ''} // Ensure controlled input behavior
+                    >
+                      <MenuItem value="" disabled>
+                        Select a location
                       </MenuItem>
-                    ))}
-                  </Select>
-                )}
+                      {uniqueClinics.map(clinic => (
+                        <MenuItem
+                          key={clinic.id}
+                          value={`${clinic.city}, ${clinic.state}`}>
+                          {clinic.name} - {clinic.city}, {clinic.state}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  );
+                }}
               </Field>
             </FormControl>
           </Grid>
@@ -1269,63 +1287,83 @@ const ReferralForm = ({
             <Grid item xs={12}>
               <Typography variant="subtitle1">Doctor/Specialty</Typography>
               <Field name="provider" validate={required}>
-                {({ input }) => (
-                  <TextField
-                    select
-                    label="Select a provider *"
-                    fullWidth
-                    variant="outlined"
-                    {...input}>
-                    <MenuItem value="">None selected</MenuItem>
-                    {/* Add options dynamically */}
-                    <MenuItem value="Provider 1">Provider 1</MenuItem>
-                    <MenuItem value="Provider 2">Provider 2</MenuItem>
-                  </TextField>
-                )}
+                {({ input }) => {
+                  // Ensure unique providers based on ID
+                  const uniqueProviders = Array.from(
+                    new Map(
+                      new Set(optoms?.map(optom => [optom.id, optom])), // Map by unique optom ID
+                    ).values(),
+                  );
+
+                  return (
+                    <TextField
+                      select
+                      label="Select a provider *"
+                      fullWidth
+                      variant="outlined"
+                      {...input}
+                      onBlur={input.onBlur} // Ensure blur handling
+                      value={input.value || ''} // Default to empty string for no selection
+                    >
+                      <MenuItem value="">None selected</MenuItem>
+                      {uniqueProviders.map(optom => (
+                        <MenuItem key={optom.id} value={optom.id}>
+                          {optom.firstName} {optom.lastName} -{' '}
+                          {optom.specialties.join(', ')}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  );
+                }}
               </Field>
             </Grid>
 
             {/* Preferred Locations */}
+
             <Grid item xs={12}>
               <Typography variant="subtitle1">
                 Select the patient's preferred location(s) *
               </Typography>
               <Field name="preferredLocations" validate={required}>
-                {({ input }) => (
-                  <FormGroup>
-                    {[
-                      'Any',
-                      'Camarillo',
-                      'Newbury Park',
-                      'San Luis Obispo',
-                      'Santa Maria',
-                      'Simi Valley',
-                      'Paso Robles',
-                      'Ventura',
-                      'Westlake Village',
-                      'Encino',
-                    ].map(location => (
-                      <FormControlLabel
-                        key={location}
-                        control={
-                          <Checkbox
-                            checked={input.value.includes(location)}
-                            onChange={e => {
-                              const newValue = e.target.checked
-                                ? [...input.value, location]
-                                : (Array.isArray(input.value) ? input.value.filter(val => val !== location) : []);
-                              input.onChange(newValue);
-                            }}
-                          />
-                        }
-                        label={location}
-                      />
-                    ))}
-                  </FormGroup>
-                )}
+                {({ input }) => {
+                  // Ensure unique cities
+                  const uniqueCities = Array.from(
+                    new Set(
+                      optoms
+                        ?.flatMap(optom => optom.clinics)
+                        ?.map(clinic => clinic.city),
+                    ),
+                  );
+
+                  return (
+                    <FormControl fullWidth>
+                      <InputLabel id="preferredLocations">
+                        Preferred Locations *
+                      </InputLabel>
+                      <Select
+                        labelId="preferredLocations"
+                        multiple
+                        {...input}
+                        value={Array.isArray(input.value) ? input.value : []}
+                        onChange={event => {
+                          const value = event.target.value;
+                          input.onChange(value);
+                        }}
+                        onClose={() => input.onBlur()} // Ensure blur event is triggered
+                        variant="outlined">
+                        {uniqueCities.map(city => (
+                          <MenuItem key={city} value={city}>
+                            {city}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  );
+                }}
               </Field>
             </Grid>
-<LocationDropdowns/>
+
+            {/* <LocationDropdowns /> */}
             {/* Consultation Types */}
             <Grid item xs={12}>
               <Typography variant="subtitle1">
@@ -1353,7 +1391,9 @@ const ReferralForm = ({
                             onChange={e => {
                               const newValue = e.target.checked
                                 ? [...input.value, type]
-                                : (Array.isArray(input.value) ? input.value.filter(val => val !== type) : []);
+                                : Array.isArray(input.value)
+                                  ? input.value.filter(val => val !== type)
+                                  : [];
                               input.onChange(newValue);
                             }}
                           />
@@ -1369,7 +1409,9 @@ const ReferralForm = ({
                           onChange={e => {
                             const newValue = e.target.checked
                               ? [...input.value, 'Other']
-                              : (Array.isArray(input.value) ? input.value.filter(val => val !== 'Other') : []);
+                              : Array.isArray(input.value)
+                                ? input.value.filter(val => val !== 'Other')
+                                : [];
                             input.onChange(newValue);
                           }}
                         />
@@ -1444,50 +1486,41 @@ const ReferralForm = ({
 
           <Grid item xs={12}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', m: 1 }}>
-              Type of Consultation Needed
-            </Typography>
-          </Grid>
-
-          <Grid item xs={12}>
-            <FormControl component="fieldset">
-              <Field name="consultationType" validate={required}>
-                {({ input }) => (
-                  <Select
-                    label="Consultation Type *"
-                    multiple
-                    {...input}
-                    value={Array.isArray(input.value) ? input.value : []} // Ensuring value is always an array
-                    variant="outlined">
-                    <MenuItem value="consultation1">Consultation 1</MenuItem>
-                    <MenuItem value="consultation2">Consultation 2</MenuItem>
-                  </Select>
-                )}
-              </Field>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', m: 1 }}>
               Co-management Preferences
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Following our evaluation, we will communicate any findings and/or
+              treatment recommendations. If surgery is necessary please indicate
+              below if you'd like to co-manage. Regardless, all patients will be
+              sent back to the referring provider to resume general eye care as
+              appropriate.
             </Typography>
           </Grid>
 
           <Grid item xs={6}>
             <Field name="comanagement" validate={required}>
-              {({ input }) => (
-                <FormControl component="fieldset">
-                  <Select
-                    label="Co-management Preferences *"
+              {({ input, meta }) => (
+                <FormControl
+                  component="fieldset"
+                  error={meta.error && meta.touched}>
+                  <FormLabel component="legend">
+                    Co-management Preferences
+                  </FormLabel>
+                  <RadioGroup
                     {...input}
-                    variant="outlined">
-                    <MenuItem value="yes">
-                      Yes - I'd like to co-manage the patient’s post-op care
-                    </MenuItem>
-                    <MenuItem value="no">
-                      No - I’d prefer {user.organization.name} to assume the
-                      patient’s post-op care
-                    </MenuItem>
-                  </Select>
+                    value={input.value || ''}
+                    onChange={event => input.onChange(event.target.value)}>
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes - I'd like to co-manage the patient’s post-op care"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label={`No - I’d prefer ${user?.organization?.name} to assume the patient’s post-op care`}
+                    />
+                  </RadioGroup>
                 </FormControl>
               )}
             </Field>

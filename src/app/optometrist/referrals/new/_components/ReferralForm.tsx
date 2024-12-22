@@ -1239,12 +1239,12 @@ const ReferralForm = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', m: 1 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginTop: 3}}>
               Preferred Clinic Location
             </Typography>
           </Grid>
 
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <FormControl component="fieldset" fullWidth>
               <Field name="preferredClinic" validate={required}>
                 {({ input }) => {
@@ -1280,11 +1280,11 @@ const ReferralForm = ({
                 }}
               </Field>
             </FormControl>
-          </Grid>
+          </Grid> */}
 
-          <Grid container spacing={2}>
+          {/* <Grid container spacing={2}> */}
             {/* Doctor/Specialty Selection */}
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <Typography variant="subtitle1">Doctor/Specialty</Typography>
               <Field name="provider" validate={required}>
                 {({ input }) => {
@@ -1320,7 +1320,7 @@ const ReferralForm = ({
 
             {/* Preferred Locations */}
 
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <Typography variant="subtitle1">
                 Select the patient's preferred location(s) *
               </Typography>
@@ -1365,7 +1365,7 @@ const ReferralForm = ({
 
             {/* <LocationDropdowns /> */}
             {/* Consultation Types */}
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <Typography variant="subtitle1">
                 What type of consultation is needed? *
               </Typography>
@@ -1482,10 +1482,10 @@ const ReferralForm = ({
                 File limit: 15mb and 10 files max
               </Typography>
             </Grid>
-          </Grid>
+          {/* </Grid> */}
 
           <Grid item xs={12}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', m: 1 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mt: 1}}>
               Co-management Preferences
             </Typography>
             <Typography variant="body2" color="textSecondary">

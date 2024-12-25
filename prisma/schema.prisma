@@ -71,7 +71,8 @@ model File {
   clinic     Clinic?   @relation(fields: [clinicId], references: [id])
   provider   Provider? @relation(fields: [providerId], references: [id])
   user       User?     @relation(fields: [userId], references: [id])
-  patient    Patient?  @relation(fields: [patientId], references: [id], onDelete: Cascade) // New relation to Patient
+  patient    Patient?  @relation("PatientToFile", fields: [patientId], references: [id], onDelete: Cascade) // Bidirectional relation
+  patientId  String?   // References the Patient model (missing field added)
 
 
   @@map("files")
@@ -151,7 +152,7 @@ model Patient {
   clinics                                                                Clinic[]             @relation("ClinicToPatient")
   insurance_companies_InsuranceCompaniesToPatient                        InsuranceCompanies[] @relation("InsuranceCompaniesToPatient")
   providers                                                              Provider[]           @relation("PatientToProvider")
-  attachedFiles    File[]    @relation("PatientToFile") // New relation to the File model
+  attachedFiles    File[]    @relation("PatientToFile") // Bidirectional relation to the File model
   gender                               String?              // New field
   fax                                  String?              // New field
   address                              String?              // New field
@@ -163,7 +164,9 @@ model Patient {
   consultationType                     String[]             // New field (array for multiple selections)
   urgentReferral                       Boolean?             // New field
   preferredLocations                   String[]             // New field (array for multiple locations)
-  comanagement                         String?              // New field
+comanageYes                             Boolean
+comanageNo                              Boolean
+notes                                   String?
 
   @@map("patients")
 }

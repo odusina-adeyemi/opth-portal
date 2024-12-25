@@ -70,27 +70,149 @@ type Organization = {
   users: User[]; // array of users
 };
 
-// patients table
-type Patient = {
+// type Patient = {
+//   id: string; // Unique patient ID
+
+//   // Basic Information
+//   firstName: string; // Patient's first name
+//   lastName: string; // Patient's last name
+//   dob: string; // Date of birth (ISO format)
+//   email: string; // Email address
+//   phoneNumber: string; // Phone number
+//   gender?: 'male' | 'female'; // Gender (optional)
+//   address?: string; // Physical address (optional)
+//   city?: string; // City of residence (optional)
+//   zip?: string; // ZIP code (optional)
+//   fax?: string; // Fax number (optional)
+
+//   // Communication Preferences
+//   language?: string; // Preferred language (optional)
+//   okToText?: boolean; // Consent to text communication (optional)
+//   interpreterNeeded?: boolean; // Need for an interpreter (optional)
+
+//   // Referral Information
+//   referral_info?: {
+//     referringemail?: string; // Referring provider's email
+//     referringphone?: string; // Referring provider's phone number
+//     referringfax?: string; // Referring provider's fax number
+//     referringaddress?: string; // Referring provider's address
+//     referringcity?: string; // Referring provider's city
+//     referringstatezip?: string; // Referring provider's state and ZIP code
+//   };
+
+//   // Medical Details
+//   preferredLocations?: string[]; // Preferred clinic locations (optional)
+//   consultationType?: string[]; // Consultation types (optional)
+//   urgentReferral?: boolean; // Indicates urgency of the referral
+//   generalNotes?: string; // Additional notes (optional)
+//   notes?: string; // Additional notes (optional)
+//   comanagement?: 'yes' | 'no'; // Co-management preferences (optional)
+
+//   // Insurance Information
+//   primaryInsuranceProvider?: string; // Primary insurance provider name (optional)
+//   primaryInsuranceIdNumber?: string; // Primary insurance ID number (optional)
+//   primaryInsuranceGroupNumber?: string; // Primary insurance group number (optional)
+//   secondaryInsuranceProvider?: string; // Secondary insurance provider name (optional)
+//   secondaryInsuranceIdNumber?: string; // Secondary insurance ID number (optional)
+//   secondaryInsuranceGroupNumber?: string; // Secondary insurance group number (optional)
+
+//   // Relationships
+//   clinics?: Clinic[]; // Associated clinics (optional)
+//   providers?: Provider[]; // Associated providers (optional)
+//   referringProvider?: Provider; // Referring provider (optional)
+//   referringProviderId?: string; // Referring provider ID (optional)
+//   referringClinic?: Clinic; // Referring clinic (optional)
+//   referringClinicId?: string; // Referring clinic ID (optional)
+//   surgeonClinicId?: string; // Surgeon clinic ID (optional)
+//   surgeonId?: string; // Surgeon ID (optional)
+
+//   // File Attachments
+//   attachedFiles?: File[]; // Associated files (optional)
+// }
+
+type AppointmentInfo = {
+  doctor_specialty: String;
+  preferred_locations: [String];
+  consultation_type: [String];
+  urgent_referral: Boolean;
+  additional_conditions: String;
+  chart_notes_attachments: [String];
+  co_manage_care: Boolean;
+  dlv_assume_post_op_care: Boolean;
+};
+
+type ReferralInfo = {
+  referringclinicid: ID;
+  referringproviderid: ID;
+  referringemail: String;
+  referringphone: String;
+  referringfax: String;
+  referringaddress: String;
+  referringcity: String;
+  referringstatezip: String;
+};
+
+type SurgeonInfo = {
   id: string;
-  clinics: Clinic[]; // array of clinics
-  dob: string | null; // Date object
-  email: string;
-  firstName: string;
-  generalNotes: string;
-  lastName: string;
-  patientContacts: PatientContact[]; // array of patientContactData data
-  organizationId: string;
-  phoneNumber: string;
-  postOperations: PostOperation[]; // array of post-operation data
-  preOperations: PreOperationData[]; // array of pre-operation data
-  providers: Provider[]; // array of providers
-  referringClinic: Clinic; // referring clinic
-  referringClinicId: string; // referring clinic id
-  referringProvider: Provider; // referring provider
-  referringProviderId: string; // referring provider id
-  surgeonClinicId: string; // surgeon clinic id
-  surgeonId: string; // surgeon id
+  clinicId: string;
+};
+
+type InsuranceInfo = {
+  primaryInsuranceProviderId: String;
+  primaryInsuranceIdNumber: String;
+  primaryInsuranceGroupNumber: String;
+  secondaryInsuranceProviderId: String;
+  secondaryInsuranceIdNumber: String;
+  secondaryInsuranceGroupNumber: String;
+};
+
+// Types for file attachments
+type File = {
+  name: String;
+  url: String;
+};
+
+// Main Patient type
+// type ID = string;
+
+type ID = string;
+
+type Patient = {
+  id: ID;
+  firstName: String;
+  lastName: String;
+  dob: String;
+  notes: String;
+  email: String;
+  phoneNumber: String;
+  gender: String;
+  address: String;
+  city: String;
+  zip: String;
+  interpreterNeeded: Boolean;
+  language: String;
+  okToText: Boolean;
+  urgentReferral: Boolean;
+  preferredLocations: [String];
+  consultationType: [String];
+  attachedFiles: [File];
+  additionalNotes: String;
+  comanageNo: Boolean;
+  comanageYes: Boolean;
+
+  appointment_info: AppointmentInfo;
+  referral_info: ReferralInfo;
+  surgeon: SurgeonInfo;
+  insurance_info: InsuranceInfo;
+  clinics: [Clinic];
+  providers: [Provider];
+  organizationId: String;
+  referringProvider?: Provider; // Referring provider (optional)
+  referringProviderId?: string; // Referring provider ID (optional)
+  referringClinic?: Clinic; // Referring clinic (optional)
+  referringClinicId?: string; // Referring clinic ID (optional)
+  surgeonClinicId?: string; // Surgeon clinic ID (optional)
+  surgeonId?: string; // Surgeon ID (optional)
 };
 
 // providers table - ophthalmologists, optometrists, etc.

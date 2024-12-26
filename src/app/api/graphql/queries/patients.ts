@@ -210,48 +210,55 @@ export const GET_PATIENT = gql`
       address
       city
       zip
+      fax
       interpreterNeeded
       language
       okToText
       urgentReferral
       preferredLocations
       consultationType
+      comanageYes
+      comanageNo
+      signUpNewsLetter
+      generalNotes
       attachedFiles {
         name
         url
       }
-      additionalNotes
-      comanageYes
-      comanageNo
-      appointment_info {
-        doctor_specialty
-        preferred_locations
-        consultation_type
-        urgent_referral
-        additional_conditions
-        chart_notes_attachments
-        co_manage_care
-        dlv_assume_post_op_care
+      appointmentInfo {
+        id
+        doctorSpecialty
+        preferredLocations
+        consultationType
+        urgentReferral
+        additionalConditions
+        chartNotesAttachments
+        coManageCare
+        dlvAssumePostOpCare
       }
-      referral_info {
-        referringclinicid
-        referringproviderid
-        referringemail
-        referringphone
-        referringfax
-        referringaddress
-        referringcity
-        referringstatezip
+      referralInfo {
+        id
+        referringClinicId
+        referringProviderId
+        referringEmail
+        referringPhone
+        referringFax
+        referringAddress
+        referringCity
+        referringStateZip
       }
       surgeon {
         id
         clinicId
       }
-      insurance_info {
+      insuranceInfo {
+        id
         primaryInsuranceProviderId
+        primaryInsuranceProviderName
         primaryInsuranceIdNumber
         primaryInsuranceGroupNumber
         secondaryInsuranceProviderId
+        secondaryInsuranceProviderName
         secondaryInsuranceIdNumber
         secondaryInsuranceGroupNumber
       }

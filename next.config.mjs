@@ -6,7 +6,7 @@ const nextConfig = {
         scrollRestoration: true, // Retains scroll position between navigations
         externalDir: true,       // Allows accessing files outside the root directory
       },
-      reactStrictMode: true,      // Enforces React best practices
+    //   reactStrictMode: true,      // Enforces React best practices
            // Enforces React best practices
 
 

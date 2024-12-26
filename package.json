@@ -32,7 +32,7 @@
     "@mui/x-data-grid-pro": "^6.19.6",
     "@mui/x-license": "^7.6.0",
     "@prisma/client": "^5.22.0",
-    "@toolpad/core": "^0.1.55",
+    "@toolpad/core": "^0.11.0",
     "@vercel/postgres": "^0.10.0",
     "final-form": "^4.20.10",
     "graphql": "^16.8.1",

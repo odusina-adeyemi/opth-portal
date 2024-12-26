@@ -559,48 +559,110 @@ interface ReferralFormProps {
   user: User;
 }
 
+// interface FormValuesProps {
+//   referrerEmail: string;
+//   referrerZip: string;
+//   referrerCity: string;
+//   referrerAddress: string;
+//   referrerFax: string;
+//   doctorSpecialty: string;
+//   clinic: string;
+//   email: string;
+//   notes: string;
+//   patientFirstName: string;
+//   patientLastName: string;
+//   patientDOB: string; // ISO date format (YYYY-MM-DD)
+//   phoneNumber: string;
+//   provider: string;
+//   surgeon: string;
+//   surgeonClinic: string;
+//   fax?: string; // Optional, for fax number
+//   address?: string; // Optional, for address
+//   city?: string; // Optional, for city
+//   zip?: string; // Optional, for ZIP code
+//   gender?: string; // Optional, male/female
+//   interpreterNeeded?: boolean; // Optional, yes/no
+//   language?: string; // Optional, for preferred language
+//   okToText?: boolean; // Optional, yes/no
+//   providerPhoneNumber?: string; // Add this property
+//   providerEmail?: string; // Add this property
+//   providerAddress?: string; // Add this property
+//   insuranceProvider?: string; // Optional, insurance provider
+//   insurancePolicyNumber?: string; // Optional, insurance policy number
+//   primaryInsuranceProvider?: string; // Optional, primary insurance provider
+//   primaryInsuranceIdNumber?: string; // Optional, primary insurance ID
+//   primaryInsuranceGroupNumber?: string; // Optional, primary insurance group number
+//   secondaryInsuranceProvider?: string; // Optional, secondary insurance provider
+//   secondaryInsuranceIdNumber?: string; // Optional, secondary insurance ID
+//   secondaryInsuranceGroupNumber?: string; // Optional, secondary insurance group number
+//   preferredLocations?: string[]; // Optional, array of preferred locations
+//   consultationType?: string[]; // Optional, array of consultation types
+//   urgentReferral?: boolean; // Optional, true if urgent
+//   attachedFiles?: File[]; // Optional, for file uploads
+//   additionalNotes?: string; // Optional, additional notes
+//   comanagement?: boolean; // Optional, for co-management preferences
+//   comanageYes?: boolean; // Optional, for co-management preferences
+//   comanageNo?: boolean; // Optional, for co-management preferences
+// }
+
 interface FormValuesProps {
-  referrerEmail: string;
-  referrerZip: string;
-  referrerCity: string;
-  referrerAddress: string;
-  referrerFax: string;
-  doctorSpecialty: string;
-  clinic: string;
-  email: string;
-  notes: string;
-  patientFirstName: string;
-  patientLastName: string;
+  // Patient Info
+  patientFirstName?: string;
+  patientLastName?: string;
   patientDOB: string; // ISO date format (YYYY-MM-DD)
-  phoneNumber: string;
-  provider: string;
-  surgeon: string;
-  surgeonClinic: string;
-  fax?: string; // Optional, for fax number
-  address?: string; // Optional, for address
-  city?: string; // Optional, for city
-  zip?: string; // Optional, for ZIP code
-  gender?: string; // Optional, male/female
-  interpreterNeeded?: boolean; // Optional, yes/no
-  language?: string; // Optional, for preferred language
-  okToText?: boolean; // Optional, yes/no
-  providerPhoneNumber?: string; // Add this property
-  providerEmail?: string; // Add this property
-  providerAddress?: string; // Add this property
-  insuranceProvider?: string; // Optional, insurance provider
-  insurancePolicyNumber?: string; // Optional, insurance policy number
-  primaryInsuranceProvider?: string; // Optional, primary insurance provider
-  primaryInsuranceIdNumber?: string; // Optional, primary insurance ID
-  primaryInsuranceGroupNumber?: string; // Optional, primary insurance group number
-  secondaryInsuranceProvider?: string; // Optional, secondary insurance provider
-  secondaryInsuranceIdNumber?: string; // Optional, secondary insurance ID
-  secondaryInsuranceGroupNumber?: string; // Optional, secondary insurance group number
-  preferredLocations?: string[]; // Optional, array of preferred locations
-  consultationType?: string[]; // Optional, array of consultation types
-  urgentReferral?: boolean; // Optional, true if urgent
-  attachedFiles?: File[]; // Optional, for file uploads
-  additionalNotes?: string; // Optional, additional notes
-  comanagement?: boolean; // Optional, for co-management preferences
+  gender?: string;
+  email?: string;
+  phoneNumber?: string;
+  address?: string;
+  city?: string;
+  zip?: string;
+  fax?: string;
+  interpreterNeeded?: boolean;
+  language?: string;
+  okToText?: boolean;
+  notes?: string;
+  urgentReferral?: boolean;
+  preferredLocations?: string[];
+  consultationType?: string[];
+  comanageYes?: boolean;
+  comanageNo?: boolean;
+  signUpNewsLetter?: boolean;
+
+  // Appointment Info
+  doctorSpecialty?: string;
+  additionalConditions?: string;
+  chartNotesAttachments?: File[]; // Array of uploaded files
+
+  // Referral Info
+  referringClinicId?: string;
+  referringProviderId?: string;
+  referringEmail?: string;
+  referringPhone?: string;
+  referringFax?: string;
+  referringAddress?: string;
+  referringCity?: string;
+  referringStateZip?: string;
+
+  // Insurance Info
+  primaryInsuranceProviderId?: string;
+  primaryInsuranceProviderName?: string;
+  primaryInsuranceIdNumber?: string;
+  primaryInsuranceGroupNumber?: string;
+  secondaryInsuranceProviderId?: string;
+  secondaryInsuranceProviderName?: string;
+  secondaryInsuranceIdNumber?: string;
+  secondaryInsuranceGroupNumber?: string;
+
+  // Surgeon Info
+  surgeonId?: string;
+  surgeonClinicId?: string;
+
+  // Organization
+  organizationId?: string;
+
+  // Relationships
+  clinics?: string[];
+  providers?: string[];
 }
 
 const ReferralForm = ({
@@ -627,88 +689,102 @@ const ReferralForm = ({
     useMutation(UPDATE_PATIENT);
 
   const onSubmit = async (values: FormValuesProps, form: any) => {
-    let clinics = [values.clinic];
-    if (values.surgeonClinic) {
-      clinics.push(values.surgeonClinic);
+    let clinics = values.clinics ?? [];
+    if (values.surgeonClinicId) {
+      clinics.push(values.surgeonClinicId);
     }
 
-    let providers = [values.provider];
-    if (values.surgeon) {
-      providers.push(values.surgeon);
+    let providers = values.providers ?? [];
+    if (values.surgeonId) {
+      providers.push(values.surgeonId);
     }
+
+
+
 
     const patientData = {
       // Patient Basic Information
-      firstName: values.patientFirstName,
-      lastName: values.patientLastName,
+      firstName: values.patientFirstName || undefined,
+      lastName: values.patientLastName || undefined,
       dob: values.patientDOB,
-      email: values.email,
-      phoneNumber: undoPhoneNumberFormat(values.phoneNumber) || undefined,
-      gender: values.gender,
-      address: values.address,
-      city: values.city,
-      zip: values.zip,
-      interpreterNeeded: values.interpreterNeeded,
-      language: values.language,
-      okToText: values.okToText,
-      urgentReferral: values.urgentReferral,
+      gender: values.gender || undefined,
+      email: values.email || undefined,
+      phoneNumber: values.phoneNumber
+        ? undoPhoneNumberFormat(values.phoneNumber)
+        : undefined,
+      address: values.address || undefined,
+      city: values.city || undefined,
+      zip: values.zip || undefined,
+      fax: values.fax || undefined,
+      interpreterNeeded: values.interpreterNeeded || undefined,
+      language: values.language || undefined,
+      okToText: values.okToText || undefined,
+      notes: values.notes || undefined,
+      urgentReferral: values.urgentReferral || undefined,
       preferredLocations: values.preferredLocations || [],
       consultationType: values.consultationType || [],
-      attachedFiles: values.attachedFiles,
-      additionalNotes: values.additionalNotes,
-      comanagement: values.comanagement,
-
-      // Appointment Info (appointment_info table)
-      appointment_info: {
-        // doctor_specialty: values.doctorSpecialty,
-        preferred_locations: values.preferredLocations || [],
-        consultation_type: values.consultationType,
-        urgent_referral: values.urgentReferral,
-        additional_conditions: values.additionalNotes,
-        chart_notes_attachments:
-          values.attachedFiles?.map(file => file.name) || [],
-        co_manage_care: values.comanagement === true,
-        dlv_assume_post_op_care: values.comanagement === false,
-        doctor_specialty: values.doctorSpecialty, // Added doctor specialty
+      comanageYes: values.comanageYes || undefined,
+      comanageNo: values.comanageNo || undefined,
+      signUpNewsLetter: values.signUpNewsLetter || undefined,
+    
+      // Appointment Info
+      appointmentInfo: {
+        doctorSpecialty: values.doctorSpecialty || undefined,
+        preferredLocations: values.preferredLocations || [],
+        consultationType: values.consultationType?.[0] || undefined,
+        urgentReferral: values.urgentReferral || undefined,
+        additionalConditions: values.additionalConditions || undefined,
+        chartNotesAttachments:
+          values.chartNotesAttachments?.map(file => file.name) || [],
       },
-
-      // Referrer Info (referral_info table)
-      referral_info: {
-        referringclinicid: values.clinic,
-        referringproviderid: optomIdSelected,
-        referringemail: values.referrerEmail,
-        referringphone:
-          formatPhoneNumber(values.providerPhoneNumber) || undefined,
-        referringfax: values.referrerFax,
-        referringaddress: values.referrerAddress,
-        referringcity: values.referrerCity,
-        referringstatezip: values.referrerZip,
+    
+      // Referral Info
+      referralInfo: {
+        referringClinicId: values.referringClinicId || undefined,
+        referringProviderId: values.referringProviderId || undefined,
+        referringEmail: values.referringEmail || undefined,
+        referringPhone: values.referringPhone
+          ? formatPhoneNumber(values.referringPhone)
+          : undefined,
+        referringFax: values.referringFax || undefined,
+        referringAddress: values.referringAddress || undefined,
+        referringCity: values.referringCity || undefined,
+        referringStateZip: values.referringStateZip || undefined,
       },
-
-      // Surgeon Information
+    
+      // Insurance Info
+      insuranceInfo: {
+        primaryInsuranceProviderId: values.primaryInsuranceProviderId || undefined,
+        primaryInsuranceProviderName:
+          values.primaryInsuranceProviderName || undefined,
+        primaryInsuranceIdNumber: values.primaryInsuranceIdNumber || undefined,
+        primaryInsuranceGroupNumber:
+          values.primaryInsuranceGroupNumber || undefined,
+        secondaryInsuranceProviderId:
+          values.secondaryInsuranceProviderId || undefined,
+        secondaryInsuranceProviderName:
+          values.secondaryInsuranceProviderName || undefined,
+        secondaryInsuranceIdNumber: values.secondaryInsuranceIdNumber || undefined,
+        secondaryInsuranceGroupNumber:
+          values.secondaryInsuranceGroupNumber || undefined,
+      },
+    
+      // Surgeon Info
       surgeon: {
-        id: surgeonIdSelected,
-        clinicId: values.surgeonClinic,
+        id: values.surgeonId || undefined,
+        clinicId: values.surgeonClinicId || undefined,
       },
-
-      // Insurance Info (insurance_info table)
-      insurance_info: {
-        primaryInsuranceProviderId: values.primaryInsuranceProvider,
-        primaryInsuranceIdNumber: values.primaryInsuranceIdNumber,
-        primaryInsuranceGroupNumber: values.primaryInsuranceGroupNumber,
-        secondaryInsuranceProviderId: values.secondaryInsuranceProvider,
-        secondaryInsuranceIdNumber: values.secondaryInsuranceIdNumber,
-        secondaryInsuranceGroupNumber: values.secondaryInsuranceGroupNumber,
-      },
-
+    
       // Organization and Relationships
-      organizationId: user.organizationId,
-      clinics: [values.clinic, values.surgeonClinic].filter(Boolean), // Dynamically include valid clinics
-      providers: [values.provider, values.surgeon].filter(Boolean), // Dynamically include valid providers
-
-      // Attachments and Files (File model relation)
-      // attachedFiles: values.attachedFiles?.map(file => file.name) || [],
+      organizationId: user.organizationId || undefined,
+      clinics: Array.isArray(values.clinics)
+        ? values.clinics.filter(Boolean)
+        : [],
+      providers: Array.isArray(values.providers)
+        ? values.providers.filter(Boolean)
+        : [],
     };
+    
 
     if (patient) {
       updatePatient({
@@ -739,8 +815,10 @@ const ReferralForm = ({
         onError: () => {
           openSnackbar(`Error creating patient ${createError}`, 'error');
         },
-        variables: { patientInput: patientData },
-      });
+        variables: { patientInput: patientData }, 
+        
+      });     console.log("PatientData:", patientData);
+
     }
   };
 
@@ -765,7 +843,7 @@ const ReferralForm = ({
             </Typography>
           </Grid>
           <Grid item xs={6} alignContent={'center'}>
-            {!values.provider?.length && (
+            {!values.providers?.length && (
               <Typography sx={{ mt: 1, mx: 1 }} variant="caption">
                 Select a provider first
               </Typography>
@@ -773,14 +851,14 @@ const ReferralForm = ({
           </Grid>
           <Grid item xs={6}>
             <Field
-              name="provider"
+              name="providers"
               initialValue={patient?.referringProviderId ?? ''}
               validate={required}>
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
                   <InputLabel id="provider">Provider *</InputLabel>
                   <Select
-                    id="provider"
+                    id="providers"
                     label="Provider *"
                     name={input.name}
                     onChange={event => {
@@ -815,15 +893,15 @@ const ReferralForm = ({
           </Grid>
           <Grid item xs={6}>
             <Field
-              name="clinic"
-              initialValue={patient?.referringClinicId ?? ''}
+              name="clinics"
+              initialValue={optom?.clinics?.map(clinic => clinic?.id).join(',') ?? ''}
               validate={required}>
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
-                  <InputLabel id="clinic">Clinic *</InputLabel>
+                  <InputLabel id="clinics">Clinic *</InputLabel>
                   <Select
-                    id="clinic"
-                    disabled={values?.provider ? false : true}
+                    id="clinics"
+                    disabled={values?.providers ? false : true}
                     label="Clinic *"
                     fullWidth
                     name={input.name}
@@ -833,10 +911,11 @@ const ReferralForm = ({
                     type="text">
                     <MenuItem value={''}>Select a clinic</MenuItem>
                     {optom?.clinics?.map((clinic: Clinic) => {
-                      { console.log("Clinic ID", clinic?.id)}
+                      {
+                        console.log('Clinic ID', clinic?.id);
+                      }
                       return (
                         <MenuItem key={clinic?.id} value={clinic?.id}>
-
                           {clinic?.name} - {clinic?.city}, {clinic?.state}
                         </MenuItem>
                       );
@@ -861,9 +940,9 @@ const ReferralForm = ({
           {/* Referrer Information */}
           <Grid className="flex gap-2" item xs={6}>
             <Field
-              name="referrerEmail"
+              name="referringEmail"
               initialValue={String(
-                patient?.referral_info?.referringemail ?? '',
+                patient?.referralInfo?.[0]?.referringEmail ?? '',
               )}
               validate={required}>
               {({ input, meta }) => (
@@ -882,9 +961,9 @@ const ReferralForm = ({
             </Field>
 
             <Field
-              name="referrerPhone"
+              name="referringPhone"
               initialValue={String(
-                patient?.referral_info?.referringphone ?? '',
+                patient?.referralInfo?.[0]?.referringPhone ?? '',
               )}
               validate={required}>
               {({ input, meta }) => (
@@ -904,8 +983,8 @@ const ReferralForm = ({
 
           <Grid item xs={6}>
             <Field
-              name="referrerFax"
-              initialValue={patient?.referral_info?.referringfax ?? ''}>
+              name="referringFax"
+              initialValue={patient?.referralInfo?.[0]?.referringFax ?? ''}>
               {({ input }) => (
                 <TextField
                   label="Referrer Fax"
@@ -919,8 +998,10 @@ const ReferralForm = ({
 
           <Grid item xs={6}>
             <Field
-              name="referrerZip"
-              initialValue={patient?.referral_info?.referringstatezip ?? ''}>
+              name="referringStateZip"
+              initialValue={
+                patient?.referralInfo?.[0]?.referringStateZip ?? ''
+              }>
               {({ input }) => (
                 <TextField
                   label="Referrer ZIP Code"
@@ -934,8 +1015,8 @@ const ReferralForm = ({
 
           <Grid className="flex gap-2" item xs={6}>
             <Field
-              name="referrerAddress"
-              initialValue={patient?.referral_info?.referringaddress ?? ''}>
+              name="referringAddress"
+              initialValue={patient?.referralInfo?.[0]?.referringAddress ?? ''}>
               {({ input }) => (
                 <TextField
                   label="Referrer Address"
@@ -947,8 +1028,8 @@ const ReferralForm = ({
             </Field>
 
             <Field
-              name="referrerCity"
-              initialValue={patient?.referral_info?.referringcity ?? ''}>
+              name="referringCity"
+              initialValue={patient?.referralInfo?.[0]?.referringCity ?? ''}>
               {({ input }) => (
                 <TextField
                   label="Referrer City"
@@ -1231,8 +1312,8 @@ const ReferralForm = ({
               name="primaryInsuranceProvider"
               validate={required}
               initialValue={
-                String(patient?.insurance_info?.primaryInsuranceProviderId) ??
-                ''
+                (patient?.insuranceInfo?.[0]
+                  ?.primaryInsuranceProviderId as string) ?? ''
               }>
               {({ input }) => (
                 <TextField
@@ -1249,7 +1330,9 @@ const ReferralForm = ({
               name="primaryInsuranceIdNumber"
               validate={required}
               initialValue={
-                String(patient?.insurance_info?.primaryInsuranceIdNumber) ?? ''
+                patient?.insuranceInfo?.[0]?.primaryInsuranceIdNumber
+                  ? String(patient.insuranceInfo[0].primaryInsuranceIdNumber)
+                  : ''
               }>
               {({ input }) => (
                 <TextField
@@ -1266,7 +1349,7 @@ const ReferralForm = ({
               name="primaryInsuranceGroupNumber"
               validate={required}
               initialValue={String(
-                patient?.insurance_info?.secondaryInsuranceGroupNumber ?? '',
+                patient?.insuranceInfo?.[0]?.primaryInsuranceGroupNumber ?? '',
               )}>
               {({ input }) => (
                 <TextField
@@ -1287,9 +1370,9 @@ const ReferralForm = ({
           </Grid>
           <Grid item xs={4}>
             <Field
-              name="secondaryInsuranceProvider"
+              name="secondaryInsuranceProviderId"
               initialValue={
-                patient?.insurance_info?.secondaryInsuranceIdNumber ?? ''
+                patient?.insuranceInfo?.[0]?.secondaryInsuranceProviderId ?? ''
               }>
               {({ input }) => (
                 <TextField
@@ -1305,7 +1388,7 @@ const ReferralForm = ({
             <Field
               name="secondaryInsuranceIdNumber"
               initialValue={
-                patient?.insurance_info?.secondaryInsuranceIdNumber ?? ''
+                patient?.insuranceInfo?.[0]?.secondaryInsuranceIdNumber ?? ''
               }>
               {({ input }) => (
                 <TextField
@@ -1321,7 +1404,7 @@ const ReferralForm = ({
             <Field
               name="secondaryInsuranceGroupNumber"
               initialValue={
-                patient?.insurance_info?.secondaryInsuranceGroupNumber ?? ''
+                patient?.insuranceInfo?.[0]?.secondaryInsuranceGroupNumber ?? ''
               }>
               {({ input }) => (
                 <TextField
@@ -1638,45 +1721,44 @@ const ReferralForm = ({
               <FormLabel component="legend">
                 Co-management Preferences
               </FormLabel>
-              <Field
-                name="comanageYes"
-                type="checkbox"
-                initialValue={patient?.comanageYes ?? false}>
+              <Field name="comanagePreference">
                 {({ input }) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...input}
-                        checked={!!input.value}
-                        onChange={event => input.onChange(event.target.checked)}
-                      />
-                    }
-                    label="Yes - I'd like to co-manage the patient’s post-op care"
-                  />
-                )}
-              </Field>
-              <Field
-                name="comanageNo"
-                type="checkbox"
-                initialValue={patient?.comanageNo ?? false}>
-                {({ input }) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...input}
-                        checked={!!input.value}
-                        onChange={event => input.onChange(event.target.checked)}
-                      />
-                    }
-                    label="No - I’d prefer Snyder Eye Institute to assume the patient’s post-op care"
-                  />
+                  <>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={input.value === 'yes'}
+                          onChange={
+                            () =>
+                              input.onChange(input.value === 'yes' ? '' : 'yes') // Untick if already selected
+                          }
+                        />
+                      }
+                      label="Yes - I'd like to co-manage the patient’s post-op care"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={input.value === 'no'}
+                          onChange={
+                            () =>
+                              input.onChange(input.value === 'no' ? '' : 'no') // Untick if already selected
+                          }
+                        />
+                      }
+                      label="No - I’d prefer Snyder Eye Institute to assume the patient’s post-op care"
+                    />
+                  </>
                 )}
               </Field>
             </FormControl>
           </Grid>
 
           <Grid item xs={12}>
-            <Field name="newsletterSignup" type="checkbox">
+            <Field
+              name="signUpNewsLetter"
+              type="checkbox"
+              initialValue={patient?.signUpNewsLetter ?? false}>
               {({ input }) => (
                 <FormControlLabel
                   control={<Checkbox {...input} />}
@@ -1688,8 +1770,8 @@ const ReferralForm = ({
 
           <Grid item xs={12}>
             <Field
-              name="additionalNotes"
-              initialValue={patient?.additionalNotes ?? ''}>
+              name="generalNotes"
+              initialValue={patient?.generalNotes ?? ''}>
               {({ input }) => (
                 <TextField
                   label="Additional Notes"

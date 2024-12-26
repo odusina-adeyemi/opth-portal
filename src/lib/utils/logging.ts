@@ -11,7 +11,7 @@ if (typeof window === 'undefined') {
   Logging = require('@google-cloud/logging');
 }
 
-export const writeLogEntry = async (message: string) => {
+export const writeLogEntry = async (message: string, p0: string) => {
   if (!Logging) {
     console.warn('Attempted to log from the client-side; skipping log.');
     return;

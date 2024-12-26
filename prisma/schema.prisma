@@ -5,151 +5,174 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") // for production db on GCP and "local" db on Vercel
+  url      = env("DATABASE_URL")
 }
 
-// TODO document the schema in Confluence
 model Action_Item {
   id         String    @id @default(cuid())
-  action     String? // Surgeon visit
+  action     String?
   completed  Boolean?  @default(false)
   createdAt  DateTime? @default(now())
-  dueDate    DateTime? @db.Date // date the action item is due
-  notes      String? // details of custom action item
-  provider   Provider? @relation(fields: [providerId], references: [id])
+  dueDate    DateTime? @db.Date
+  notes      String?
   providerId String?   @unique
   updatedAt  DateTime? @updatedAt
-  user       User?     @relation(fields: [userId], references: [id])
   userId     String?   @unique
+  provider   Provider? @relation(fields: [providerId], references: [id])
+  user       User?     @relation(fields: [userId], references: [id])
 
   @@map("action_items")
 }
 
 model Clinic {
-  id                     String           @id @default(cuid())
-  address                String?
-  city                   String?
-  email                  String?
-  faxNumber              String?
-  files                  File[]
-  state                  String?
-  name                   String?
-  notes                  String?
-  organization           Organization?    @relation(fields: [organizationId], references: [id])
-  organizationId         String?
-  patientReferrals       Patient[]        @relation("PatientToReferringClinic") // patients referred by this clinic
-  patients               Patient[] // m-m relationship between clinics and patients
-  patientContact         PatientContact[] // 1-m relationship between patientPreOpContact and patients
-  preOperations          PreOperation[]
-  postOperations         PostOperation[]
-  phoneNumber            String?
-  providers              Provider[] // m-m relationship between clinics and providers
-  providerClinics        ProviderClinic[]
-  referralManager        String? // name of person who makes referrals to oph provider
-  referrerStatusTimeline Json?            @db.Json // rn every clinic tied to a user will be affected
-  surgeonClinics         Patient[]        @relation("PatientToSurgeonClinic") // patients referred by this clinic
-  type                   String? // used to differentiate between optometrists and ophthalmologists
-  zipCode                String?
-  referralInfos          ReferralInfo[]
-
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id                                                               String           @id @default(cuid())
+  address                                                          String?
+  city                                                             String?
+  email                                                            String?
+  state                                                            String?
+  name                                                             String?
+  type                                                             String?
+  phoneNumber                                                      String?
+  zipCode                                                          String?
+  createdAt                                                        DateTime?        @default(now())
+  updatedAt                                                        DateTime?        @updatedAt
+  referrerStatusTimeline                                           Json?            @db.Json
+  faxNumber                                                        String?
+  notes                                                            String?
+  referralManager                                                  String?
+  organizationId                                                   String?
+  failedClinicsOrganizationId                                      String?
+  organizations_clinics_failedClinicsOrganizationIdToorganizations Organization?    @relation("clinics_failedClinicsOrganizationIdToorganizations", fields: [failedClinicsOrganizationId], references: [id])
+  organization                                                     Organization?    @relation(fields: [organizationId], references: [id])
+  files                                                            File[]
+  patientReferrals                                                 Patient[]        @relation("PatientToReferringClinic")
+  surgeonClinics                                                   Patient[]        @relation("PatientToSurgeonClinic")
+  providerClinics                                                  ProviderClinic[]
+  referral_info                                                    referral_info[]
+  patients                                                         Patient[]        @relation("ClinicToPatient")
+  patientContact                                                   PatientContact[] @relation("ClinicToPatientContact")
+  postOperations                                                   PostOperation[]  @relation("ClinicToPostOperation")
+  preOperations                                                    PreOperation[]   @relation("ClinicToPreOperation")
+  providers                                                        Provider[]       @relation("ClinicToProvider")
+  referralInfos                                                    ReferralInfo[]   @relation("ReferralInfoToReferringClinic")
 
   @@map("clinics")
 }
 
 model File {
   id         String    @id @default(cuid())
-  clinic     Clinic?   @relation(fields: [clinicId], references: [id])
   clinicId   String?
   createdAt  DateTime? @default(now())
-  isArchived Boolean?  @default(false)
-  name       String? // name of the field that relates to the file
-  provider   Provider? @relation(fields: [providerId], references: [id])
+  name       String?
   providerId String?
-  url        String? // filepath in the cloud storage
-  user       User?     @relation(fields: [userId], references: [id])
+  url        String?
   userId     String?
   updatedAt  DateTime? @updatedAt
+  isArchived Boolean?  @default(false)
+  clinic     Clinic?   @relation(fields: [clinicId], references: [id])
+  provider   Provider? @relation(fields: [providerId], references: [id])
+  user       User?     @relation(fields: [userId], references: [id])
+  patient    Patient?  @relation("PatientToFile", fields: [patientId], references: [id], onDelete: Cascade) // Bidirectional relation
+  patientId  String? // References the Patient model (missing field added)
 
   @@map("files")
 }
 
 model InsuranceCompanies {
-  id                      String          @id @default(cuid())
-  isCommercial            Boolean?        @default(false)
-  organization            Organization?   @relation(fields: [organizationId], references: [id])
-  organizationId          String?
-  name                    String?
-  primaryInsuranceInfos   InsuranceInfo[] @relation("PrimaryInsuranceRelation")
-  secondaryInsuranceInfos InsuranceInfo[] @relation("SecondaryInsuranceRelation")
-  createdAt               DateTime?       @default(now())
-  updatedAt               DateTime?       @updatedAt
+  id                                                                              String           @id @default(cuid())
+  isCommercial                                                                    Boolean?         @default(false)
+  name                                                                            String?
+  createdAt                                                                       DateTime?        @default(now())
+  updatedAt                                                                       DateTime?        @updatedAt
+  organizationId                                                                  String?
+  organization                                                                    Organization?    @relation(fields: [organizationId], references: [id])
+  insurance_info_insurance_info_primaryInsuranceProviderIdToinsurance_companies   insurance_info[] @relation("insurance_info_primaryInsuranceProviderIdToinsurance_companies")
+  insurance_info_insurance_info_secondaryInsuranceProviderIdToinsurance_companies insurance_info[] @relation("insurance_info_secondaryInsuranceProviderIdToinsurance_companies")
+  patients_patients_primaryInsuranceIdToinsurance_companies                       Patient?         @relation("patients_primaryInsuranceIdToinsurance_companies")
+  patients_patients_secondaryInsuranceIdToinsurance_companies                     Patient?         @relation("patients_secondaryInsuranceIdToinsurance_companies")
+  patients_InsuranceCompaniesToPatient                                            Patient[]        @relation("InsuranceCompaniesToPatient")
+  primaryInsuranceInfo                                                            InsuranceInfo[]  @relation("PrimaryInsurance")
+  secondaryInsuranceInfo                                                          InsuranceInfo[]  @relation("SecondaryInsurance")
 
   @@map("insurance_companies")
 }
 
-// Organizations represent the Viewpoint customers e.g. oph clinic groups (providers, users, clinics)
-// under one umbrella.  E.g. Brimhall Eye is an organization that has multiple clinics and providers and users
 model Organization {
-  id                 String               @id @default(cuid())
-  clinics            Clinic[] // 1-m relationship between organizations and clinics
-  insuranceCompanies InsuranceCompanies[]
-  name               String?
-  patients           Patient[] // 1-m relationship between organizations and patients
-  providers          Provider[] // 1-m relationship between organizations and providers
-  providerStatuses   ProviderStatus[] // 1-m relationship between organizations and provider statuses
-  users              User[] // 1-m relationship between organizations and users
-  createdAt          DateTime?            @default(now())
-  updatedAt          DateTime?            @updatedAt
+  id                                                               String               @id @default(cuid())
+  name                                                             String?
+  createdAt                                                        DateTime?            @default(now())
+  updatedAt                                                        DateTime?            @updatedAt
+  dateLastClinicsFetch                                             DateTime?            @db.Date
+  dateLastProvidersFetch                                           DateTime?            @db.Date
+  dateLastReferralsFetch                                           DateTime?            @db.Date
+  ehrVersion                                                       String?
+  clinics_clinics_failedClinicsOrganizationIdToorganizations       Clinic[]             @relation("clinics_failedClinicsOrganizationIdToorganizations")
+  clinics                                                          Clinic[]
+  insuranceCompanies                                               InsuranceCompanies[]
+  patients_patients_failedPatientsOrganizationIdToorganizations    Patient[]            @relation("patients_failedPatientsOrganizationIdToorganizations")
+  patients                                                         Patient[]
+  providerStatuses                                                 ProviderStatus[]
+  providers_providers_failedProvidersOrganizationIdToorganizations Provider[]           @relation("providers_failedProvidersOrganizationIdToorganizations")
+  providers                                                        Provider[]
+  users                                                            User[]
 
   @@map("organizations")
 }
 
 model Patient {
-  id                String   @id @default(cuid())
-  clinics           Clinic[]
-  consentFormSigned Boolean? @default(false)
-  dob               String // ISO 8601 date string 'YYYY-MM-DD'
-  email             String?
-  firstName         String?
-  lastName          String?
-  phoneNumber       String?
-  generalNotes      String?
-
-  referringProviderId String? // Add the foreign key field
-  referringProvider   Provider? @relation("PatientToReferringProvider", fields: [referringProviderId], references: [id])
-  referringClinicId   String? // Foreign key field
-  referringClinic     Clinic?   @relation("PatientToReferringClinic", fields: [referringClinicId], references: [id])
-
-  // Organization Relationship
-  organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
-
-  // Referring Information
-  referralInfoId String? // Reference to ReferralInfo
-  referralInfo   ReferralInfo? @relation(fields: [referralInfoId], references: [id])
-
-  // Insurance Information
-  insuranceInfoId String?        @unique // Reference to InsuranceInfo
-  insuranceInfo   InsuranceInfo? @relation(fields: [insuranceInfoId], references: [id])
-
-  // Appointment Information
-  appointmentInfoId String?          @unique // Reference to AppointmentInfo
-  appointmentInfo   AppointmentInfo? @relation(fields: [appointmentInfoId], references: [id])
-
-  // Other Relationships
-  patientContacts PatientContact[]
-  preOperations   PreOperation[]
-  postOperations  PostOperation[]
-  providers       Provider[]
-  surgeon         Provider?        @relation("PatientToSurgeon", fields: [surgeonId], references: [id])
-  surgeonId       String?
-  surgeonClinic   Clinic?          @relation("PatientToSurgeonClinic", fields: [surgeonClinicId], references: [id])
-  surgeonClinicId String?
-
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  dob                                                                    String
+  firstName                                                              String?
+  lastName                                                               String?
+  id                                                                     String               @id @default(cuid())
+  createdAt                                                              DateTime?            @default(now())
+  updatedAt                                                              DateTime?            @updatedAt
+  referringProviderId                                                    String?
+  surgeonId                                                              String?
+  referringClinicId                                                      String?
+  surgeonClinicId                                                        String?
+  organizationId                                                         String?
+  consentFormSigned                                                      Boolean?             @default(false)
+  generalNotes                                                           String?
+  email                                                                  String?
+  phoneNumber                                                            String?
+  primaryInsuranceId                                                     String?              @unique
+  secondaryInsuranceId                                                   String?              @unique
+  failedPatientsOrganizationId                                           String?
+  appointment_info                                                       appointment_info[]
+  insurance_info                                                         insurance_info[]
+  patientContacts                                                        PatientContact?
+  organizations_patients_failedPatientsOrganizationIdToorganizations     Organization?        @relation("patients_failedPatientsOrganizationIdToorganizations", fields: [failedPatientsOrganizationId], references: [id])
+  organization                                                           Organization?        @relation(fields: [organizationId], references: [id])
+  insurance_companies_patients_primaryInsuranceIdToinsurance_companies   InsuranceCompanies?  @relation("patients_primaryInsuranceIdToinsurance_companies", fields: [primaryInsuranceId], references: [id])
+  referringClinic                                                        Clinic?              @relation("PatientToReferringClinic", fields: [referringClinicId], references: [id])
+  referringProvider                                                      Provider?            @relation("PatientToReferringProvider", fields: [referringProviderId], references: [id])
+  insurance_companies_patients_secondaryInsuranceIdToinsurance_companies InsuranceCompanies?  @relation("patients_secondaryInsuranceIdToinsurance_companies", fields: [secondaryInsuranceId], references: [id])
+  surgeonClinic                                                          Clinic?              @relation("PatientToSurgeonClinic", fields: [surgeonClinicId], references: [id])
+  surgeon                                                                Provider?            @relation("PatientToSurgeon", fields: [surgeonId], references: [id])
+  postOperations                                                         PostOperation?
+  preOperations                                                          PreOperation?
+  clinics                                                                Clinic[]             @relation("ClinicToPatient")
+  insurance_companies_InsuranceCompaniesToPatient                        InsuranceCompanies[] @relation("InsuranceCompaniesToPatient")
+  providers                                                              Provider[]           @relation("PatientToProvider")
+  attachedFiles                                                          File[]               @relation("PatientToFile") // Bidirectional relation to the File model
+  gender                                                                 String? // New field
+  fax                                                                    String? // New field
+  address                                                                String? // New field
+  city                                                                   String? // New field
+  zip                                                                    String? // New field
+  interpreterNeeded                                                      Boolean? // New field
+  language                                                               String? // New field
+  okToText                                                               Boolean? // New field
+  consultationType                                                       String[] // New field (array for multiple selections)
+  urgentReferral                                                         Boolean? // New field
+  preferredLocations                                                     String[] // New field (array for multiple locations)
+  comanageYes                                                            Boolean?
+  comanageNo                                                             Boolean?
+  notes                                                                  String?
+  signUpNewsLetter                                                       Boolean?
+  appointmentInfo                                                        AppointmentInfo?     @relation("PatientToAppointmentInfo")
+  referralInfo                                                           ReferralInfo[]       @relation("PatientToReferralInfo")
+  insuranceInfo                                                          InsuranceInfo[]      @relation("PatientToInsuranceInfo")
 
   @@map("patients")
 }
@@ -214,152 +237,268 @@ model AppointmentInfo {
 
 model PatientContact {
   id                              String     @id @default(cuid())
-  clinics                         Clinic[]
   contactNotes                    String?
-  dateAttemptedFirstContact       DateTime?  @db.Timestamp
-  dateComanagerAware              DateTime?  @db.Timestamp
+  dateAttemptedFirstContact       DateTime?  @db.Timestamp(6)
+  dateComanagerAware              DateTime?  @db.Timestamp(6)
   dateInitialAppointmentScheduled DateTime?  @db.Date
-  dateReferralReceived            DateTime?  @db.Timestamp
-  patient                         Patient?   @relation(fields: [patientId], references: [id])
+  dateReferralReceived            DateTime?  @db.Timestamp(6)
   patientId                       String?    @unique
-  providers                       Provider[] // m-m relationship between preOperations and providers
   createdAt                       DateTime?  @default(now())
   updatedAt                       DateTime?  @updatedAt
+  patient                         Patient?   @relation(fields: [patientId], references: [id])
+  clinics                         Clinic[]   @relation("ClinicToPatientContact")
+  providers                       Provider[] @relation("PatientContactToProvider")
 
   @@map("patientContacts")
 }
 
 model PreOperation {
   id                          String     @id @default(cuid())
-  clinics                     Clinic[] // m-m relationship between operations and clinics
+  patientId                   String?    @unique
+  createdAt                   DateTime?  @default(now())
+  updatedAt                   DateTime?  @updatedAt
   consultationReportSent      Boolean?
   delayInSurgery              Boolean?
-  delayReason                 String?
   delayLetterSent             Boolean?
+  delayReason                 String?
   eyesToBeDone                String?
   firstEyeSurgeryDate         DateTime?  @db.Date
   firstEyeSurgeryType         String?
   initialAppointmentCompleted Boolean?
   isComanage                  Boolean?
-  isMedicare                  Boolean?
-  patient                     Patient?   @relation(fields: [patientId], references: [id])
-  patientId                   String?    @unique
-  providers                   Provider[] // m-m relationship between operations and providers
-  reasonNotComanage           String?
   reasonNoSurgeryScheduled    String?
+  reasonNotComanage           String?
   secondEyeSurgeryDate        DateTime?  @db.Date
   secondEyeSurgeryType        String?
   surgeryScheduled            Boolean?
-  createdAt                   DateTime?  @default(now())
-  updatedAt                   DateTime?  @updatedAt
+  isMedicare                  Boolean?
+  originalReferralType        String?
+  isReverseReferral           Boolean?
+  patient                     Patient?   @relation(fields: [patientId], references: [id])
+  clinics                     Clinic[]   @relation("ClinicToPreOperation")
+  providers                   Provider[] @relation("PreOperationToProvider")
 
   @@map("preOperations")
 }
 
-// Ophthalmologist or Optometrist
 model Provider {
-  id                    String           @id @default(cuid())
-  actionItem            Action_Item?
-  clinics               Clinic[] // an optom can work for multiple clinics
-  consentFormOnFile     Boolean?         @default(false)
-  dateVisitedByLiaison  String? // @db.Date wasn't working
-  dateVisitedByProvider String? // DateTime type wasn't working??
-  email                 String? // email address is optional
-  files                 File[]
-  firstName             String?
-  hasDemographics       Boolean?         @default(false)
-  hasW9                 Boolean?         @default(false)
-  image                 String?
-  lastName              String?
-  notes                 String?
-  organization          Organization?    @relation(fields: [organizationId], references: [id])
-  organizationId        String?
-  patients              Patient[] // patients referred by this provider
-  patientContact        PatientContact[] // 1-m relationship between patientPreOpContact and patients
-  patientsReferred      Patient[]        @relation("PatientToReferringProvider") // patients referred by this provider
-  phoneNumber           String?
-  preOperations         PreOperation[]
-  providerClinics       ProviderClinic[]
-  postOperations        PostOperation[]
-  specialties           String[]         @default([])
-  status                String?
-  surgeons              Patient[]        @relation("PatientToSurgeon") // surgeon for patients
-  type                  String? // optometrist or ophthalmologist
-  referralInfos         ReferralInfo[]
-  createdAt             DateTime?        @default(now())
-  updatedAt             DateTime?        @updatedAt
+  id                                                                   String           @id @default(cuid())
+  image                                                                String?
+  status                                                               String?
+  type                                                                 String?
+  firstName                                                            String?
+  lastName                                                             String?
+  specialties                                                          String[]         @default([])
+  createdAt                                                            DateTime?        @default(now())
+  updatedAt                                                            DateTime?        @updatedAt
+  dateVisitedByLiaison                                                 String?
+  dateVisitedByProvider                                                String?
+  email                                                                String?
+  notes                                                                String?
+  phoneNumber                                                          String?
+  organizationId                                                       String?
+  consentFormOnFile                                                    Boolean?         @default(false)
+  hasDemographics                                                      Boolean?         @default(false)
+  hasW9                                                                Boolean?         @default(false)
+  failedProvidersOrganizationId                                        String?
+  actionItem                                                           Action_Item?
+  files                                                                File[]
+  patientsReferred                                                     Patient[]        @relation("PatientToReferringProvider")
+  surgeons                                                             Patient[]        @relation("PatientToSurgeon")
+  providerClinics                                                      ProviderClinic[]
+  organizations_providers_failedProvidersOrganizationIdToorganizations Organization?    @relation("providers_failedProvidersOrganizationIdToorganizations", fields: [failedProvidersOrganizationId], references: [id])
+  organization                                                         Organization?    @relation(fields: [organizationId], references: [id])
+  referral_info                                                        referral_info[]
+  clinics                                                              Clinic[]         @relation("ClinicToProvider")
+  patientContact                                                       PatientContact[] @relation("PatientContactToProvider")
+  patients                                                             Patient[]        @relation("PatientToProvider")
+  postOperations                                                       PostOperation[]  @relation("PostOperationToProvider")
+  preOperations                                                        PreOperation[]   @relation("PreOperationToProvider")
+  referralInfos                                                        ReferralInfo[]   @relation("ReferralInfoToReferringProvider")
 
   @@map("providers")
 }
 
 model ProviderClinic {
-  clinic            Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
-  clinicId          String
   consentFormOnFile Boolean
   hasDemographics   Boolean
-  hasW9             Boolean
-  provider          Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
   providerId        String
+  clinicId          String
+  hasW9             Boolean
+  clinic            Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  provider          Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
 
-  @@id([providerId, clinicId]) // Composite primary key
+  @@id([providerId, clinicId])
   @@map("provider_clinics")
 }
 
 model ProviderStatus {
   id             String        @id @default(cuid())
   description    String?
-  organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?
   status         String?
   createdAt      DateTime?     @default(now())
   updatedAt      DateTime?     @updatedAt
+  organization   Organization? @relation(fields: [organizationId], references: [id])
 
   @@map("provider_statuses")
 }
 
 model PostOperation {
   id                           String     @id @default(cuid())
-  amountToBePaidFromInsurance  Decimal?
-  amountToPayProvider          Decimal?
-  clinics                      Clinic[] // m-m relationship between postOperations and clinics
   checkNumber                  Int?
   checkDelivered               Boolean?
-  checkDeliveryPaperwork       Boolean?
   contactedReferrer            Boolean?
   reasonNotReferredBack        String?
-  receivedOptomPostOpNotes     Boolean?
   referredBackToOriginalClinic Boolean?
   referralCompleted            Boolean?
   referralCanceled             Boolean?
   referralCanceledReason       String?
-  paidOptomDate                DateTime?  @db.Date
-  patient                      Patient?   @relation(fields: [patientId], references: [id])
-  patientId                    String?    @unique
-  providers                    Provider[] // m-m relationship between postOperations and providers
   postOpVisitDate              DateTime?  @db.Date
-  postOpVisitType              String? // TODO ask if this is a relevant field
-  transferOfCare               Boolean?
-  transferOfCareDate           DateTime?  @db.Date
-  typeOfInsurance              String? // an oph clinic ONLY pays out on commercial insurance
+  typeOfInsurance              String?
+  patientId                    String?    @unique
   createdAt                    DateTime?  @default(now())
   updatedAt                    DateTime?  @updatedAt
+  amountToBePaidFromInsurance  Decimal?
+  amountToPayProvider          Decimal?
+  paidOptomDate                DateTime?  @db.Date
+  checkDeliveryPaperwork       Boolean?
+  transferOfCareDateLeftEye    DateTime?  @db.Date
+  transferOfCareDateRightEye   DateTime?  @db.Date
+  transferOfCareLeftEye        Boolean?
+  transferOfCareRightEye       Boolean?
+  postOpNotesReceivedLeftEye   Boolean?
+  postOpNotesReceivedRightEye  Boolean?
+  referralCompletedAt          DateTime?  @db.Date
+  patient                      Patient?   @relation(fields: [patientId], references: [id])
+  clinics                      Clinic[]   @relation("ClinicToPostOperation")
+  providers                    Provider[] @relation("PostOperationToProvider")
 
   @@map("postOperations")
 }
 
-// App user 
 model User {
   id             String        @id @default(cuid())
-  actionItem     Action_Item?
   email          String?       @unique
-  files          File[]
+  role           String?       @default("specialist")
   firstName      String?
   lastName       String?
-  organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
-  role           String?       @default("specialist")
   createdAt      DateTime?     @default(now())
   updatedAt      DateTime?     @updatedAt
+  organizationId String?
+  actionItem     Action_Item?
+  files          File[]
+  organization   Organization? @relation(fields: [organizationId], references: [id])
 
   @@map("users")
+}
+
+model appointment_info {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()"))
+  doctor_specialty        String?
+  preferred_locations     String[]
+  consultation_type       String?
+  urgent_referral         Boolean?
+  additional_conditions   String?
+  chart_notes_attachments String[]
+  co_manage_care          Boolean?
+  dlv_assume_post_op_care Boolean?
+  patient_id              String?
+  created_at              DateTime? @default(now()) @db.Timestamp(6)
+  updated_at              DateTime? @default(now()) @db.Timestamp(6)
+  patients                Patient?  @relation(fields: [patient_id], references: [id], map: "fk_patient")
+}
+
+model insurance_info {
+  id                                                                                   String              @id @default(dbgenerated("gen_random_uuid()"))
+  primaryInsuranceProviderId                                                           String?
+  primaryInsuranceIdNumber                                                             String?
+  primaryInsuranceGroupNumber                                                          String?
+  secondaryInsuranceProviderId                                                         String?
+  secondaryInsuranceIdNumber                                                           String?
+  secondaryInsuranceGroupNumber                                                        String?
+  patientid                                                                            String?
+  createdat                                                                            DateTime?           @default(now()) @db.Timestamp(6)
+  updatedat                                                                            DateTime?           @default(now()) @db.Timestamp(6)
+  patients                                                                             Patient?            @relation(fields: [patientid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_patient")
+  insurance_companies_insurance_info_primaryInsuranceProviderIdToinsurance_companies   InsuranceCompanies? @relation("insurance_info_primaryInsuranceProviderIdToinsurance_companies", fields: [primaryInsuranceProviderId], references: [id], onUpdate: NoAction, map: "fk_primary_insurance_provider")
+  insurance_companies_insurance_info_secondaryInsuranceProviderIdToinsurance_companies InsuranceCompanies? @relation("insurance_info_secondaryInsuranceProviderIdToinsurance_companies", fields: [secondaryInsuranceProviderId], references: [id], onUpdate: NoAction, map: "fk_secondary_insurance_provider")
+}
+
+model referral_info {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referringclinicid   String?
+  referringproviderid String?
+  referringemail      String?
+  referringphone      String?
+  referringfax        String?
+  referringaddress    String?
+  referringcity       String?
+  referringstatezip   String?
+  createdat           DateTime? @default(now()) @db.Timestamp(6)
+  updatedat           DateTime? @default(now()) @db.Timestamp(6)
+  clinics             Clinic?   @relation(fields: [referringclinicid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  providers           Provider? @relation(fields: [referringproviderid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+
+model ReferralInfo {
+  id                  String   @id @default(cuid())
+  referringClinicId   String? // Foreign key to Clinic
+  referringProviderId String? // Foreign key to Provider
+  referringEmail      String? // Referring email
+  referringPhone      String? // Referring phone
+  referringFax        String? // Referring fax
+  referringAddress    String? // Referring address
+  referringCity       String? // Referring city
+  referringStateZip   String? // Referring state and zip
+  patientId           String // Foreign key to Patient
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @default(now()) @updatedAt @map("updated_at")
+
+  // Relation to Patient
+  patient Patient @relation("PatientToReferralInfo", fields: [patientId], references: [id], onDelete: Cascade)
+
+  referringClinic   Clinic?   @relation("ReferralInfoToReferringClinic", fields: [referringClinicId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  referringProvider Provider? @relation("ReferralInfoToReferringProvider", fields: [referringProviderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+}
+
+model InsuranceInfo {
+  id                             String   @id @default(cuid())
+  primaryInsuranceProviderId     String? // ID for primary insurance provider
+  primaryInsuranceProviderName   String? // ID for primary insurance provider name
+  primaryInsuranceIdNumber       String? // Insurance ID number for primary provider
+  primaryInsuranceGroupNumber    String? // Group number for primary insurance
+  secondaryInsuranceProviderId   String? // ID for secondary insurance provider
+  secondaryInsuranceProviderName String? // ID for secondary insurance provider name
+  secondaryInsuranceIdNumber     String? // Insurance ID number for secondary provider
+  secondaryInsuranceGroupNumber  String? // Group number for secondary insurance
+  patientId                      String // Foreign key to Patient
+  createdAt                      DateTime @default(now()) @map("created_at")
+  updatedAt                      DateTime @default(now()) @updatedAt @map("updated_at")
+
+  // Relation to Patient
+  patient Patient @relation("PatientToInsuranceInfo", fields: [patientId], references: [id], onDelete: Cascade)
+
+  // Relations to insurance providers
+  primaryInsuranceProvider   InsuranceCompanies? @relation("PrimaryInsurance", fields: [primaryInsuranceProviderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  secondaryInsuranceProvider InsuranceCompanies? @relation("SecondaryInsurance", fields: [secondaryInsuranceProviderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+}
+
+model AppointmentInfo {
+  id                    String   @id @default(cuid())
+  doctorSpecialty       String?
+  preferredLocations    String[] // Array of preferred locations
+  consultationType      String? // Consultation type
+  urgentReferral        Boolean? // Whether the referral is urgent
+  additionalConditions  String? // Additional medical conditions
+  chartNotesAttachments String[] // Attachments for chart notes
+  coManageCare          Boolean? // Co-manage care flag
+  dlvAssumePostOpCare   Boolean? // Whether post-op care is assumed
+  patientId             String   @unique // Foreign key to Patient
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @default(now()) @updatedAt @map("updated_at")
+
+  // Relation to Patient
+  patient Patient @relation("PatientToAppointmentInfo", fields: [patientId], references: [id], onDelete: Cascade)
 }

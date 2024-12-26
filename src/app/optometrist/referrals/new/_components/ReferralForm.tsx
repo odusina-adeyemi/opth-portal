@@ -1716,43 +1716,31 @@ const ReferralForm = ({
             </Typography>
           </Grid>
 
-          <Grid item xs={12}>
+            <Grid item xs={12}>
             <FormControl component="fieldset">
               <FormLabel component="legend">
-                Co-management Preferences
+              Co-management Preferences
               </FormLabel>
-              <Field name="comanagePreference">
+              <FormGroup>
+              <Field name="comanageYes" type="checkbox" initialValue={patient?.comanageYes ?? false}>
                 {({ input }) => (
-                  <>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={input.value === 'yes'}
-                          onChange={
-                            () =>
-                              input.onChange(input.value === 'yes' ? '' : 'yes') // Untick if already selected
-                          }
-                        />
-                      }
-                      label="Yes - I'd like to co-manage the patient’s post-op care"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={input.value === 'no'}
-                          onChange={
-                            () =>
-                              input.onChange(input.value === 'no' ? '' : 'no') // Untick if already selected
-                          }
-                        />
-                      }
-                      label="No - I’d prefer Snyder Eye Institute to assume the patient’s post-op care"
-                    />
-                  </>
+                <FormControlLabel
+                  control={<Checkbox {...input} />}
+                  label="Yes - I'd like to co-manage the patient’s post-op care"
+                />
                 )}
               </Field>
+              <Field name="comanageNo" type="checkbox" initialValue={patient?.comanageNo ?? false}>
+                {({ input }) => (
+                <FormControlLabel
+                  control={<Checkbox {...input} />}
+                  label="No - I’d prefer Snyder Eye Institute to assume the patient’s post-op care"
+                />
+                )}
+              </Field>
+              </FormGroup>
             </FormControl>
-          </Grid>
+            </Grid>
 
           <Grid item xs={12}>
             <Field

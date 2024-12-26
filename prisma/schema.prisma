@@ -177,63 +177,6 @@ model Patient {
   @@map("patients")
 }
 
-model ReferralInfo {
-  id                  String    @id @default(cuid())
-  referringClinic     Clinic?   @relation(fields: [referringClinicId], references: [id])
-  referringClinicId   String?
-  referringProvider   Provider? @relation(fields: [referringProviderId], references: [id])
-  referringProviderId String?
-  referringEmail      String?
-  referringPhone      String?
-  referringFax        String?
-  referringAddress    String?
-  referringCity       String?
-  referringStateZip   String?
-  patients            Patient[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("referral_info")
-}
-
-model InsuranceInfo {
-  id                          String              @id @default(cuid())
-  primaryInsuranceProviderId  String? // Foreign key for the primary provider
-  primaryInsuranceProvider    InsuranceCompanies? @relation("PrimaryInsuranceRelation", fields: [primaryInsuranceProviderId], references: [id])
-  primaryInsuranceIdNumber    String?
-  primaryInsuranceGroupNumber String?
-
-  secondaryInsuranceProviderId  String? // Foreign key for the secondary provider
-  secondaryInsuranceProvider    InsuranceCompanies? @relation("SecondaryInsuranceRelation", fields: [secondaryInsuranceProviderId], references: [id])
-  secondaryInsuranceIdNumber    String?
-  secondaryInsuranceGroupNumber String?
-  patient                       Patient?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("insurance_info")
-}
-
-model AppointmentInfo {
-  id                    String   @id @default(cuid())
-  doctorSpecialty       String?
-  preferredLocations    String[] // Array of preferred locations
-  consultationType      String?
-  urgentReferral        Boolean?
-  additionalConditions  String?
-  chartNotesAttachments String[] // File paths or URLs for attachments
-
-  coManageCare        Boolean? // True if co-managing post-op care
-  dlvAssumePostOpCare Boolean? // True if Co Management will handle post-op care
-  patient             Patient?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("appointment_info")
-}
 
 model PatientContact {
   id                              String     @id @default(cuid())

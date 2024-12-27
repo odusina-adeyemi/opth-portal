@@ -141,9 +141,6 @@ type Organization = {
 //   dlv_assume_post_op_care: Boolean;
 // };
 
-
-
-
 type ReferralInfo = {
   id: string; // Unique identifier
   referringClinicId?: string; // Foreign key to Clinic
@@ -164,7 +161,6 @@ type ReferralInfo = {
   referringProvider?: Provider; // Relation to referring Provider
 };
 
-
 type AppointmentInfo = {
   id: string; // Unique identifier
   doctorSpecialty?: string; // Doctor's specialty
@@ -182,7 +178,6 @@ type AppointmentInfo = {
   // Relation to Patient
   patient: Patient; // Associated patient
 };
-
 
 type referral_info = {
   referringclinicid: ID;
@@ -209,8 +204,6 @@ type SurgeonInfo = {
 //   secondaryInsuranceGroupNumber: String;
 // };
 
-
-
 type InsuranceInfo = {
   id: string; // Unique identifier
   primaryInsuranceProviderId?: string; // ID for primary insurance provider
@@ -233,7 +226,6 @@ type InsuranceInfo = {
   secondaryInsuranceProvider?: InsuranceCompanies; // Associated secondary insurance provider
 };
 
-
 type InsuranceCompanies = {
   id: string; // Unique identifier
   isCommercial?: boolean; // Whether the insurance is commercial (default: false)
@@ -252,8 +244,6 @@ type InsuranceCompanies = {
   patients_patients_secondaryInsuranceIdToinsurance_companies?: Patient; // Secondary insurance patient relation (legacy mapping)
   patients_InsuranceCompaniesToPatient: Patient[]; // Patients associated with this insurance company
 };
-
-
 
 // Types for file attachments
 type File = {
@@ -303,8 +293,6 @@ type ID = string;
 //   surgeonClinicId?: string; // Surgeon clinic ID (optional)
 //   surgeonId?: string; // Surgeon ID (optional)
 // };
-
-
 
 type Patient = {
   id: string; // Unique identifier
@@ -357,10 +345,6 @@ type Patient = {
   providers?: Provider[]; // Associated providers
   patientContacts?: PatientContact; // Associated patient contact
 };
-
-
-
-
 
 // providers table - ophthalmologists, optometrists, etc.
 type Provider = {

@@ -32,7 +32,8 @@ const CustomDialogContent = ({
           <Button
             onClick={affirmativeOnClick}
             variant="contained"
-            color="primary">
+            color="primary"
+          >
             {affirmativeButtonLabel}
           </Button>
         )}
@@ -40,7 +41,8 @@ const CustomDialogContent = ({
           <Button
             onClick={negativeOnClick}
             variant="contained"
-            color="secondary">
+            color="secondary"
+          >
             {negativeButtonLabel}
           </Button>
         )}

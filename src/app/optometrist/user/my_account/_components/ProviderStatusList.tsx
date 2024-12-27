@@ -116,7 +116,8 @@ const ProviderStatusList = ({ orgId }: { orgId: string }) => {
                   </Field>
                   <Field
                     name="description"
-                    initialValue={providerStatus.description}>
+                    initialValue={providerStatus.description}
+                  >
                     {({ input }) => (
                       <TextField
                         id="description"

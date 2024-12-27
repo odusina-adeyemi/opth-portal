@@ -200,7 +200,8 @@ const DetailPanelToolbar = ({
           }
           startIcon={<Add />}
           onClick={handleClick}
-          sx={{ color: pageTitleHeaderBackgroundColor }}>
+          sx={{ color: pageTitleHeaderBackgroundColor }}
+        >
           New {selectionName} Record
         </Button>
       )}

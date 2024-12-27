@@ -491,9 +491,6 @@ export const patientResolver = {
           //   create: patientInput.referralInfo,
           // },
 
-          
-
-
           referralInfo: {
             create: patientInput.referralInfo?.map(info => ({
               referringClinicId: info.referringClinicId,
@@ -506,7 +503,7 @@ export const patientResolver = {
               referringStateZip: info.referringStateZip,
             })),
           },
-          
+
           // referralInfo: patientInput.referralInfo && {
           //   create: {
           //     referringClinicId: patientInput.referralInfo[0]?.referringClinicId,
@@ -519,9 +516,6 @@ export const patientResolver = {
           //     referringStateZip: patientInput.referralInfo[0]?.referringStateZip,
           //   },
           // },
-          
-
-
 
           // insuranceInfo: {
           //   create: patientInput.insuranceInfo,
@@ -534,7 +528,8 @@ export const patientResolver = {
               primaryInsuranceIdNumber: info.primaryInsuranceIdNumber,
               primaryInsuranceGroupNumber: info.primaryInsuranceGroupNumber,
               secondaryInsuranceProviderId: info.secondaryInsuranceProviderId,
-              secondaryInsuranceProviderName: info.secondaryInsuranceProviderName,
+              secondaryInsuranceProviderName:
+                info.secondaryInsuranceProviderName,
               secondaryInsuranceIdNumber: info.secondaryInsuranceIdNumber,
               secondaryInsuranceGroupNumber: info.secondaryInsuranceGroupNumber,
             })),
@@ -586,9 +581,10 @@ export const patientResolver = {
           //   connect: { id: patientInput.surgeon.clinics[0].id },
           // },
 
-          surgeonClinic: patientInput.surgeon?.clinics && patientInput.surgeon.clinics.length > 0 && {
-            connect: { id: patientInput.surgeon.clinics[0].id },
-          },
+          surgeonClinic: patientInput.surgeon?.clinics &&
+            patientInput.surgeon.clinics.length > 0 && {
+              connect: { id: patientInput.surgeon.clinics[0].id },
+            },
 
           surgeon: patientInput.surgeon?.id && {
             connect: { id: patientInput.surgeon.id },
@@ -626,7 +622,6 @@ export const patientResolver = {
             connect: patientInput?.clinics?.map(id => ({ id })),
           },
 
-          
           appointmentInfo: {
             upsert: {
               create: patientInput.appointmentInfo,

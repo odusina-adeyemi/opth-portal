@@ -143,7 +143,8 @@ const UploadDocument = ({
             href={data.providerClinicFile.signedUrl}
             target="_blank"
             rel="noreferrer"
-            sx={{ position: 'relative', top: '4px' }}>
+            sx={{ position: 'relative', top: '4px' }}
+          >
             <FindInPageIcon color="info" fontSize="small" />
           </Link>
           <DeleteOutline
@@ -177,7 +178,8 @@ const UploadDocument = ({
                 color:
                   !clinicId || !providerId ? 'rgba(0, 0, 0, 0.26)' : '#0288d1',
               },
-            }}>
+            }}
+          >
             <UploadIcon color="info" />
           </IconButton>
         </label>

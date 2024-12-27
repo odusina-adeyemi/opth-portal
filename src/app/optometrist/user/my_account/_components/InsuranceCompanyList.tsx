@@ -107,7 +107,8 @@ const InsuranceCompanyList = ({
                     {...rest}
                     variant="subtitle1"
                     display={'flex'}
-                    px={1}>
+                    px={1}
+                  >
                     {option.name} <Check color="success" />
                   </Typography>
                 </Fragment>
@@ -119,7 +120,8 @@ const InsuranceCompanyList = ({
                   {...rest}
                   variant="subtitle1"
                   display={'flex'}
-                  px={1}>
+                  px={1}
+                >
                   {option.name}
                 </Typography>
               </Fragment>

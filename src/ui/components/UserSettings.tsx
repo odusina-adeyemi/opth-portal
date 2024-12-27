@@ -29,7 +29,8 @@ const UserSettings = ({ orgName }: { orgName: string }) => {
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}>
+        onClose={handleClose}
+      >
         <Link href={'/user/profile'}>
           <MenuItem onClick={handleClose}>Profile</MenuItem>
         </Link>

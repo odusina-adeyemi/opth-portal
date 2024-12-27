@@ -29,11 +29,13 @@ const EditToolbar = () => {
       sx={{
         justifyContent: 'space-between',
         padding: '0 16px',
-      }}>
+      }}
+    >
       <Link href="/clinics/new">
         <Button
           sx={{ color: pageTitleHeaderBackgroundColor }}
-          startIcon={<Add />}>
+          startIcon={<Add />}
+        >
           New clinic
         </Button>
       </Link>
@@ -101,12 +103,14 @@ const ClinicsTable = ({ clinics }: { clinics: Clinic[] }) => {
                     // if we have a view page, it'll be that href
                     // instead of the edit url
                     href={`/providers/edit/${provider.id}`}
-                    key={provider.id}>
+                    key={provider.id}
+                  >
                     <Button
                       sx={{
                         color: textLinkColor,
                         textTransform: 'capitalize',
-                      }}>
+                      }}
+                    >
                       {provider.firstName} {provider.lastName}
                     </Button>
                   </Link>

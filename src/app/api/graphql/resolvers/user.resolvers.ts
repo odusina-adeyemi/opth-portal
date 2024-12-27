@@ -13,7 +13,7 @@ export const userResolver = {
       _parent: User,
       { organizationId }: { organizationId: string },
       context: any,
-    ) => 
+    ) =>
       await context.prisma.user.findMany({
         where: { organizationId },
         include: { organization: true },

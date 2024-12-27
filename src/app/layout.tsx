@@ -12,7 +12,7 @@ import { getLoggedInUser } from '../lib/getLoggedInUser';
 import LayoutUseClient from './LayoutUseClient';
 import TopBar from '../ui/components/TopBar';
 import { validateJwtToken } from '../lib/utils/utils';
-import OptometristDashboard from "../app/optometrist/optometristLayout"
+import OptometristDashboard from '../app/optometrist/optometristLayout';
 import './globals.css';
 
 // The build would fail if this was not here
@@ -41,7 +41,7 @@ export default async function RootLayout({
     getLoggedInUser(),
     getAccessTokenRaw(),
   ]);
-console.log(user)
+  console.log(user);
   let layout = null;
 
   if (!isAuth) {
@@ -52,7 +52,9 @@ console.log(user)
 
   if (isAuth && user?.id && isValidToken) {
     // const isOptometrist = user?.role?.includes('optometrist');
-    const isOptometrist = typeof user?.role === 'string' && user.role.toLowerCase() === 'optometrist';
+    const isOptometrist =
+      typeof user?.role === 'string' &&
+      user.role.toLowerCase() === 'optometrist';
 
     layout = (
       <AppRouterCacheProvider>
@@ -61,10 +63,12 @@ console.log(user)
             {/* <OptometristDashboard user={user}>{children}</OptometristDashboard>
             <LayoutUseClient user={user}>{children}</LayoutUseClient> */}
             {isOptometrist ? (
-                <OptometristDashboard user={user}>{children}</OptometristDashboard>
-              ) : (
-                <LayoutUseClient user={user}>{children}</LayoutUseClient>
-              )}
+              <OptometristDashboard user={user}>
+                {children}
+              </OptometristDashboard>
+            ) : (
+              <LayoutUseClient user={user}>{children}</LayoutUseClient>
+            )}
             <MuiXLicense />
           </CssBaseline>
         </ApolloWrapper>

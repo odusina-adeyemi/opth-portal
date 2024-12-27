@@ -31,7 +31,8 @@ export const clinicsColumns: GridColDef<GridValidRowModel>[] = [
         sx={{
           color: pageTitleHeaderBackgroundColor,
           textTransform: 'capitalize',
-        }}>
+        }}
+      >
         Providers
       </Button>
     ),

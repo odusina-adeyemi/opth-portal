@@ -5,11 +5,11 @@ import { Box, Button } from '@mui/material';
 import { MutationFunction, useLazyQuery, useMutation } from '@apollo/client';
 import {
   GET_ARCHIVED_FILES,
-  GET_FILE,    
+  GET_FILE,
 } from '../../../../api/graphql/queries/files';
 import CenterLoadingIcon from '../../../../../ui/components/CenterLoadingIcon';
 import { archivedFileColumns } from '../../../../../constants/dataGridColumnNames/archivedFilesColumns';
-import { FileResponse } from '../../../../../constants/types/types';     
+import { FileResponse } from '../../../../../constants/types/types';
 import { useModal } from '../../../../_components/ModalProvider';
 import { useSnackbar } from '../../../../_components/SnackbarProvider';
 import CustomDialogContent from '../../../../_components/CustomDialogContent';
@@ -31,7 +31,8 @@ const Toolbar = ({
       onClick={() => fetchArchivedFiles()}
       size="small"
       sx={{ textTransform: 'capitalize', width: 'fit-content' }}
-      variant="contained">
+      variant="contained"
+    >
       Fetch
     </Button>
   );

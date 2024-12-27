@@ -7,7 +7,7 @@ import PageTitleHeader from '../../../ui/components/PageTitleHeader';
 const UserProfilePage = async () => {
   const user = await getLoggedInUser();
   const organization = await fetchOrganization(user?.organizationId);
-console.log('user', user);
+  console.log('user', user);
   return (
     <Grid container py={2} display={'flex'} justifyContent={'center'}>
       <PageTitleHeader title="User Profile" />

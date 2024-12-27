@@ -35,8 +35,6 @@
 //   };
 // };
 
-
-
 import { defaultFieldResolver, GraphQLSchema } from 'graphql';
 import { getDirective, mapSchema, MapperKind } from '@graphql-tools/utils';
 import { writeLogEntry } from '../../../../lib/utils/logging';

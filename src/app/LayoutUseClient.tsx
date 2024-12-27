@@ -46,7 +46,8 @@ const LayoutUseClient = ({
             pt={2}
             display={'flex'}
             alignContent={'center'}
-            flexDirection={'column'}>
+            flexDirection={'column'}
+          >
             <SideNavBar />
           </Grid>
           <Grid
@@ -54,7 +55,8 @@ const LayoutUseClient = ({
             xs={10}
             bgcolor={mainBackgroundColor}
             minHeight={'100vh'}
-            flex={1}>
+            flex={1}
+          >
             {children}
           </Grid>
         </Grid>

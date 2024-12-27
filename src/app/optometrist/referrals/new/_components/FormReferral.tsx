@@ -15,7 +15,12 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import { useForm, Controller } from 'react-hook-form';
-import { Clinic, Provider, Patient, User } from '../../../../../constants/types/types';
+import {
+  Clinic,
+  Provider,
+  Patient,
+  User,
+} from '../../../../../constants/types/types';
 import AddProvider from '../../../../_components/AddProvider';
 import AddClinic from '../../../../_components/AddClinic';
 import { useSnackbar } from '../../../../_components/SnackbarProvider';
@@ -56,17 +61,30 @@ const ReferralForm = ({
   surgeons,
   user,
 }: ReferralFormProps) => {
-  const [surgeonIdSelected, setSurgeonIdSelected] = useState<string>(patient?.surgeonId ?? '');
-  const [optomIdSelected, setOptomIdSelected] = useState<string>(patient?.referringProviderId ?? '');
-  const [phoneNumber, setPhoneNumber] = useState<string | undefined>(patient?.phoneNumber ?? undefined);
+  const [surgeonIdSelected, setSurgeonIdSelected] = useState<string>(
+    patient?.surgeonId ?? '',
+  );
+  const [optomIdSelected, setOptomIdSelected] = useState<string>(
+    patient?.referringProviderId ?? '',
+  );
+  const [phoneNumber, setPhoneNumber] = useState<string | undefined>(
+    patient?.phoneNumber ?? undefined,
+  );
 
   const { openSnackbar } = useSnackbar();
   const textFieldRef = useRef<HTMLInputElement>(null);
 
-  const { control, handleSubmit, formState: { errors }, reset } = useForm<FormValuesProps>();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormValuesProps>();
 
-  const [createPatient, { loading: createLoading, error: createError }] = useMutation(ADD_PATIENT);
-  const [updatePatient, { loading: updateLoading, error: updateError }] = useMutation(UPDATE_PATIENT);
+  const [createPatient, { loading: createLoading, error: createError }] =
+    useMutation(ADD_PATIENT);
+  const [updatePatient, { loading: updateLoading, error: updateError }] =
+    useMutation(UPDATE_PATIENT);
 
   const onSubmit = async (values: FormValuesProps) => {
     let clinics = [values.clinic];
@@ -115,7 +133,10 @@ const ReferralForm = ({
             setOptomIdSelected('');
             setSurgeonIdSelected('');
           } else {
-            openSnackbar('Error creating patient. Check for invalid inputs', 'error');
+            openSnackbar(
+              'Error creating patient. Check for invalid inputs',
+              'error',
+            );
           }
         },
         onError: () => {
@@ -195,7 +216,9 @@ const ReferralForm = ({
                       {...field}
                       sx={{ m: 1 }}
                       type="date"
-                      inputProps={{ max: new Date().toISOString().split('T')[0] }}
+                      inputProps={{
+                        max: new Date().toISOString().split('T')[0],
+                      }}
                       error={!!errors.patientDOB}
                       helperText={errors.patientDOB?.message}
                     />
@@ -205,7 +228,10 @@ const ReferralForm = ({
             </Grid>
 
             <Grid item xs={12}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mt: 1, mx: 1 }}>
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: 'bold', mt: 1, mx: 1 }}
+              >
                 Patient Contact Information
               </Typography>
             </Grid>
@@ -242,7 +268,7 @@ const ReferralForm = ({
                     sx={{ m: 1 }}
                     type="tel"
                     value={formatPhoneNumber(phoneNumber)}
-                    onChange={(e) => {
+                    onChange={e => {
                       setPhoneNumber(e.target.value);
                       field.onChange(e);
                     }}
@@ -253,7 +279,10 @@ const ReferralForm = ({
             </Grid>
 
             <Grid item xs={12}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mt: 1, mx: 1 }}>
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: 'bold', mt: 1, mx: 1 }}
+              >
                 Provider Information
               </Typography>
             </Grid>
@@ -275,7 +304,7 @@ const ReferralForm = ({
                       id="provider"
                       label="Provider *"
                       {...field}
-                      onChange={(e) => {
+                      onChange={e => {
                         field.onChange(e);
                         setOptomIdSelected(e.target.value);
                       }}
@@ -283,7 +312,7 @@ const ReferralForm = ({
                       variant="outlined"
                     >
                       <MenuItem value="">Select a provider</MenuItem>
-                      {optoms.map((optom) => (
+                      {optoms.map(optom => (
                         <MenuItem key={optom.id} value={optom.id}>
                           {optom.firstName} {optom.lastName}
                         </MenuItem>

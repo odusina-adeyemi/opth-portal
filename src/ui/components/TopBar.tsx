@@ -14,7 +14,8 @@ const TopBar = ({ user }: { user: User }) => {
         display="flex"
         justifyContent={'left'}
         alignItems={'center'}
-        pl={3}>
+        pl={3}
+      >
         <VisibilityIcon style={{ fill: 'white' }} />
         &nbsp;
         <Typography variant="h6" color={'white'}>

@@ -189,9 +189,6 @@
 //   }
 // };
 
-
-
-
 import { gql } from '@apollo/client';
 import prisma from '../../../../../lib/prisma';
 import { Patient } from '../../../../constants/types/types';

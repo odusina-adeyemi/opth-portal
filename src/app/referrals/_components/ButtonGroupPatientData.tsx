@@ -57,7 +57,8 @@ const ButtonGroupPatientData = ({
               color: 'white',
             },
           }}
-          variant={buttonSelected === 'contact' ? 'contained' : 'outlined'}>
+          variant={buttonSelected === 'contact' ? 'contained' : 'outlined'}
+        >
           Contact
         </Button>
         <Button
@@ -85,7 +86,8 @@ const ButtonGroupPatientData = ({
               color: 'white',
             },
           }}
-          variant={buttonSelected === 'preop' ? 'contained' : 'outlined'}>
+          variant={buttonSelected === 'preop' ? 'contained' : 'outlined'}
+        >
           Pre-op
         </Button>
         <Button
@@ -113,7 +115,8 @@ const ButtonGroupPatientData = ({
               color: 'white',
             },
           }}
-          variant={buttonSelected === 'postop' ? 'contained' : 'outlined'}>
+          variant={buttonSelected === 'postop' ? 'contained' : 'outlined'}
+        >
           Post-op
         </Button>
       </ButtonGroup>

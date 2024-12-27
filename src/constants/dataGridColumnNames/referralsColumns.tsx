@@ -45,7 +45,8 @@ export const referralsColumns: GridColDef<GridValidRowModel>[] = [
               sx={{
                 color: pageTitleHeaderBackgroundColor,
                 textDecoration: 'underline',
-              }}>
+              }}
+            >
               {row.lastName}, {row.firstName}
             </Typography>
           </Link>

@@ -14,7 +14,8 @@ const BackArrowLink = ({ color, href, title }: BackArrowLinkProps) => {
     <Box display="flex" alignItems="center">
       <Link
         href={href}
-        style={{ color, display: 'flex', alignItems: 'center' }}>
+        style={{ color, display: 'flex', alignItems: 'center' }}
+      >
         <ArrowBack sx={{ m: 1 }} />
         {title}
       </Link>

@@ -87,7 +87,8 @@ const UserForm = ({ loggedInUser, user }: UserFormProps) => {
                   display: 'flex',
                   alignItems: 'center',
                   textDecoration: 'none',
-                }}>
+                }}
+              >
                 <ArrowBack sx={{ m: 1 }} />
                 My Account
               </Link>
@@ -103,7 +104,8 @@ const UserForm = ({ loggedInUser, user }: UserFormProps) => {
                   <Grid item xs={12} alignContent={'center'}>
                     <Typography
                       variant="subtitle1"
-                      sx={{ fontWeight: 'bold', m: 1 }}>
+                      sx={{ fontWeight: 'bold', m: 1 }}
+                    >
                       User Information
                     </Typography>
                   </Grid>
@@ -111,7 +113,8 @@ const UserForm = ({ loggedInUser, user }: UserFormProps) => {
                     <Field
                       name="firstName"
                       initialValue={user?.firstName ?? ''}
-                      validate={required}>
+                      validate={required}
+                    >
                       {({ input, meta }) => (
                         <TextField
                           id="firstName"
@@ -133,7 +136,8 @@ const UserForm = ({ loggedInUser, user }: UserFormProps) => {
                     <Field
                       name="lastName"
                       initialValue={user?.lastName ?? ''}
-                      validate={required}>
+                      validate={required}
+                    >
                       {({ input, meta }) => (
                         <TextField
                           id="lastName"
@@ -154,7 +158,8 @@ const UserForm = ({ loggedInUser, user }: UserFormProps) => {
                     <Field
                       name="email"
                       initialValue={user?.email ?? ''}
-                      validate={required}>
+                      validate={required}
+                    >
                       {({ input, meta }) => (
                         <TextField
                           id="email"
@@ -176,11 +181,13 @@ const UserForm = ({ loggedInUser, user }: UserFormProps) => {
                     <Field
                       name="role"
                       initialValue={user?.role ?? ''}
-                      validate={required}>
+                      validate={required}
+                    >
                       {({ input, meta }) => (
                         <FormControl
                           fullWidth
-                          error={meta.error && meta.touched}>
+                          error={meta.error && meta.touched}
+                        >
                           <InputLabel id="role">Role *</InputLabel>
                           <Select
                             id="role"
@@ -188,7 +195,8 @@ const UserForm = ({ loggedInUser, user }: UserFormProps) => {
                             name={input.name}
                             onChange={input.onChange}
                             value={input.value}
-                            variant="outlined">
+                            variant="outlined"
+                          >
                             <MenuItem value={''}>Select a Role</MenuItem>
                             {USER_ROLES?.map((role, index) => {
                               return (
@@ -210,7 +218,8 @@ const UserForm = ({ loggedInUser, user }: UserFormProps) => {
                     m={1}
                     mr={0}
                     p={1}
-                    pr={0}>
+                    pr={0}
+                  >
                     <Button
                       color="primary"
                       disabled={
@@ -224,7 +233,8 @@ const UserForm = ({ loggedInUser, user }: UserFormProps) => {
                           updateUserLoading) && <CircularProgress size={20} />
                       }
                       type="submit"
-                      variant="contained">
+                      variant="contained"
+                    >
                       {user ? 'Update' : 'Create'}
                     </Button>
                   </Grid>

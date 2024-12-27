@@ -50,7 +50,7 @@ interface FormValuesProps {
   patientLastName: string;
   patientDOB: string;
   phoneNumber: string;
-  provider: string; 
+  provider: string;
   surgeon: string;
   surgeonClinic: string;
 }
@@ -156,7 +156,8 @@ const ReferralForm = ({
                 <Grid item xs={12} alignContent={'center'}>
                   <Typography
                     variant="subtitle1"
-                    sx={{ fontWeight: 'bold', m: 1 }}>
+                    sx={{ fontWeight: 'bold', m: 1 }}
+                  >
                     Patient Information
                   </Typography>
                 </Grid>
@@ -164,7 +165,8 @@ const ReferralForm = ({
                   <Field
                     name="patientFirstName"
                     initialValue={patient?.firstName ?? ''}
-                    validate={required}>
+                    validate={required}
+                  >
                     {({ input, meta }) => (
                       <TextField
                         id="patientFirstName"
@@ -186,7 +188,8 @@ const ReferralForm = ({
                   <Field
                     name="patientLastName"
                     initialValue={patient?.lastName ?? ''}
-                    validate={required}>
+                    validate={required}
+                  >
                     {({ input, meta }) => (
                       <TextField
                         id="patientLastName"
@@ -207,7 +210,8 @@ const ReferralForm = ({
                   <Field
                     name="patientDOB"
                     initialValue={patient?.dob ?? undefined}
-                    validate={required}>
+                    validate={required}
+                  >
                     {({ input, meta }) => (
                       <>
                         <InputLabel
@@ -215,7 +219,8 @@ const ReferralForm = ({
                           sx={{
                             pl: 1,
                             color: meta.error && meta.touched && '#d32f2f',
-                          }}>
+                          }}
+                        >
                           Date of birth *
                         </InputLabel>
                         <TextField
@@ -240,14 +245,16 @@ const ReferralForm = ({
                 <Grid item xs={12}>
                   <Typography
                     variant="subtitle1"
-                    sx={{ fontWeight: 'bold', mt: 1, mx: 1 }}>
+                    sx={{ fontWeight: 'bold', mt: 1, mx: 1 }}
+                  >
                     Patient Contact Information
                   </Typography>
                 </Grid>
                 <Grid item xs={6} alignContent={'center'} pr={2}>
                   <Field
                     name="email"
-                    initialValue={patient?.email ?? undefined}>
+                    initialValue={patient?.email ?? undefined}
+                  >
                     {({ input }) => (
                       <TextField
                         id="email"
@@ -266,7 +273,8 @@ const ReferralForm = ({
                 <Grid item xs={6} alignContent={'center'} pr={2}>
                   <Field
                     name="phoneNumber"
-                    initialValue={patient?.phoneNumber ?? undefined}>
+                    initialValue={patient?.phoneNumber ?? undefined}
+                  >
                     {({ input }) => (
                       <TextField
                         id="phoneNumber"
@@ -289,7 +297,8 @@ const ReferralForm = ({
                 <Grid item xs={12}>
                   <Typography
                     variant="subtitle1"
-                    sx={{ fontWeight: 'bold', mt: 1, mx: 1 }}>
+                    sx={{ fontWeight: 'bold', mt: 1, mx: 1 }}
+                  >
                     Provider Information
                   </Typography>
                 </Grid>
@@ -311,7 +320,8 @@ const ReferralForm = ({
                     initialValue={
                       patient ? patient.referringProviderId : undefined
                     }
-                    validate={required}>
+                    validate={required}
+                  >
                     {({ input, meta }) => (
                       <FormControl fullWidth error={meta.error && meta.touched}>
                         <InputLabel id="provider">Provider *</InputLabel>
@@ -324,7 +334,8 @@ const ReferralForm = ({
                             setOptomIdSelected(event.target.value);
                           }}
                           value={optomIdSelected}
-                          variant="outlined">
+                          variant="outlined"
+                        >
                           <MenuItem value={''}>Select a provider</MenuItem>
                           {optoms?.map(optom => {
                             return (
@@ -348,7 +359,8 @@ const ReferralForm = ({
                   <Field
                     name="clinic"
                     initialValue={patient?.referringClinicId ?? undefined}
-                    validate={required}>
+                    validate={required}
+                  >
                     {({ input, meta }) => (
                       <FormControl fullWidth error={meta.error && meta.touched}>
                         <InputLabel id="clinic">Clinic *</InputLabel>
@@ -361,7 +373,8 @@ const ReferralForm = ({
                           onChange={input.onChange}
                           value={input.value}
                           variant="outlined"
-                          type="text">
+                          type="text"
+                        >
                           <MenuItem value={''}>Select a clinic</MenuItem>
                           {optom?.clinics?.map((clinic: Clinic) => {
                             return (
@@ -387,10 +400,12 @@ const ReferralForm = ({
                   display={'flex'}
                   alignContent={'center'}
                   px={1}
-                  pt={1}>
+                  pt={1}
+                >
                   <Field
                     name="surgeon"
-                    initialValue={patient?.surgeonId ?? undefined}>
+                    initialValue={patient?.surgeonId ?? undefined}
+                  >
                     {({ input, meta }) => (
                       <FormControl fullWidth error={meta.error && meta.touched}>
                         <InputLabel id="surgeonName">Surgeon name</InputLabel>
@@ -405,7 +420,8 @@ const ReferralForm = ({
                           }}
                           type="text"
                           value={surgeonIdSelected}
-                          variant="outlined">
+                          variant="outlined"
+                        >
                           <MenuItem value={''}>Select a surgeon</MenuItem>
                           {surgeons?.map(surgeon => {
                             return (
@@ -423,7 +439,8 @@ const ReferralForm = ({
                 <Grid item xs={6} alignContent={'center'} px={1} pt={1}>
                   <Field
                     name="surgeonClinic"
-                    initialValue={patient?.surgeonClinicId ?? undefined}>
+                    initialValue={patient?.surgeonClinicId ?? undefined}
+                  >
                     {({ input, meta }) => (
                       <FormControl fullWidth error={meta.error && meta.touched}>
                         <InputLabel id="surgeonClinic">
@@ -438,7 +455,8 @@ const ReferralForm = ({
                           onChange={input.onChange}
                           type="text"
                           value={input.value}
-                          variant="outlined">
+                          variant="outlined"
+                        >
                           <MenuItem value={''}>Select a surgeon</MenuItem>
                           {surgeon?.clinics?.map(clinic => {
                             return (
@@ -458,7 +476,8 @@ const ReferralForm = ({
                 <Grid item xs={6} alignContent={'center'}>
                   <Field
                     name="notes"
-                    initialValue={patient?.generalNotes ?? undefined}>
+                    initialValue={patient?.generalNotes ?? undefined}
+                  >
                     {({ input }) => (
                       <TextField
                         id="notes"
@@ -481,7 +500,8 @@ const ReferralForm = ({
                   display={'flex'}
                   alignContent={'center'}
                   justifyContent={'end'}
-                  p={1}>
+                  p={1}
+                >
                   <Button
                     color="primary"
                     disabled={submitting || createLoading || updateLoading}
@@ -492,7 +512,8 @@ const ReferralForm = ({
                       )
                     }
                     type="submit"
-                    variant="contained">
+                    variant="contained"
+                  >
                     {patient ? 'Update' : 'Create'}
                   </Button>
                 </Grid>

@@ -84,8 +84,6 @@
 //   });
 // });
 
-
-
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';

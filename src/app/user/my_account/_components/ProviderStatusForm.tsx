@@ -70,7 +70,8 @@ const ProviderStatusForm = ({
           onSubmit={onSubmit}
           sx={{ textTransform: 'capitalize' }}
           variant="contained"
-          type="submit">
+          type="submit"
+        >
           Add
         </Button>
       </Grid>

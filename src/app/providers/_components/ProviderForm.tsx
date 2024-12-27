@@ -328,7 +328,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                     <Field
                       name="firstName"
                       validate={required}
-                      initialValue={provider?.firstName ?? ''}>
+                      initialValue={provider?.firstName ?? ''}
+                    >
                       {({ input, meta }) => (
                         <TextField
                           id="firstName"
@@ -350,7 +351,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                     <Field
                       name="lastName"
                       validate={required}
-                      initialValue={provider?.lastName ?? ''}>
+                      initialValue={provider?.lastName ?? ''}
+                    >
                       {({ input, meta }) => (
                         <TextField
                           id="lastName"
@@ -380,7 +382,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                                 (providerStatus: ProviderStatus) =>
                                   providerStatus.status !== values?.status,
                               )
-                            }>
+                            }
+                          >
                             <InputLabel id="status">Status</InputLabel>
                             <Select
                               id="status"
@@ -388,7 +391,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                               name={input.name}
                               onChange={input.onChange}
                               value={input.value ?? ''}
-                              variant="outlined">
+                              variant="outlined"
+                            >
                               <MenuItem value={''}>Select a Status</MenuItem>
                               {providerStatuses?.providerStatuses?.map(
                                 (
@@ -398,10 +402,12 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                                   return (
                                     <MenuItem
                                       key={index}
-                                      value={providerStatus.status}>
+                                      value={providerStatus.status}
+                                    >
                                       {providerStatus.status} &nbsp;
                                       <Tooltip
-                                        title={providerStatus.description}>
+                                        title={providerStatus.description}
+                                      >
                                         <InfoOutlinedIcon fontSize="small" />
                                       </Tooltip>
                                     </MenuItem>
@@ -481,13 +487,15 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                             }}
                             type="text"
                             value={specialties}
-                            variant="outlined">
+                            variant="outlined"
+                          >
                             <MenuItem value={''}>Select a specialty</MenuItem>
                             {PROVIDER_SPECIALTIES?.map((specialty, index) => {
                               return (
                                 <MenuItem
                                   key={`${specialty}-${index}`}
-                                  value={specialty}>
+                                  value={specialty}
+                                >
                                   {specialty}
                                 </MenuItem>
                               );
@@ -501,11 +509,13 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                     <Field
                       name="type"
                       validate={required}
-                      initialValue={provider?.type ?? ''}>
+                      initialValue={provider?.type ?? ''}
+                    >
                       {({ input, meta }) => (
                         <FormControl
                           fullWidth
-                          error={meta.error && meta.touched}>
+                          error={meta.error && meta.touched}
+                        >
                           <InputLabel id="type">Type *</InputLabel>
                           <Select
                             id="type"
@@ -515,7 +525,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                             onChange={input.onChange}
                             type="text"
                             value={input.value}
-                            variant="outlined">
+                            variant="outlined"
+                          >
                             <MenuItem value={''}>Select a type</MenuItem>
                             {PROVIDER_TYPES?.map((type, index) => {
                               return (
@@ -532,7 +543,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                   <Grid item xs={6} alignContent={'center'} pt={1} pr={2}>
                     <Field
                       name="email"
-                      initialValue={provider?.email ?? undefined}>
+                      initialValue={provider?.email ?? undefined}
+                    >
                       {({ input }) => (
                         <TextField
                           id="email"
@@ -551,7 +563,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                   <Grid item xs={6} alignContent={'center'} pt={1} pr={2}>
                     <Field
                       name="phoneNumber"
-                      initialValue={provider?.phoneNumber ?? undefined}>
+                      initialValue={provider?.phoneNumber ?? undefined}
+                    >
                       {({ input }) => (
                         <TextField
                           id="phoneNumber"
@@ -576,7 +589,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                       name="dateVisitedByProvider"
                       initialValue={
                         provider?.dateVisitedByProvider ?? undefined
-                      }>
+                      }
+                    >
                       {({ input }) => (
                         <>
                           <InputLabel id="dateVisitedByProvider" sx={{ pl: 1 }}>
@@ -604,7 +618,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                       name="dateVisitedByLiaison"
                       initialValue={
                         provider?.dateVisitedByProvider ?? undefined
-                      }>
+                      }
+                    >
                       {({ input }) => (
                         <>
                           <InputLabel id="dateVisitedByLiaison" sx={{ pl: 1 }}>
@@ -632,7 +647,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                       <Grid item xs={12} alignContent={'center'} pl={1} my={1}>
                         <Field
                           name="providerClinicDocuments"
-                          initialValue={selectedDocumentsClinicId ?? ''}>
+                          initialValue={selectedDocumentsClinicId ?? ''}
+                        >
                           {({ input }) => (
                             <FormControl fullWidth>
                               <InputLabel id="selectClinicDocuments">
@@ -648,7 +664,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                                   );
                                 }}
                                 variant="outlined"
-                                value={input.value}>
+                                value={input.value}
+                              >
                                 {selectedClinics.map(clinic => {
                                   return (
                                     <MenuItem key={clinic.id} value={clinic.id}>
@@ -679,7 +696,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                           display="flex"
                           alignItems={'center'}
                           justifyContent={'space-between'}
-                          pt={1}>
+                          pt={1}
+                        >
                           <CheckboxProviderClinicDocs
                             checked={
                               checkboxStates[selectedDocumentsClinicId]?.[
@@ -698,7 +716,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                         <Box
                           display="flex"
                           alignItems={'center'}
-                          justifyContent={'space-between'}>
+                          justifyContent={'space-between'}
+                        >
                           <CheckboxProviderClinicDocs
                             checked={
                               checkboxStates[selectedDocumentsClinicId]?.[
@@ -717,7 +736,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                         <Box
                           display="flex"
                           alignItems={'center'}
-                          justifyContent={'space-between'}>
+                          justifyContent={'space-between'}
+                        >
                           <CheckboxProviderClinicDocs
                             checked={
                               checkboxStates[selectedDocumentsClinicId]?.[
@@ -746,7 +766,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                   <Grid item xs={6} alignContent={'center'} display={'flex'}>
                     <Field
                       name="notes"
-                      initialValue={provider?.notes ?? undefined}>
+                      initialValue={provider?.notes ?? undefined}
+                    >
                       {({ input }) => (
                         <TextField
                           id="image"
@@ -793,7 +814,8 @@ const ProviderForm = ({ clinics, provider, user }: ProviderFormProps) => {
                       }
                       sx={{ textTransform: 'capitalize' }}
                       variant="contained"
-                      type="submit">
+                      type="submit"
+                    >
                       {provider ? 'Update' : 'Create'}
                     </Button>
                   </Grid>

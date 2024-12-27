@@ -144,9 +144,9 @@ export const providerResolver = {
             },
           },
         });
-    }
-    return provider;
-  },
+      }
+      return provider;
+    },
     deleteProvider: async (
       _parent: Provider,
       { id }: { id: string },

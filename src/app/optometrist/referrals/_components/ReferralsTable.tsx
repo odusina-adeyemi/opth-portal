@@ -36,7 +36,8 @@ const EditToolbar = () => {
       <Link href="/optometrist/referrals/new">
         <Button
           startIcon={<Add />}
-          sx={{ color: pageTitleHeaderBackgroundColor, padding: '0 16px' }}>
+          sx={{ color: pageTitleHeaderBackgroundColor, padding: '0 16px' }}
+        >
           new referral
         </Button>
       </Link>

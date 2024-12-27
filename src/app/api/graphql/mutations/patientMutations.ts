@@ -99,8 +99,6 @@
 //   }
 // `;
 
-
-
 // const AppointmentInfoStruct = object({
 //   doctor_specialty: optional(string()),
 //   preferred_locations: optional(array(string())),
@@ -283,9 +281,6 @@
 //   }
 // `;
 
-
-
-
 import { Patient } from '../../../../constants/types/types';
 import { gql } from '@apollo/client';
 import {
@@ -412,7 +407,6 @@ export const CreatePatientStruct = object({
   organizationId: pattern(string(), idRegex),
 });
 
-
 // export const UpdatePatientStruct = object({
 //   firstName: optional(pattern(string(), nameRegex)),
 //   lastName: optional(pattern(string(), nameRegex)),
@@ -444,7 +438,6 @@ export const CreatePatientStruct = object({
 //   providers: optional(array(pattern(string(), idRegex))),
 //   organizationId: optional(pattern(string(), idRegex)),
 // });
-
 
 export const UpdatePatientStruct = object({
   firstName: optional(pattern(string(), nameRegex)),
@@ -478,15 +471,13 @@ export const UpdatePatientStruct = object({
   organizationId: optional(pattern(string(), idRegex)),
 });
 
-
 export type PatientCreateUpdateInputType = Omit<Patient, 'id'> & {
   clinics: string[];
   providers: string[];
   attachedFiles?: { name: string; url: string }[];
-  referralInfo: typeof ReferralInfoStruct[];
-  insuranceInfo: typeof InsuranceInfoStruct[];
+  referralInfo: (typeof ReferralInfoStruct)[];
+  insuranceInfo: (typeof InsuranceInfoStruct)[];
 };
-
 
 // export const ADD_PATIENT = gql`
 //   mutation createPatient($patientInput: PatientInput) {
@@ -558,81 +549,75 @@ export type PatientCreateUpdateInputType = Omit<Patient, 'id'> & {
 //   }
 // `;
 
-
- export const ADD_PATIENT = gql`
- 
- mutation createPatient($patientInput: PatientInput) {
+export const ADD_PATIENT = gql`
+  mutation createPatient($patientInput: PatientInput) {
     createPatient(patientInput: $patientInput) {
-    id
-    firstName
-    lastName
-    dob
-    notes
-    email
-    phoneNumber
-    gender
-    address
-    city
-    zip
-    fax
-    interpreterNeeded
-    language
-    okToText
-    urgentReferral
-    preferredLocations
-    consultationType
-    attachedFiles {
-      name
-      url
-    }
-    additionalNotes
-    generalNotes
-    comanageNo
-    comanageYes
-    signUpNewsLetter
-    clinics {
       id
-    }
-    providers {
-      id
-    }
-    appointmentInfo {
-      doctorSpecialty
+      firstName
+      lastName
+      dob
+      notes
+      email
+      phoneNumber
+      gender
+      address
+      city
+      zip
+      fax
+      interpreterNeeded
+      language
+      okToText
+      urgentReferral
       preferredLocations
       consultationType
-      urgentReferral
-      additionalConditions
-      chartNotesAttachments
-      coManageCare
-      dlvAssumePostOpCare
-    }
-    referralInfo {
-      referringClinicId
-      referringProviderId
-      referringEmail
-      referringPhone
-      referringFax
-      referringAddress
-      referringCity
-      referringStateZip
-    }
-    insuranceInfo {
-      primaryInsuranceProviderId
-      primaryInsuranceProviderName
-      primaryInsuranceIdNumber
-      primaryInsuranceGroupNumber
-      secondaryInsuranceProviderId
-      secondaryInsuranceProviderName
-      secondaryInsuranceIdNumber
-      secondaryInsuranceGroupNumber
+      attachedFiles {
+        name
+        url
+      }
+      additionalNotes
+      generalNotes
+      comanageNo
+      comanageYes
+      signUpNewsLetter
+      clinics {
+        id
+      }
+      providers {
+        id
+      }
+      appointmentInfo {
+        doctorSpecialty
+        preferredLocations
+        consultationType
+        urgentReferral
+        additionalConditions
+        chartNotesAttachments
+        coManageCare
+        dlvAssumePostOpCare
+      }
+      referralInfo {
+        referringClinicId
+        referringProviderId
+        referringEmail
+        referringPhone
+        referringFax
+        referringAddress
+        referringCity
+        referringStateZip
+      }
+      insuranceInfo {
+        primaryInsuranceProviderId
+        primaryInsuranceProviderName
+        primaryInsuranceIdNumber
+        primaryInsuranceGroupNumber
+        secondaryInsuranceProviderId
+        secondaryInsuranceProviderName
+        secondaryInsuranceIdNumber
+        secondaryInsuranceGroupNumber
+      }
     }
   }
-    
-}`
-
-
-
-
+`;
 
 export const DELETE_PATIENT = gql`
   mutation deletePatient($id: ID!) {

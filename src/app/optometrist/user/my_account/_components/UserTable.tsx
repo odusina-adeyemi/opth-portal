@@ -1,4 +1,4 @@
-"use client";   
+'use client';
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import { SyntheticEvent } from 'react';
@@ -17,10 +17,10 @@ import { User } from '../../../../../constants/types/types';
 // Styled components for the table
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#D1EAF0",
+    backgroundColor: '#D1EAF0',
     // theme.palette.common.black
     color: theme.palette.text.primary,
-    font: "bold",
+    font: 'bold',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -37,7 +37,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-
 interface UsersTablesProps {
   users: User[];
 }
@@ -45,82 +44,75 @@ interface UsersTablesProps {
 export default function UsersTables({ users }: UsersTablesProps) {
   console.log(users);
 
-  
-  
   // const [users, setUsers] = React.useState<User[]>([]);
   const [activeTab, setActiveTab] = React.useState(0);
 
- 
-  
   const optometristUsers = users.filter(
-    (user: User) => typeof user.role === 'string' && user.role.toLowerCase() === 'optometrist'
+    (user: User) =>
+      typeof user.role === 'string' &&
+      user.role.toLowerCase() === 'optometrist',
   );
 
   const nonOptometristUsers = users.filter(
- (user: User) => typeof user.role === 'string' && user.role.toLowerCase() !== 'optometrist'
+    (user: User) =>
+      typeof user.role === 'string' &&
+      user.role.toLowerCase() !== 'optometrist',
   );
-
 
   // Select data based on the active tab
   const rows = activeTab === 0 ? optometristUsers : nonOptometristUsers;
-
-
 
   // Handle tab change
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
 
-
   return (
-  
     <Box>
       {/* Tabs for switching between user categories */}
-     
-    <div className='w-full'>
-      <Tabs
-       
-        value={activeTab}
-        onChange={handleTabChange}
-        centered
-        TabIndicatorProps={{
-          style: {
-            display: 'none',
-          },
-        
-        }}
-      >
 
-        
-        <Tab
-          className={`!capitalize ${activeTab === 0 ? 'bg-primary text-white   rounded-full px-4 py-1' : ''}`}
-          label="Optometrist Users"
-        />
-        <Tab
-          className={`!capitalize ${activeTab === 1 ? 'bg-primary text-white rounded-full px-4 py-1' : ''}`}
-          label="Non-Optometrist Users"
-        />
-      </Tabs>
-    </div>
+      <div className="w-full">
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          centered
+          TabIndicatorProps={{
+            style: {
+              display: 'none',
+            },
+          }}
+        >
+          <Tab
+            className={`!capitalize ${activeTab === 0 ? 'bg-primary text-white   rounded-full px-4 py-1' : ''}`}
+            label="Optometrist Users"
+          />
+          <Tab
+            className={`!capitalize ${activeTab === 1 ? 'bg-primary text-white rounded-full px-4 py-1' : ''}`}
+            label="Non-Optometrist Users"
+          />
+        </Tabs>
+      </div>
       {/* Table to display user data */}
       <TableContainer component={Paper} sx={{ marginTop: 2 }}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
-            <TableHead >
-            <TableRow className='!font-bold'>
+          <TableHead>
+            <TableRow className="!font-bold">
               <StyledTableCell>First Name</StyledTableCell>
               <StyledTableCell>Last Name</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
               <StyledTableCell>Organization</StyledTableCell>
               <StyledTableCell>Role</StyledTableCell>
             </TableRow>
-            </TableHead>
+          </TableHead>
           <TableBody>
             {rows.map((row, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell>{row?.firstName}</StyledTableCell>
                 <StyledTableCell>{row?.lastName}</StyledTableCell>
                 <StyledTableCell>{row?.email}</StyledTableCell>
-                <StyledTableCell>{row.organization ? row.organization.name : 'N/A'}</StyledTableCell>
+                <StyledTableCell>
+                  {row.organization ? row.organization.name : 'N/A'}
+                </StyledTableCell>
                 <StyledTableCell>{row.role}</StyledTableCell>
               </StyledTableRow>
             ))}

@@ -1,4 +1,4 @@
-import FormSkeleton from '../../../../ui/components/FormSkeleton';
+import FormSkeleton from '../../../../../ui/components/FormSkeleton';
 
 const Loading = () => {
   return <FormSkeleton />;

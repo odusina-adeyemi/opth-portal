@@ -811,6 +811,10 @@ const ReferralForm = ({
       comanageYes: values.comanageYes || undefined,
       comanageNo: values.comanageNo || undefined,
       signUpNewsLetter: values.signUpNewsLetter || undefined,
+      surgeonClinicId: values.surgeonClinic,
+      surgeonId: surgeonIdSelected === '' ? undefined : surgeonIdSelected,
+
+
       
     
       // Appointment Info
@@ -855,13 +859,7 @@ const ReferralForm = ({
           values.secondaryInsuranceGroupNumber || undefined,
       },
     
-      // Surgeon Info
-      surgeon: {
-        id: values.surgeonId || undefined,
-        surgeonId: surgeonIdSelected === '' ? undefined : surgeonIdSelected,
-        clinicId: values.surgeonClinicId || undefined,
-        surgeonClinicId: values.surgeonClinic,
-      },
+
 
     
       // Organization and Relationships
@@ -1541,39 +1539,105 @@ const ReferralForm = ({
 
           {/* <Grid container spacing={2}> */}
           {/* Doctor/Specialty Selection */}
-          <Grid item xs={6}>
-            <Typography variant="subtitle1">Doctor/Specialty</Typography>
-            <Field name="doctorSpecialty" validate={required} initialValue={patient?.doctorSpecialty ?? ''}>
-              {({ input }) => {
-                // Ensure unique providers based on ID
-                const uniqueProviders = Array.from(
-                  new Map(
-                    new Set(optoms?.map(optom => [optom.id, optom])), // Map by unique optom ID
-                  ).values(),
-                );
+          {/* <Grid item xs={6}>
+  <Typography variant="subtitle1">Doctor/Specialty</Typography>
+  <Field name="doctorSpecialty" validate={required} initialValue={patient?.doctorSpecialty ?? ''}>
+    {({ input }) => {
+      // Ensure unique providers based on ID
+      const uniqueProviders = Array.from(
+        new Map(
+          optoms?.map(optom => [optom.id, optom]) // Map by unique optom ID
+        ).values()
+      );
 
-                return (
-                  <TextField
-                    select
-                    label="Select a provider *"
-                    fullWidth
-                    variant="outlined"
-                    {...input}
-                    onBlur={input.onBlur} // Ensure blur handling
-                    value={input.value || ''} // Default to empty string for no selection
-                  >
-                    <MenuItem value="">None selected</MenuItem>
-                    {uniqueProviders.map(optom => (
-                      <MenuItem key={optom.id} value={optom.specialties}>
-                        {optom.firstName} {optom.lastName} -{' '}
-                        {optom.specialties.join(', ')}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                );
-              }}
-            </Field>
-          </Grid>
+      return (
+        <TextField
+          select
+          label="Select a provider *"
+          fullWidth
+          variant="outlined"
+          {...input}
+          onBlur={input.onBlur} // Ensure blur handling
+          value={input.value || ''} // Default to empty string for no selection
+        >
+          <MenuItem value="">None selected</MenuItem>
+          {uniqueProviders.map(optom => (
+            <MenuItem key={optom.id} value={optom.specialties[0]}>
+              {optom.firstName} {optom.lastName} - {optom.specialties.join(', ')}
+            </MenuItem>
+          ))}
+        </TextField>
+      );
+    }}
+  </Field>
+</Grid> */}
+
+          <Grid item xs={6} alignContent={'center'} px={1} pt={1}>
+          <Field
+                    name="surgeon"
+                    initialValue={patient?.surgeonId ?? undefined}>
+                    {({ input, meta }) => (
+                      <FormControl fullWidth error={meta.error && meta.touched}>
+                        <InputLabel id="surgeonName">Surgeon name</InputLabel>
+                        <Select
+                          id="surgeonName"
+                          label="Surgeon Name"
+                          fullWidth
+                          name={input.name}
+                          onChange={event => {
+                            input.onChange;
+                            setSurgeonIdSelected(event.target.value);
+                          }}
+                          type="text"
+                          value={surgeonIdSelected}
+                          variant="outlined">
+                          <MenuItem value={''}>Select a surgeon</MenuItem>
+                          {surgeons?.map(surgeon => {
+                            return (
+                              <MenuItem key={surgeon.id} value={surgeon.id}>
+                                {surgeon.firstName} {surgeon.lastName}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                        <FormHelperText />
+                      </FormControl>
+                    )}
+                  </Field>
+                              <Field
+                    name="surgeonClinic"
+                    initialValue={patient?.surgeonClinicId ?? undefined}>
+                    {({ input, meta }) => (
+                      <FormControl fullWidth error={meta.error && meta.touched}>
+                        <InputLabel id="surgeonClinic">
+                          Surgeon clinic
+                        </InputLabel>
+                        <Select
+                          id="surgeonName"
+                          disabled={!surgeonIdSelected}
+                          label="Surgeon Clinic"
+                          fullWidth
+                          name={input.name}
+                          onChange={input.onChange}
+                          type="text"
+                          value={input.value}
+                          variant="outlined">
+                          <MenuItem value={''}>Select a surgeon</MenuItem>
+                          {surgeon?.clinics?.map(clinic => {
+                            return (
+                              <MenuItem key={clinic.id} value={clinic.id}>
+                                {clinic.name} - {clinic.city}, {clinic.state}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                        {!surgeonIdSelected && (
+                          <FormHelperText>Select a surgeon</FormHelperText>
+                        )}
+                      </FormControl>
+                    )}
+                  </Field>
+                </Grid>
 
           {/* Preferred Locations */}
 

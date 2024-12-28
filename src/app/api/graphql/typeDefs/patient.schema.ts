@@ -132,7 +132,7 @@
 //         consultationType: [String]
 //         attachedFiles: [FileInput]
 //         additionalNotes: String
-//          comanageNo: Boolean    
+//          comanageNo: Boolean
 //           comanageYes: Boolean
 //         appointment_info: AppointmentInfoInput
 //         referral_info: ReferralInfoInput
@@ -164,7 +164,7 @@
 //         consultationType: [String]
 //         attachedFiles: [File]
 //         additionalNotes: String
-//         comanageNo: Boolean    
+//         comanageNo: Boolean
 //         comanageYes: Boolean
 //         appointment_info: AppointmentInfo
 //         referral_info: ReferralInfo
@@ -224,10 +224,10 @@
 //     # Queries
 //     type Query {
 //         organizationPatients(
-//             organizationId: ID!, 
+//             organizationId: ID!,
 //             referringClinicId: ID,
 //             referringProviderId: ID,
-//             startDate: String, 
+//             startDate: String,
 //             endDate: String
 //         ): [Patient]
 //         patients: [Patient]
@@ -240,13 +240,9 @@
 //         deletePatient(id: ID!): Patient @auth
 //         updatePatient(id: ID!, patientInput: PatientInput): Patient @auth
 //     }
-
 // `;
 
 // export const typeDef = `#graphql
-
-
-
 
 export const typeDef = `#graphql
 
@@ -319,7 +315,8 @@ export const typeDef = `#graphql
         consultationType: [String]
         attachedFiles: [FileInput]
         additionalNotes: String
-        comanage: Boolean    
+        comanageNo: Boolean    
+        comanageYes: Boolean    
         signUpNewsLetter: Boolean
         appointmentInfo: AppointmentInfoInput
         referralInfo: [ReferralInfoInput]
@@ -437,5 +434,3 @@ export const typeDef = `#graphql
     }
 
 `;
-
-

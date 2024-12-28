@@ -172,6 +172,7 @@ model Patient {
   appointmentInfo                                                        AppointmentInfo?     @relation("PatientToAppointmentInfo")
   referralInfo                                                           ReferralInfo[]       @relation("PatientToReferralInfo")
   insuranceInfo                                                          InsuranceInfo[]      @relation("PatientToInsuranceInfo")
+  view                                                                   String?      @default("View")
 
   @@map("patients")
 }

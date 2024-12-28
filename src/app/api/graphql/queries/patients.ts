@@ -217,7 +217,8 @@ export const GET_PATIENT = gql`
       urgentReferral
       preferredLocations
       consultationType
-      comanage
+      comanageYes
+      comanageNo
       signUpNewsLetter
       generalNotes
       attachedFiles {

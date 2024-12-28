@@ -20,7 +20,8 @@ const UserMyAccountPage = async () => {
       display={'flex'}
       justifyContent={'center'}
       pt={2}
-      suppressHydrationWarning>
+      suppressHydrationWarning
+    >
       <PageTitleHeader title="My Account" />
       <Grid item xs={9} pt={1}>
         <Grid container>

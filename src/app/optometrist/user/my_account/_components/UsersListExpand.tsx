@@ -72,7 +72,6 @@ const UsersListExpand = ({
 
   return (
     <>
-    
       <CenterLoadingIcon show={deleteUserLoading} />
       <Typography variant="h6">
         Total users: {currentUsers.length}{' '}
@@ -93,7 +92,8 @@ const UsersListExpand = ({
                 {(loggedInUser.id === user.id || isLoggedInUserAdmin) && (
                   <Grid item xs={4}>
                     <IconButton
-                      onClick={() => router.push(`/user/edit/${user.id}`)}>
+                      onClick={() => router.push(`/user/edit/${user.id}`)}
+                    >
                       <Edit fontSize="small" />
                     </IconButton>
 

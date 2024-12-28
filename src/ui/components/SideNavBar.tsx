@@ -27,7 +27,8 @@ const SideNavBar = () => {
           pathname === nav.href ? pageTitleHeaderBackgroundColor : '#abdae4'
         }
         display={'flex'}
-        position={'relative'}>
+        position={'relative'}
+      >
         <Box
           mx={1}
           bgcolor={'white'}
@@ -42,7 +43,8 @@ const SideNavBar = () => {
               color: pathname === nav.href ? 'white' : '#0f5262',
               fontWeight: 'bold',
               textAlign: 'left',
-            }}>
+            }}
+          >
             {nav.name}{' '}
             {nav.name === 'Action Items' && (
               <Chip

@@ -104,7 +104,8 @@ const ProvidersListExpand = ({ providers }: { providers: Provider[] }) => {
                             PROVIDER_REFERRER_STATUS_DESCRIPTIONS[
                               provider.status
                             ]
-                          }>
+                          }
+                        >
                           <InfoOutlinedIcon sx={{ pl: 1 }} fontSize="small" />
                         </Tooltip>
                       </TableCell>

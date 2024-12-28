@@ -113,7 +113,8 @@ const UserProfileCard = ({ user, organization }: UserProfileCardProps) => {
             boxShadow: 24,
             p: 4,
             borderRadius: '8px',
-          }}>
+          }}
+        >
           <h2>Edit Profile</h2>
           <form>
             <TextField

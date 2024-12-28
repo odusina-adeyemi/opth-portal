@@ -1,6 +1,15 @@
-"use client"; 
+'use client';
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography, FormGroup, FormControlLabel, Checkbox, CircularProgress, MenuItem, Select } from '@mui/material';
+import {
+  Grid,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  CircularProgress,
+  MenuItem,
+  Select,
+} from '@mui/material';
 import { Field } from 'react-final-form';
 
 const STATES_API = 'https://api.zippopotam.us/us'; // Base API for ZIP and City lookup
@@ -14,8 +23,8 @@ const LocationDropdowns = () => {
   const [error, setError] = useState(null);
 
   // Hardcoded list of states (for demo purposes)
-// Full list of US states
-const STATE_LIST = [
+  // Full list of US states
+  const STATE_LIST = [
     { name: 'Alabama', abbreviation: 'AL' },
     { name: 'Alaska', abbreviation: 'AK' },
     { name: 'Arizona', abbreviation: 'AZ' },
@@ -66,7 +75,7 @@ const STATE_LIST = [
     { name: 'West Virginia', abbreviation: 'WV' },
     { name: 'Wisconsin', abbreviation: 'WI' },
     { name: 'Wyoming', abbreviation: 'WY' },
-];
+  ];
 
   // Simulate fetching states
   useEffect(() => {
@@ -80,7 +89,7 @@ const STATE_LIST = [
   }, []);
 
   // Fetch cities and ZIPs based on selected state
-  const fetchCities = async (stateAbbr) => {
+  const fetchCities = async stateAbbr => {
     setLoadingCities(true);
     setError(null);
 
@@ -89,7 +98,7 @@ const STATE_LIST = [
       if (!response.ok) throw new Error('Failed to fetch cities and ZIPs');
 
       const data = await response.json();
-      const places = data.places.map((place) => ({
+      const places = data.places.map(place => ({
         city: place['place name'],
         zip: place['post code'],
       }));
@@ -114,7 +123,7 @@ const STATE_LIST = [
           <Select
             fullWidth
             value={selectedState}
-            onChange={(e) => {
+            onChange={e => {
               setSelectedState(e.target.value);
               fetchCities(e.target.value); // Fetch cities for selected state
             }}
@@ -123,7 +132,7 @@ const STATE_LIST = [
             <MenuItem value="" disabled>
               Select State
             </MenuItem>
-            {states.map((state) => (
+            {states.map(state => (
               <MenuItem key={state.abbreviation} value={state.abbreviation}>
                 {state.name}
               </MenuItem>
@@ -148,11 +157,15 @@ const STATE_LIST = [
                     key={index}
                     control={
                       <Checkbox
-                        checked={input.value.includes(`${place.city} (${place.zip})`)}
-                        onChange={(e) => {
+                        checked={input.value.includes(
+                          `${place.city} (${place.zip})`,
+                        )}
+                        onChange={e => {
                           const newValue = e.target.checked
                             ? [...input.value, `${place.city} (${place.zip})`]
-                            : input.value.filter((val) => val !== `${place.city} (${place.zip})`);
+                            : input.value.filter(
+                                val => val !== `${place.city} (${place.zip})`,
+                              );
                           input.onChange(newValue);
                         }}
                       />

@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run format && npm run lint && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --fix",
     "pre-commit": "eslint . && tsc --noEmit && sh ../.git/hooks/pre-commit",
     "vercel-build": "npx prisma generate && npx prisma migrate deploy && next build",
-    "postbuild": "ts-node ./src/scripts/add-urls-to-kinde.ts"
+    "postbuild": "ts-node ./src/scripts/add-urls-to-kinde.ts",
+    "format": "prettier --write .",
+    "prisma": "npx prisma"
   },
   "dependencies": {
     "@apollo/client": "^3.11.10",

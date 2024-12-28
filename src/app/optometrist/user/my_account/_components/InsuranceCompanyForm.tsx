@@ -70,7 +70,8 @@ const InsuranceCompanyForm = ({
         <Field
           name="name"
           validate={required}
-          initialValue={company?.name ?? ''}>
+          initialValue={company?.name ?? ''}
+        >
           {({ input, meta }) => (
             <TextField
               {...input}
@@ -110,7 +111,8 @@ const InsuranceCompanyForm = ({
           onClick={company?.name ? handleUpdate : () => {}}
           sx={{ textTransform: 'capitalize' }}
           type={company?.name ? 'button' : 'submit'}
-          variant="contained">
+          variant="contained"
+        >
           {company?.name ? 'Update' : 'Add'}
         </Button>
       </Grid>

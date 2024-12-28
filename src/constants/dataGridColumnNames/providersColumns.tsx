@@ -46,7 +46,8 @@ export const providersColumns: GridColDef<GridValidRowModel>[] = [
               sx={{
                 color: pageTitleHeaderBackgroundColor,
                 textDecoration: 'underline',
-              }}>
+              }}
+            >
               {row.lastName}, {row.firstName}
             </Typography>
             {/* </Tooltip> */}
@@ -74,7 +75,8 @@ export const providersColumns: GridColDef<GridValidRowModel>[] = [
             <Typography
               key={specialty}
               variant="subtitle2"
-              sx={{ textTransform: 'capitalize' }}>
+              sx={{ textTransform: 'capitalize' }}
+            >
               {specialty}
             </Typography>
           ))}

@@ -25,7 +25,8 @@ export const providersAdditionalColumns: GridColDef<GridValidRowModel>[] = [
             <Typography
               key={specialty}
               variant="subtitle2"
-              sx={{ textTransform: 'capitalize' }}>
+              sx={{ textTransform: 'capitalize' }}
+            >
               {specialty}
             </Typography>
           ))}

@@ -31,7 +31,8 @@ const Toolbar = ({
       onClick={() => fetchArchivedFiles()}
       size="small"
       sx={{ textTransform: 'capitalize', width: 'fit-content' }}
-      variant="contained">
+      variant="contained"
+    >
       Fetch
     </Button>
   );

@@ -22,7 +22,8 @@ const TimeSelections = ({
       name="timePeriodSelection"
       value={timePeriodSelected}
       onChange={handleChange}
-      variant="outlined">
+      variant="outlined"
+    >
       <MenuItem value="">Select a time period</MenuItem>
       {TIME_PERIODS.map(timePeriod => (
         <MenuItem key={timePeriod} value={timePeriod}>

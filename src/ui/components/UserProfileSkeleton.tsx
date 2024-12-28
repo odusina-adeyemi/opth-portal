@@ -12,7 +12,8 @@ const UserProfileSkeleton = () => {
         flexWrap={'wrap'}
         display={'flex'}
         flexDirection={'column'}
-        alignContent={'center'}>
+        alignContent={'center'}
+      >
         <Skeleton
           width={400}
           height={100}

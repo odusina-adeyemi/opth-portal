@@ -32,12 +32,14 @@ const EditToolbar = () => {
       sx={{
         justifyContent: 'space-between',
         padding: '0 16px',
-      }}>
+      }}
+    >
       <Box>
         <Link href="/providers/new">
           <Button
             startIcon={<Add />}
-            sx={{ color: pageTitleHeaderBackgroundColor, pt: 1 }}>
+            sx={{ color: pageTitleHeaderBackgroundColor, pt: 1 }}
+          >
             new provider
           </Button>
         </Link>

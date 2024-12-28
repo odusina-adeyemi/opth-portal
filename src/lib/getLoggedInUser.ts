@@ -27,7 +27,6 @@
 //   }
 // };
 
-
 // import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 // import client from '../app/api/_apolloClient/apolloClientServerSide'; // Updated Apollo client import
 // import { GET_USER_WITH_EMAIL } from '../app/api/graphql/queries/users';
@@ -56,8 +55,6 @@
 //   }
 // };
 
-
-
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import client from '../app/api/_apolloClient/apolloClientServerSide'; // Apollo client import
 import { GET_USER_WITH_EMAIL } from '../app/api/graphql/queries/users';
@@ -85,4 +82,3 @@ export const getLoggedInUser = async (): Promise<User> => {
     return {} as User; // Return empty object on error
   }
 };
-

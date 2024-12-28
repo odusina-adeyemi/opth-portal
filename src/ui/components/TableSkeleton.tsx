@@ -18,7 +18,8 @@ const TableSkeleton = () => {
         xs={12}
         display={'flex'}
         justifyContent={'space-between'}
-        width={'100%'}>
+        width={'100%'}
+      >
         <Skeleton
           width={200}
           height={40}

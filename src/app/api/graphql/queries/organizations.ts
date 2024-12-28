@@ -35,5 +35,3 @@ export const fetchOrganization = async (
     return {} as Organization;
   }
 };
-
-

@@ -63,8 +63,11 @@ export default function OptometristDashboard({
         path: '/optometrist/appointments',
       },
       { text: 'Reports', icon: <Assessment />, path: '/optometrist/reports' },
-      { text: 'Referrals', icon: <Profile />, path: '/optometrist/referrals/new' },
-
+      {
+        text: 'Referrals',
+        icon: <Profile />,
+        path: '/optometrist/referrals/new',
+      },
     ],
     [],
   );
@@ -90,7 +93,8 @@ export default function OptometristDashboard({
           <AppBar
             className="!bg-white text-gray-200" // Custom styles
             position="fixed"
-            sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
+            sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}
+          >
             <Toolbar>
               <Typography variant="h6" className="" noWrap sx={{ flexGrow: 1 }}>
                 Opt Dashboard
@@ -114,7 +118,8 @@ export default function OptometristDashboard({
                 width: drawerWidth,
                 boxSizing: 'border-box',
               },
-            }}>
+            }}
+          >
             <Toolbar />
             <Box sx={{ overflow: 'auto' }}>
               <List>
@@ -138,11 +143,13 @@ export default function OptometristDashboard({
                       },
                       borderRadius: 1, // Adds a slight rounded effect
                       cursor: 'pointer',
-                    }}>
+                    }}
+                  >
                     <ListItemIcon
                       sx={{
                         color: currentPath === item.path ? 'white' : '#4BA7C1',
-                      }}>
+                      }}
+                    >
                       {item.icon}
                     </ListItemIcon>
                     <ListItemText primary={item.text} />
@@ -158,8 +165,11 @@ export default function OptometristDashboard({
           >
             {children}
           </div> */}
-          
-          <Box className="mt-8 p-0 bg-[#f2f6f8] h-[100vh]" sx={{ flexGrow: 1, maxWidth: 'calc(100% - 240px)' }}>
+
+          <Box
+            className="mt-8 p-0 bg-[#f2f6f8] h-[100vh]"
+            sx={{ flexGrow: 1, maxWidth: 'calc(100% - 240px)' }}
+          >
             {children}
           </Box>
         </Box>

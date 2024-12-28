@@ -64,7 +64,8 @@ const SelectVisitsTimeline = ({
     <Box display={'flex'}>
       <Select
         onChange={event => handleSelectChange(event)}
-        value={visitTimeline}>
+        value={visitTimeline}
+      >
         {VISIT_TIMELINE_OPTIONS.map(option => (
           <MenuItem key={option} value={option}>
             {option}

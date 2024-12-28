@@ -8,7 +8,8 @@ const PageTitleHeader = ({ title }: { title: string }) => {
       item
       xs={12}
       bgcolor={pageTitleHeaderBackgroundColor}
-      position={'relative'}>
+      position={'relative'}
+    >
       <Box display={'flex'} alignItems={'center'}>
         <Box
           height={'32px'}

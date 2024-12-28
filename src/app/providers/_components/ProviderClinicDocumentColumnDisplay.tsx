@@ -31,7 +31,8 @@ const ProviderClinicDocumentColumnDisplay = ({
             key={document.clinicId}
             display={'flex'}
             alignItems={'center'}
-            flexWrap={'wrap'}>
+            flexWrap={'wrap'}
+          >
             <Typography display={'block'} variant="caption">
               {clinicNames[document.clinicId]}:{' '}
             </Typography>

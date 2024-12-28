@@ -559,7 +559,6 @@ interface ReferralFormProps {
   user: User;
 }
 
-
 interface FormValuesProps {
   surgeonClinic: any;
   // Patient Info
@@ -655,9 +654,6 @@ const ReferralForm = ({
       providers.push(values.surgeonId);
     }
 
-
-
-
     const patientData = {
       // Patient Basic Information
       firstName: values.patientFirstName || undefined,
@@ -682,8 +678,7 @@ const ReferralForm = ({
       comanageYes: values.comanageYes || undefined,
       comanageNo: values.comanageNo || undefined,
       signUpNewsLetter: values.signUpNewsLetter || undefined,
-      
-    
+
       // Appointment Info
       appointmentInfo: {
         doctorSpecialty: values.doctorSpecialty || undefined,
@@ -694,7 +689,7 @@ const ReferralForm = ({
         chartNotesAttachments:
           values.chartNotesAttachments?.map(file => file.name) || [],
       },
-    
+
       // Referral Info
       referralInfo: {
         referringClinicId: values.clinics || undefined,
@@ -708,10 +703,11 @@ const ReferralForm = ({
         referringCity: values.referringCity || undefined,
         referringStateZip: values.referringStateZip || undefined,
       },
-    
+
       // Insurance Info
       insuranceInfo: {
-        primaryInsuranceProviderId: values.primaryInsuranceProviderId || undefined,
+        primaryInsuranceProviderId:
+          values.primaryInsuranceProviderId || undefined,
         primaryInsuranceProviderName:
           values.primaryInsuranceProviderName || undefined,
         primaryInsuranceIdNumber: values.primaryInsuranceIdNumber || undefined,
@@ -721,11 +717,12 @@ const ReferralForm = ({
           values.secondaryInsuranceProviderId || undefined,
         secondaryInsuranceProviderName:
           values.secondaryInsuranceProviderName || undefined,
-        secondaryInsuranceIdNumber: values.secondaryInsuranceIdNumber || undefined,
+        secondaryInsuranceIdNumber:
+          values.secondaryInsuranceIdNumber || undefined,
         secondaryInsuranceGroupNumber:
           values.secondaryInsuranceGroupNumber || undefined,
       },
-    
+
       // Surgeon Info
       surgeon: {
         id: values.surgeonId || undefined,
@@ -734,7 +731,6 @@ const ReferralForm = ({
         surgeonClinicId: values.surgeonClinic,
       },
 
-    
       // Organization and Relationships
       organizationId: user.organizationId || undefined,
       clinics: Array.isArray(values.clinics)
@@ -744,7 +740,6 @@ const ReferralForm = ({
         ? values.providers.filter(Boolean)
         : [],
     };
-    
 
     if (patient) {
       updatePatient({
@@ -775,115 +770,110 @@ const ReferralForm = ({
         onError: () => {
           openSnackbar(`Error creating patient ${createError}`, 'error');
         },
-        variables: { patientInput: patientData }, 
-        
-      });     console.log("PatientData:", patientData);
-
+        variables: { patientInput: patientData },
+      });
+      console.log('PatientData:', patientData);
     }
   };
 
-    const submitPreview = (values: FormValuesProps, form: any) => (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    
+  const submitPreview =
+    (values: FormValuesProps, form: any) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
 
-
-    const patientData = {
-      // Patient Basic Information
-      firstName: values.patientFirstName || undefined,
-      lastName: values.patientLastName || undefined,
-      dob: values.patientDOB,
-      gender: values.gender || undefined,
-      email: values.email || undefined,
-      phoneNumber: values.phoneNumber
-        ? undoPhoneNumberFormat(values.phoneNumber)
-        : undefined,
-      address: values.address || undefined,
-      city: values.city || undefined,
-      zip: values.zip || undefined,
-      fax: values.fax || undefined,
-      interpreterNeeded: values.interpreterNeeded || undefined,
-      language: values.language || undefined,
-      okToText: values.okToText || undefined,
-      notes: values.notes || undefined,
-      urgentReferral: values.urgentReferral || undefined,
-      preferredLocations: values.preferredLocations || [],
-      consultationType: values.consultationType || [],
-      comanageYes: values.comanageYes || undefined,
-      comanageNo: values.comanageNo || undefined,
-      signUpNewsLetter: values.signUpNewsLetter || undefined,
-      surgeonClinicId: values.surgeonClinic,
-      surgeonId: surgeonIdSelected === '' ? undefined : surgeonIdSelected,
-
-
-      
-    
-      // Appointment Info
-      appointmentInfo: {
-        doctorSpecialty: values.doctorSpecialty || undefined,
-        preferredLocations: values.preferredLocations || [],
-        consultationType: values.consultationType?.[0] || undefined,
-        urgentReferral: values.urgentReferral || undefined,
-        additionalConditions: values.additionalConditions || undefined,
-        chartNotesAttachments:
-          values.chartNotesAttachments?.map(file => file.name) || [],
-      },
-    
-      // Referral Info
-      referralInfo: {
-        referringClinicId: values.clinics || undefined,
-        referringProviderId: values.providers || undefined,
-        referringEmail: values.referringEmail || undefined,
-        referringPhone: values.referringPhone
-          ? formatPhoneNumber(values.referringPhone)
+      const patientData = {
+        // Patient Basic Information
+        firstName: values.patientFirstName || undefined,
+        lastName: values.patientLastName || undefined,
+        dob: values.patientDOB,
+        gender: values.gender || undefined,
+        email: values.email || undefined,
+        phoneNumber: values.phoneNumber
+          ? undoPhoneNumberFormat(values.phoneNumber)
           : undefined,
-        referringFax: values.referringFax || undefined,
-        referringAddress: values.referringAddress || undefined,
-        referringCity: values.referringCity || undefined,
-        referringStateZip: values.referringStateZip || undefined,
-      },
-    
-      // Insurance Info
-      insuranceInfo: {
-        primaryInsuranceProviderId: values.primaryInsuranceProviderId || undefined,
-        primaryInsuranceProviderName:
-          values.primaryInsuranceProviderName || undefined,
-        primaryInsuranceIdNumber: values.primaryInsuranceIdNumber || undefined,
-        primaryInsuranceGroupNumber:
-          values.primaryInsuranceGroupNumber || undefined,
-        secondaryInsuranceProviderId:
-          values.secondaryInsuranceProviderId || undefined,
-        secondaryInsuranceProviderName:
-          values.secondaryInsuranceProviderName || undefined,
-        secondaryInsuranceIdNumber: values.secondaryInsuranceIdNumber || undefined,
-        secondaryInsuranceGroupNumber:
-          values.secondaryInsuranceGroupNumber || undefined,
-      },
-    
+        address: values.address || undefined,
+        city: values.city || undefined,
+        zip: values.zip || undefined,
+        fax: values.fax || undefined,
+        interpreterNeeded: values.interpreterNeeded || undefined,
+        language: values.language || undefined,
+        okToText: values.okToText || undefined,
+        notes: values.notes || undefined,
+        urgentReferral: values.urgentReferral || undefined,
+        preferredLocations: values.preferredLocations || [],
+        consultationType: values.consultationType || [],
+        comanageYes: values.comanageYes || undefined,
+        comanageNo: values.comanageNo || undefined,
+        signUpNewsLetter: values.signUpNewsLetter || undefined,
+        surgeonClinicId: values.surgeonClinic,
+        surgeonId: surgeonIdSelected === '' ? undefined : surgeonIdSelected,
 
+        // Appointment Info
+        appointmentInfo: {
+          doctorSpecialty: values.doctorSpecialty || undefined,
+          preferredLocations: values.preferredLocations || [],
+          consultationType: values.consultationType?.[0] || undefined,
+          urgentReferral: values.urgentReferral || undefined,
+          additionalConditions: values.additionalConditions || undefined,
+          chartNotesAttachments:
+            values.chartNotesAttachments?.map(file => file.name) || [],
+        },
 
-    
-      // Organization and Relationships
-      organizationId: user.organizationId || undefined,
-      clinics: Array.isArray(values.clinics)
-        ? values.clinics.filter(Boolean)
-        : [],
-      providers: Array.isArray(values.providers)
-        ? values.providers.filter(Boolean)
-        : [],
+        // Referral Info
+        referralInfo: {
+          referringClinicId: values.clinics || undefined,
+          referringProviderId: values.providers || undefined,
+          referringEmail: values.referringEmail || undefined,
+          referringPhone: values.referringPhone
+            ? formatPhoneNumber(values.referringPhone)
+            : undefined,
+          referringFax: values.referringFax || undefined,
+          referringAddress: values.referringAddress || undefined,
+          referringCity: values.referringCity || undefined,
+          referringStateZip: values.referringStateZip || undefined,
+        },
+
+        // Insurance Info
+        insuranceInfo: {
+          primaryInsuranceProviderId:
+            values.primaryInsuranceProviderId || undefined,
+          primaryInsuranceProviderName:
+            values.primaryInsuranceProviderName || undefined,
+          primaryInsuranceIdNumber:
+            values.primaryInsuranceIdNumber || undefined,
+          primaryInsuranceGroupNumber:
+            values.primaryInsuranceGroupNumber || undefined,
+          secondaryInsuranceProviderId:
+            values.secondaryInsuranceProviderId || undefined,
+          secondaryInsuranceProviderName:
+            values.secondaryInsuranceProviderName || undefined,
+          secondaryInsuranceIdNumber:
+            values.secondaryInsuranceIdNumber || undefined,
+          secondaryInsuranceGroupNumber:
+            values.secondaryInsuranceGroupNumber || undefined,
+        },
+
+        // Organization and Relationships
+        organizationId: user.organizationId || undefined,
+        clinics: Array.isArray(values.clinics)
+          ? values.clinics.filter(Boolean)
+          : [],
+        providers: Array.isArray(values.providers)
+          ? values.providers.filter(Boolean)
+          : [],
+      };
+
+      return console.log('PatientData:', patientData);
     };
-
-    return console.log("PatientData:", patientData);
-  }
 
   const optom = optoms.find(optom => optom?.id === optomIdSelected);
   const surgeon = surgeons?.find(surgeon => surgeon?.id === surgeonIdSelected);
-  console.log("Surgeon:", surgeon)
+  console.log('Surgeon:', surgeon);
 
   return (
-    
     <Form
-    onSubmit={onSubmit}
-    render={({ handleSubmit, submitting, values }) => (
+      onSubmit={onSubmit}
+      render={({ handleSubmit, submitting, values }) => (
         <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
           {/* Reffering Provider Information       */}
           <Grid item xs={12}>
@@ -907,8 +897,11 @@ const ReferralForm = ({
           <Grid item xs={6}>
             <Field
               name="providers"
-              initialValue={patient?.referralInfo?.[0]?.referringProviderId ?? ''}
-              validate={required}>
+              initialValue={
+                patient?.referralInfo?.[0]?.referringProviderId ?? ''
+              }
+              validate={required}
+            >
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
                   <InputLabel id="provider">Provider *</InputLabel>
@@ -921,7 +914,8 @@ const ReferralForm = ({
                       setOptomIdSelected(event.target.value);
                     }}
                     value={optomIdSelected}
-                    variant="outlined">
+                    variant="outlined"
+                  >
                     <MenuItem value={''}>Select a provider</MenuItem>
                     {optoms?.map(optom => {
                       return (
@@ -949,8 +943,9 @@ const ReferralForm = ({
           <Grid item xs={6}>
             <Field
               name="clinics"
-              initialValue={patient?.referralInfo?.[0]?.referringClinicId ?? ""}
-              validate={required}>
+              initialValue={patient?.referralInfo?.[0]?.referringClinicId ?? ''}
+              validate={required}
+            >
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
                   <InputLabel id="clinics">Clinic *</InputLabel>
@@ -963,7 +958,8 @@ const ReferralForm = ({
                     onChange={input.onChange}
                     value={input.value}
                     variant="outlined"
-                    type="text">
+                    type="text"
+                  >
                     <MenuItem value={''}>Select a clinic</MenuItem>
                     {optom?.clinics?.map((clinic: Clinic) => {
                       {
@@ -999,7 +995,8 @@ const ReferralForm = ({
               initialValue={String(
                 patient?.referralInfo?.[0]?.referringEmail ?? '',
               )}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   label="Referrer Email *"
@@ -1020,7 +1017,8 @@ const ReferralForm = ({
               initialValue={String(
                 patient?.referralInfo?.[0]?.referringPhone ?? '',
               )}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   label="Referrer Phone *"
@@ -1039,7 +1037,8 @@ const ReferralForm = ({
           <Grid item xs={6}>
             <Field
               name="referringFax"
-              initialValue={patient?.referralInfo?.[0]?.referringFax ?? ''}>
+              initialValue={patient?.referralInfo?.[0]?.referringFax ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Referrer Fax"
@@ -1054,9 +1053,8 @@ const ReferralForm = ({
           <Grid item xs={6}>
             <Field
               name="referringStateZip"
-              initialValue={
-                patient?.referralInfo?.[0]?.referringStateZip ?? ''
-              }>
+              initialValue={patient?.referralInfo?.[0]?.referringStateZip ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Referrer ZIP Code"
@@ -1071,7 +1069,8 @@ const ReferralForm = ({
           <Grid className="flex gap-2" item xs={6}>
             <Field
               name="referringAddress"
-              initialValue={patient?.referralInfo?.[0]?.referringAddress ?? ''}>
+              initialValue={patient?.referralInfo?.[0]?.referringAddress ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Referrer Address"
@@ -1084,7 +1083,8 @@ const ReferralForm = ({
 
             <Field
               name="referringCity"
-              initialValue={patient?.referralInfo?.[0]?.referringCity ?? ''}>
+              initialValue={patient?.referralInfo?.[0]?.referringCity ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Referrer City"
@@ -1106,7 +1106,8 @@ const ReferralForm = ({
             <Field
               name="patientFirstName"
               initialValue={String(patient?.firstName ?? '')}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1123,7 +1124,8 @@ const ReferralForm = ({
             <Field
               name="patientLastName"
               initialValue={String(patient?.lastName ?? '')}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1140,7 +1142,8 @@ const ReferralForm = ({
             <Field
               name="patientDOB"
               initialValue={patient?.dob ? String(patient.dob) : ''}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1158,7 +1161,8 @@ const ReferralForm = ({
             <Field
               name="email"
               initialValue={String(patient?.email ?? '')}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1181,7 +1185,8 @@ const ReferralForm = ({
               initialValue={
                 patient?.phoneNumber ? String(patient.phoneNumber) : ''
               }
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1201,7 +1206,8 @@ const ReferralForm = ({
             <Field
               name="address"
               initialValue={patient?.address ? String(patient.address) : ''}
-              validate={required}>
+              validate={required}
+            >
               {({ input }) => (
                 <TextField
                   label="Address *"
@@ -1217,7 +1223,8 @@ const ReferralForm = ({
             <Field
               name="gender"
               initialValue={patient?.gender ? String(patient.gender) : ''}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
                   <InputLabel id="gender">Gender *</InputLabel>
@@ -1225,7 +1232,8 @@ const ReferralForm = ({
                     id="gender"
                     label="Gender *"
                     {...input}
-                    variant="outlined">
+                    variant="outlined"
+                  >
                     <MenuItem value="male">Male</MenuItem>
                     <MenuItem value="female">Female</MenuItem>
                   </Select>
@@ -1270,7 +1278,8 @@ const ReferralForm = ({
             {/* Interpreter Needed - Radio Buttons - interpreterNeeded */}
             <Field
               name="interpreterNeeded"
-              initialValue={patient?.interpreterNeeded ?? false}>
+              initialValue={patient?.interpreterNeeded ?? false}
+            >
               {({ input }) => (
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Interpreter Needed?</FormLabel>
@@ -1278,7 +1287,8 @@ const ReferralForm = ({
                     {...input}
                     row
                     value={input.value === true ? 'true' : 'false'}
-                    onChange={e => input.onChange(e.target.value === 'true')}>
+                    onChange={e => input.onChange(e.target.value === 'true')}
+                  >
                     <FormControlLabel
                       value="true"
                       control={<Radio color="primary" />}
@@ -1298,7 +1308,8 @@ const ReferralForm = ({
               <Field
                 name="language"
                 initialValue={String(patient?.language ?? '')}
-                validate={required}>
+                validate={required}
+              >
                 {({ input }) => (
                   <TextField
                     label="Language *"
@@ -1319,7 +1330,8 @@ const ReferralForm = ({
                     {...input}
                     row
                     value={input.value === true ? 'true' : 'false'}
-                    onChange={e => input.onChange(e.target.value === 'true')}>
+                    onChange={e => input.onChange(e.target.value === 'true')}
+                  >
                     <FormControlLabel
                       value="true"
                       control={<Radio color="primary" />}
@@ -1339,7 +1351,8 @@ const ReferralForm = ({
           <Grid item xs={12}>
             <Typography
               variant="subtitle1"
-              sx={{ fontWeight: 'bold', m: 1, marginTop: '4px' }}>
+              sx={{ fontWeight: 'bold', m: 1, marginTop: '4px' }}
+            >
               Insurance Information
             </Typography>
           </Grid>
@@ -1347,7 +1360,8 @@ const ReferralForm = ({
             <Typography
               variant="body2"
               color="textSecondary"
-              style={{ marginTop: 'px' }}>
+              style={{ marginTop: 'px' }}
+            >
               If the patient has HMO insurance, we will require an
               authorization/referral from their PCP before they can be seen.
               Please send a copy of the patient’s insurance cards and last
@@ -1369,7 +1383,8 @@ const ReferralForm = ({
               initialValue={
                 (patient?.insuranceInfo?.[0]
                   ?.primaryInsuranceProviderName as string) ?? ''
-              }>
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Primary Insurance Provider *"
@@ -1388,7 +1403,8 @@ const ReferralForm = ({
                 patient?.insuranceInfo?.[0]?.primaryInsuranceIdNumber
                   ? String(patient.insuranceInfo[0].primaryInsuranceIdNumber)
                   : ''
-              }>
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Insurance ID Number *"
@@ -1405,7 +1421,8 @@ const ReferralForm = ({
               validate={required}
               initialValue={String(
                 patient?.insuranceInfo?.[0]?.primaryInsuranceGroupNumber ?? '',
-              )}>
+              )}
+            >
               {({ input }) => (
                 <TextField
                   label="Insurance Group Number *"
@@ -1427,8 +1444,10 @@ const ReferralForm = ({
             <Field
               name="secondaryInsuranceProviderName"
               initialValue={
-                patient?.insuranceInfo?.[0]?.secondaryInsuranceProviderName ?? ''
-              }>
+                patient?.insuranceInfo?.[0]?.secondaryInsuranceProviderName ??
+                ''
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Secondary Insurance Provider"
@@ -1444,7 +1463,8 @@ const ReferralForm = ({
               name="secondaryInsuranceIdNumber"
               initialValue={
                 patient?.insuranceInfo?.[0]?.secondaryInsuranceIdNumber ?? ''
-              }>
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Insurance ID Number"
@@ -1460,7 +1480,8 @@ const ReferralForm = ({
               name="secondaryInsuranceGroupNumber"
               initialValue={
                 patient?.insuranceInfo?.[0]?.secondaryInsuranceGroupNumber ?? ''
-              }>
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Insurance Group Number"
@@ -1477,7 +1498,8 @@ const ReferralForm = ({
             <Typography
               variant="body2"
               color="#4BA7C1"
-              style={{ marginTop: '16px' }}>
+              style={{ marginTop: '16px' }}
+            >
               Due to certain limitations within our Ambulatory Surgery Centers,
               and in an attempt to provide the best possible care to your
               surgical patients, some procedures offered by our providers must
@@ -1494,7 +1516,8 @@ const ReferralForm = ({
           <Grid item xs={12}>
             <Typography
               variant="subtitle1"
-              sx={{ fontWeight: 'bold', marginTop: 3 }}>
+              sx={{ fontWeight: 'bold', marginTop: 3 }}
+            >
               Preferred Clinic Location
             </Typography>
           </Grid>
@@ -1573,71 +1596,73 @@ const ReferralForm = ({
 </Grid> */}
 
           <Grid item xs={6} alignContent={'center'} px={1} pt={1}>
-          <Field
-                    name="surgeon"
-                    initialValue={patient?.surgeonId ?? undefined}>
-                    {({ input, meta }) => (
-                      <FormControl fullWidth error={meta.error && meta.touched}>
-                        <InputLabel id="surgeonName">Surgeon name</InputLabel>
-                        <Select
-                          id="surgeonName"
-                          label="Surgeon Name"
-                          fullWidth
-                          name={input.name}
-                          onChange={event => {
-                            input.onChange;
-                            setSurgeonIdSelected(event.target.value);
-                          }}
-                          type="text"
-                          value={surgeonIdSelected}
-                          variant="outlined">
-                          <MenuItem value={''}>Select a surgeon</MenuItem>
-                          {surgeons?.map(surgeon => {
-                            return (
-                              <MenuItem key={surgeon.id} value={surgeon.id}>
-                                {surgeon.firstName} {surgeon.lastName}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                        <FormHelperText />
-                      </FormControl>
-                    )}
-                  </Field>
-                              <Field
-                    name="surgeonClinic"
-                    initialValue={patient?.surgeonClinicId ?? undefined}>
-                    {({ input, meta }) => (
-                      <FormControl fullWidth error={meta.error && meta.touched}>
-                        <InputLabel id="surgeonClinic">
-                          Surgeon clinic
-                        </InputLabel>
-                        <Select
-                          id="surgeonName"
-                          disabled={!surgeonIdSelected}
-                          label="Surgeon Clinic"
-                          fullWidth
-                          name={input.name}
-                          onChange={input.onChange}
-                          type="text"
-                          value={input.value}
-                          variant="outlined">
-                          <MenuItem value={''}>Select a surgeon</MenuItem>
-                          {surgeon?.clinics?.map(clinic => {
-                            return (
-                              <MenuItem key={clinic.id} value={clinic.id}>
-                                {clinic.name} - {clinic.city}, {clinic.state}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                        {!surgeonIdSelected && (
-                          <FormHelperText>Select a surgeon</FormHelperText>
-                        )}
-                      </FormControl>
-                    )}
-                  </Field>
-                </Grid>
+            <Field
+              name="surgeon"
+              initialValue={patient?.surgeonId ?? undefined}
+            >
+              {({ input, meta }) => (
+                <FormControl fullWidth error={meta.error && meta.touched}>
+                  <InputLabel id="surgeonName">Surgeon name</InputLabel>
+                  <Select
+                    id="surgeonName"
+                    label="Surgeon Name"
+                    fullWidth
+                    name={input.name}
+                    onChange={event => {
+                      input.onChange;
+                      setSurgeonIdSelected(event.target.value);
+                    }}
+                    type="text"
+                    value={surgeonIdSelected}
+                    variant="outlined"
+                  >
+                    <MenuItem value={''}>Select a surgeon</MenuItem>
+                    {surgeons?.map(surgeon => {
+                      return (
+                        <MenuItem key={surgeon.id} value={surgeon.id}>
+                          {surgeon.firstName} {surgeon.lastName}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  <FormHelperText />
+                </FormControl>
+              )}
+            </Field>
+            <Field
+              name="surgeonClinic"
+              initialValue={patient?.surgeonClinicId ?? undefined}
+            >
+              {({ input, meta }) => (
+                <FormControl fullWidth error={meta.error && meta.touched}>
+                  <InputLabel id="surgeonClinic">Surgeon clinic</InputLabel>
+                  <Select
+                    id="surgeonName"
+                    disabled={!surgeonIdSelected}
+                    label="Surgeon Clinic"
+                    fullWidth
+                    name={input.name}
+                    onChange={input.onChange}
+                    type="text"
+                    value={input.value}
+                    variant="outlined"
+                  >
+                    <MenuItem value={''}>Select a surgeon</MenuItem>
+                    {surgeon?.clinics?.map(clinic => {
+                      return (
+                        <MenuItem key={clinic.id} value={clinic.id}>
+                          {clinic.name} - {clinic.city}, {clinic.state}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  {!surgeonIdSelected && (
+                    <FormHelperText>Select a surgeon</FormHelperText>
+                  )}
+                </FormControl>
+              )}
+            </Field>
+          </Grid>
 
           {/* Preferred Locations */}
 
@@ -1648,7 +1673,8 @@ const ReferralForm = ({
             <Field
               name="preferredLocations"
               initialValue={patient?.preferredLocations?.join(', ') ?? ''}
-              validate={required}>
+              validate={required}
+            >
               {({ input }) => {
                 // Ensure unique cities
                 const uniqueCities = Array.from(
@@ -1674,7 +1700,8 @@ const ReferralForm = ({
                         input.onChange(value);
                       }}
                       onClose={() => input.onBlur()} // Ensure blur event is triggered
-                      variant="outlined">
+                      variant="outlined"
+                    >
                       {uniqueCities.map(city => (
                         <MenuItem key={city} value={city}>
                           {city}
@@ -1700,7 +1727,8 @@ const ReferralForm = ({
                   ? patient?.consultationType.join(', ')
                   : (patient?.consultationType ?? '')
               }
-              validate={required}>
+              validate={required}
+            >
               {({ input }) => (
                 <FormGroup>
                   {[
@@ -1765,7 +1793,8 @@ const ReferralForm = ({
             <Field
               name="urgentReferral"
               type="checkbox"
-              initialValue={patient?.urgentReferral ?? false}>
+              initialValue={patient?.urgentReferral ?? false}
+            >
               {({ input }) => (
                 <FormControlLabel
                   control={<Checkbox {...input} />}
@@ -1837,37 +1866,46 @@ const ReferralForm = ({
             </Typography>
           </Grid>
 
-            <Grid item xs={12}>
+          <Grid item xs={12}>
             <FormControl component="fieldset">
               <FormLabel component="legend">
-              Co-management Preferences
+                Co-management Preferences
               </FormLabel>
               <FormGroup>
-              <Field name="comanageYes" type="checkbox" initialValue={patient?.comanageYes ?? false}>
-                {({ input }) => (
-                <FormControlLabel
-                  control={<Checkbox {...input} />}
-                  label="Yes - I'd like to co-manage the patient’s post-op care"
-                />
-                )}
-              </Field>
-              <Field name="comanageNo" type="checkbox" initialValue={patient?.comanageNo ?? false}>
-                {({ input }) => (
-                <FormControlLabel
-                  control={<Checkbox {...input} />}
-                  label="No - I’d prefer Snyder Eye Institute to assume the patient’s post-op care"
-                />
-                )}
-              </Field>
+                <Field
+                  name="comanageYes"
+                  type="checkbox"
+                  initialValue={patient?.comanageYes ?? false}
+                >
+                  {({ input }) => (
+                    <FormControlLabel
+                      control={<Checkbox {...input} />}
+                      label="Yes - I'd like to co-manage the patient’s post-op care"
+                    />
+                  )}
+                </Field>
+                <Field
+                  name="comanageNo"
+                  type="checkbox"
+                  initialValue={patient?.comanageNo ?? false}
+                >
+                  {({ input }) => (
+                    <FormControlLabel
+                      control={<Checkbox {...input} />}
+                      label="No - I’d prefer Snyder Eye Institute to assume the patient’s post-op care"
+                    />
+                  )}
+                </Field>
               </FormGroup>
             </FormControl>
-            </Grid>
+          </Grid>
 
           <Grid item xs={12}>
             <Field
               name="signUpNewsLetter"
               type="checkbox"
-              initialValue={patient?.signUpNewsLetter ?? false}>
+              initialValue={patient?.signUpNewsLetter ?? false}
+            >
               {({ input }) => (
                 <FormControlLabel
                   control={<Checkbox {...input} />}
@@ -1880,7 +1918,8 @@ const ReferralForm = ({
           <Grid item xs={12}>
             <Field
               name="generalNotes"
-              initialValue={patient?.generalNotes ?? ''}>
+              initialValue={patient?.generalNotes ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Additional Notes"
@@ -1894,12 +1933,13 @@ const ReferralForm = ({
             </Field>
           </Grid>
 
-<Grid item xs={12}>
+          <Grid item xs={12}>
             <button
               // type="submit"
-              className='bg-blue-400 w-full p-2 rounded-md'
-               onClick={(event) => submitPreview}>
-              Preview           
+              className="bg-blue-400 w-full p-2 rounded-md"
+              onClick={event => submitPreview}
+            >
+              Preview
             </button>
           </Grid>
           <Grid item xs={12}>
@@ -1908,7 +1948,8 @@ const ReferralForm = ({
               variant="contained"
               color="primary"
               fullWidth
-              disabled={submitting}>
+              disabled={submitting}
+            >
               {submitting ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (

@@ -1,7 +1,5 @@
 // import { Logging } from '@google-cloud/logging';
 
-
-
 // Possible severity level values: "NOTICE" | "INFO" | "ERROR" | "WARNING" | "ALERT" | "EMERGENCY" | "CRITICAL" | "DEBUG"
 
 let Logging: any;
@@ -20,15 +18,16 @@ export const writeLogEntry = async (message: string, p0: string) => {
   const logging = new Logging();
   const log = logging.log('viewpoint-co-management-log');
 
-
   const metadata = {
     resource: { type: 'global' },
   };
 
-  const entry = log.entry(metadata, { message, timestamp: new Date().toISOString(), });
+  const entry = log.entry(metadata, {
+    message,
+    timestamp: new Date().toISOString(),
+  });
   await log.write(entry);
 };
-
 
 // Select the log to write to
 // const log = logging.log('viewpoint-co-management-log');

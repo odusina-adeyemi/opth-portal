@@ -170,7 +170,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                       <Field
                         name="name"
                         validate={required}
-                        initialValue={clinic?.name ?? ''}>
+                        initialValue={clinic?.name ?? ''}
+                      >
                         {({ input, meta }) => (
                           <TextField
                             id="name"
@@ -191,7 +192,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                       <Field
                         name="address"
                         validate={required}
-                        initialValue={clinic?.address ?? ''}>
+                        initialValue={clinic?.address ?? ''}
+                      >
                         {({ input, meta }) => (
                           <TextField
                             id="address"
@@ -212,7 +214,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                       <Field
                         name="city"
                         validate={required}
-                        initialValue={clinic?.city ?? ''}>
+                        initialValue={clinic?.city ?? ''}
+                      >
                         {({ input, meta }) => (
                           <TextField
                             id="city"
@@ -232,11 +235,13 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                       <Field
                         name="state"
                         validate={required}
-                        initialValue={selectedState}>
+                        initialValue={selectedState}
+                      >
                         {({ input, meta }) => (
                           <FormControl
                             fullWidth
-                            error={meta.error && meta.touched}>
+                            error={meta.error && meta.touched}
+                          >
                             <Autocomplete
                               id="state"
                               onChange={(_, value) => {
@@ -266,7 +271,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                       <Field
                         name="zipCode"
                         validate={required}
-                        initialValue={clinic?.zipCode?.toString() ?? ''}>
+                        initialValue={clinic?.zipCode?.toString() ?? ''}
+                      >
                         {({ input, meta }) => (
                           <TextField
                             id="zipCode"
@@ -305,7 +311,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                     <Grid item xs={6} alignContent={'center'} pl={1} py={1}>
                       <Field
                         name="phoneNumber"
-                        initialValue={clinic?.phoneNumber ?? ''}>
+                        initialValue={clinic?.phoneNumber ?? ''}
+                      >
                         {({ input }) => (
                           <TextField
                             id="phoneNumber"
@@ -327,7 +334,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                     <Grid item xs={6} alignContent={'center'} px={1}>
                       <Field
                         name="faxNumber"
-                        initialValue={clinic?.faxNumber ?? ''}>
+                        initialValue={clinic?.faxNumber ?? ''}
+                      >
                         {({ input }) => (
                           <TextField
                             id="faxNumber"
@@ -350,11 +358,13 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                       <Field
                         name="type"
                         validate={required}
-                        initialValue={clinic?.type ?? ''}>
+                        initialValue={clinic?.type ?? ''}
+                      >
                         {({ input, meta }) => (
                           <FormControl
                             fullWidth
-                            error={meta.error && meta.touched}>
+                            error={meta.error && meta.touched}
+                          >
                             <InputLabel id="type">Type *</InputLabel>
                             <Select
                               id="type"
@@ -367,7 +377,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                                 }
                               }}
                               value={input.value}
-                              variant="outlined">
+                              variant="outlined"
+                            >
                               <MenuItem value={''}>Select a Type</MenuItem>
                               {CLINIC_TYPES?.map((type, index) => {
                                 return (
@@ -386,7 +397,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                         {({ input, meta }) => (
                           <FormControl
                             fullWidth
-                            error={meta.error && meta.touched}>
+                            error={meta.error && meta.touched}
+                          >
                             <Autocomplete
                               id="providers"
                               disableCloseOnSelect
@@ -435,10 +447,12 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                       alignContent={'center'}
                       display={'flex'}
                       pl={1}
-                      py={1}>
+                      py={1}
+                    >
                       <Field
                         name="referralManager"
-                        initialValue={clinic?.referralManager ?? ''}>
+                        initialValue={clinic?.referralManager ?? ''}
+                      >
                         {({ input }) => (
                           <TextField
                             id="referralManager"
@@ -476,7 +490,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                       xs={12}
                       p={1}
                       display={'flex'}
-                      justifyContent={'end'}>
+                      justifyContent={'end'}
+                    >
                       <Button
                         color="primary"
                         disabled={submitting || createLoading || updateLoading}
@@ -488,7 +503,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
                         }
                         sx={{ textTransform: 'capitalize' }}
                         variant="contained"
-                        type="submit">
+                        type="submit"
+                      >
                         {clinic ? 'Update' : 'Add'}
                       </Button>
                     </Grid>
@@ -503,7 +519,8 @@ const ClinicForm = ({ clinic, providers, user }: ClinicFormProps) => {
         <Box display={'flex'} alignItems={'center'} pl={1}>
           <Link
             href="/providers/new"
-            style={{ alignItems: 'center', display: 'flex' }}>
+            style={{ alignItems: 'center', display: 'flex' }}
+          >
             Provider not found?
             <AddProvider />
           </Link>

@@ -18,19 +18,18 @@ const UserSettings = ({ orgName }: { orgName: string }) => {
   return (
     <>
       <Box display={'flex'} alignItems={'center'}>
-        <Typography>
-          {orgName}
-        </Typography>
+        <Typography>{orgName}</Typography>
       </Box>
       <IconButton onClick={handleClick}>
-        <AccountCircleIcon  />
+        <AccountCircleIcon />
       </IconButton>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}>
-        <Link href={'/optometrist/user/profile'}> 
+        onClose={handleClose}
+      >
+        <Link href={'/optometrist/user/profile'}>
           <MenuItem onClick={handleClose}>Profile</MenuItem>
         </Link>
         <Link href={'/optometrist/user/my_account'}>

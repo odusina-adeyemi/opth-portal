@@ -478,7 +478,7 @@ export const patientResolver = {
       } catch (error: any) {
         handleAssertDataValidationError(error);
       }
-    
+
       return await context.prisma.patient.create({
         data: {
           // Clinics and Providers
@@ -488,25 +488,31 @@ export const patientResolver = {
           providers: patientInput.providers?.length
             ? { connect: patientInput.providers.map(id => ({ id })) }
             : undefined,
-    
+
           // Appointment Info
           appointmentInfo: patientInput.appointmentInfo
             ? {
                 create: {
                   doctorSpecialty: patientInput.appointmentInfo.doctorSpecialty,
-                  preferredLocations: patientInput.appointmentInfo.preferredLocations,
+                  preferredLocations:
+                    patientInput.appointmentInfo.preferredLocations,
                   consultationType: patientInput.consultationType?.[0] || null, // Adjusted for a single string
                   urgentReferral: patientInput.appointmentInfo.urgentReferral,
-                  additionalConditions: patientInput.appointmentInfo.additionalConditions,
+                  additionalConditions:
+                    patientInput.appointmentInfo.additionalConditions,
                   chartNotesAttachments:
-                    patientInput.appointmentInfo.chartNotesAttachments?.map(file => ({
-                      name: ((file as unknown) as { name: string; url: string }).name,
-                      url: ((file as unknown) as { name: string; url: string }).url,
-                    })) || [],
+                    patientInput.appointmentInfo.chartNotesAttachments?.map(
+                      file => ({
+                        name: (file as unknown as { name: string; url: string })
+                          .name,
+                        url: (file as unknown as { name: string; url: string })
+                          .url,
+                      }),
+                    ) || [],
                 },
               }
             : undefined,
-    
+
           // Referral Info
           referralInfo: patientInput.referralInfo?.length
             ? {
@@ -522,34 +528,49 @@ export const patientResolver = {
                 })),
               }
             : undefined,
-    
+
           // Insurance Info
           insuranceInfo: patientInput.insuranceInfo?.length
             ? {
                 create: patientInput.insuranceInfo.map(info => ({
                   primaryInsuranceProviderId: info.primaryInsuranceProviderId,
-                  primaryInsuranceProviderName: info.primaryInsuranceProviderName,
+                  primaryInsuranceProviderName:
+                    info.primaryInsuranceProviderName,
                   primaryInsuranceIdNumber: info.primaryInsuranceIdNumber,
                   primaryInsuranceGroupNumber: info.primaryInsuranceGroupNumber,
-                  secondaryInsuranceProviderId: info.secondaryInsuranceProviderId,
-                  secondaryInsuranceProviderName: info.secondaryInsuranceProviderName,
+                  secondaryInsuranceProviderId:
+                    info.secondaryInsuranceProviderId,
+                  secondaryInsuranceProviderName:
+                    info.secondaryInsuranceProviderName,
                   secondaryInsuranceIdNumber: info.secondaryInsuranceIdNumber,
-                  secondaryInsuranceGroupNumber: info.secondaryInsuranceGroupNumber,
+                  secondaryInsuranceGroupNumber:
+                    info.secondaryInsuranceGroupNumber,
                 })),
               }
             : undefined,
-    
+
           // Attached Files
           attachedFiles: patientInput.attachedFiles?.length
-            ? { create: patientInput.attachedFiles.map(file => ({ name: file.name, url: file.url })) }
+            ? {
+                create: patientInput.attachedFiles.map(file => ({
+                  name: file.name,
+                  url: file.url,
+                })),
+              }
             : undefined,
-    
+
           // Optional Relationships
           referringClinic: patientInput.referralInfo?.[0]?.referringClinicId
-            ? { connect: { id: patientInput.referralInfo[0].referringClinicId } }
+            ? {
+                connect: { id: patientInput.referralInfo[0].referringClinicId },
+              }
             : undefined,
           referringProvider: patientInput.referralInfo?.[0]?.referringProviderId
-            ? { connect: { id: patientInput.referralInfo[0].referringProviderId } }
+            ? {
+                connect: {
+                  id: patientInput.referralInfo[0].referringProviderId,
+                },
+              }
             : undefined,
           surgeonClinic: patientInput.surgeon?.clinics?.[0]?.id
             ? { connect: { id: patientInput.surgeon.clinics[0].id } }
@@ -560,7 +581,7 @@ export const patientResolver = {
           organization: patientInput.organizationId
             ? { connect: { id: patientInput.organizationId } }
             : undefined,
-    
+
           // Basic Information
           dob: patientInput.dob,
           email: patientInput.email,
@@ -582,11 +603,10 @@ export const patientResolver = {
           comanageNo: patientInput.comanageNo,
           comanageYes: patientInput.comanageYes,
           signUpNewsLetter: patientInput.signUpNewsLetter,
-          
         },
       });
     },
-    
+
     deletePatient: async (
       _parent: Patient,
       { id }: { id: string },
@@ -617,7 +637,6 @@ export const patientResolver = {
             connect: patientInput?.clinics?.map(id => ({ id })),
           },
 
-          
           appointmentInfo: {
             upsert: {
               create: patientInput.appointmentInfo,

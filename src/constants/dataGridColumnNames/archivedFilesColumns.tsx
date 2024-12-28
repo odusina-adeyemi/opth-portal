@@ -33,7 +33,8 @@ export const archivedFileColumns = [
         href={row?.signedUrl}
         target="_blank"
         rel="noopener noreferrer"
-        sx={{ cursor: 'pointer' }}>
+        sx={{ cursor: 'pointer' }}
+      >
         {uploadFileNames[row.name]}
       </Link>
     ),
@@ -78,7 +79,8 @@ export const archivedFileColumns = [
               <Link
                 href={row?.signedUrl}
                 target="_blank"
-                rel="noopener noreferrer">
+                rel="noopener noreferrer"
+              >
                 <FindInPageIcon sx={{ width: 22, height: 22 }} />
               </Link>
             </Tooltip>

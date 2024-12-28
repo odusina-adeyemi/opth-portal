@@ -1,7 +1,7 @@
-import FormSkeleton from '../../../../../ui/components/FormSkeleton';
+// import FormSkeleton from '../../../../../ui/components/FormSkeleton';
 
-const Loading = () => {
-  return <FormSkeleton />;
-};
+// const Loading = () => {
+//   return <FormSkeleton />;
+// };
 
-export default Loading;
+// export default Loading;

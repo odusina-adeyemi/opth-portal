@@ -19,11 +19,11 @@ const NewReferralPage = async () => {
     <div className=''>
       
       <div className='mt-6'>
-        <BackArrowLink
+        {/* <BackArrowLink
           color={textLinkColor}
           href="/referrals"
           title="Referrals"
-        />
+        /> */}
       </div>
       <div className="bg-white w- h- p-12 mt-8 rounded-xl ml-6 mr-6 text-center flex flex-row gap-4 justify-between ">
         <div>

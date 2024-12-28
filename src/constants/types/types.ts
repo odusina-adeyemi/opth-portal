@@ -340,6 +340,7 @@ type Patient = {
   comanageNo?: boolean; // Co-manage care disapproval
   notes?: string; // Additional notes
   signUpNewsLetter?: boolean; // Whether patient signed up for newsletters
+  doctorSpecialty?: string; // Doctor's specialty
 
   // Relations
   appointmentInfo?: AppointmentInfo; // Associated appointment info

@@ -319,8 +319,7 @@ export const typeDef = `#graphql
         consultationType: [String]
         attachedFiles: [FileInput]
         additionalNotes: String
-        comanageNo: Boolean    
-        comanageYes: Boolean
+        comanage: Boolean    
         signUpNewsLetter: Boolean
         appointmentInfo: AppointmentInfoInput
         referralInfo: [ReferralInfoInput]

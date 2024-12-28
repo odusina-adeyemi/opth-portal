@@ -478,67 +478,90 @@ export const patientResolver = {
       } catch (error: any) {
         handleAssertDataValidationError(error);
       }
-
+    
       return await context.prisma.patient.create({
         data: {
-          clinics: {
-            connect: patientInput.clinics.map(id => ({ id })),
-          },
-          // appointmentInfo: {
-          //   create: patientInput.appointmentInfo,
-          // },
-          // referralInfo: {
-          //   create: patientInput.referralInfo,
-          // },
-
-          
-
-
-          referralInfo: {
-            create: patientInput.referralInfo?.map(info => ({
-              referringClinicId: info.referringClinicId,
-              referringProviderId: info.referringProviderId,
-              referringEmail: info.referringEmail,
-              referringPhone: info.referringPhone,
-              referringFax: info.referringFax,
-              referringAddress: info.referringAddress,
-              referringCity: info.referringCity,
-              referringStateZip: info.referringStateZip,
-            })),
-          },
-          
-          // referralInfo: patientInput.referralInfo && {
-          //   create: {
-          //     referringClinicId: patientInput.referralInfo[0]?.referringClinicId,
-          //     referringProviderId: patientInput.referralInfo[0]?.referringProviderId,
-          //     referringEmail: patientInput.referralInfo[0]?.referringEmail,
-          //     referringPhone: patientInput.referralInfo[0]?.referringPhone,
-          //     referringFax: patientInput.referralInfo[0]?.referringFax,
-          //     referringAddress: patientInput.referralInfo[0]?.referringAddress,
-          //     referringCity: patientInput.referralInfo[0]?.referringCity,
-          //     referringStateZip: patientInput.referralInfo[0]?.referringStateZip,
-          //   },
-          // },
-          
-
-
-
-          // insuranceInfo: {
-          //   create: patientInput.insuranceInfo,
-          // },
-
-          insuranceInfo: {
-            create: patientInput.insuranceInfo?.map(info => ({
-              primaryInsuranceProviderId: info.primaryInsuranceProviderId,
-              primaryInsuranceProviderName: info.primaryInsuranceProviderName,
-              primaryInsuranceIdNumber: info.primaryInsuranceIdNumber,
-              primaryInsuranceGroupNumber: info.primaryInsuranceGroupNumber,
-              secondaryInsuranceProviderId: info.secondaryInsuranceProviderId,
-              secondaryInsuranceProviderName: info.secondaryInsuranceProviderName,
-              secondaryInsuranceIdNumber: info.secondaryInsuranceIdNumber,
-              secondaryInsuranceGroupNumber: info.secondaryInsuranceGroupNumber,
-            })),
-          },
+          // Clinics and Providers
+          clinics: patientInput.clinics?.length
+            ? { connect: patientInput.clinics.map(id => ({ id })) }
+            : undefined,
+          providers: patientInput.providers?.length
+            ? { connect: patientInput.providers.map(id => ({ id })) }
+            : undefined,
+    
+          // Appointment Info
+          appointmentInfo: patientInput.appointmentInfo
+            ? {
+                create: {
+                  doctorSpecialty: patientInput.appointmentInfo.doctorSpecialty,
+                  preferredLocations: patientInput.appointmentInfo.preferredLocations,
+                  consultationType: patientInput.consultationType?.[0] || null, // Adjusted for a single string
+                  urgentReferral: patientInput.appointmentInfo.urgentReferral,
+                  additionalConditions: patientInput.appointmentInfo.additionalConditions,
+                  chartNotesAttachments:
+                    patientInput.appointmentInfo.chartNotesAttachments?.map(file => ({
+                      name: ((file as unknown) as { name: string; url: string }).name,
+                      url: ((file as unknown) as { name: string; url: string }).url,
+                    })) || [],
+                },
+              }
+            : undefined,
+    
+          // Referral Info
+          referralInfo: patientInput.referralInfo?.length
+            ? {
+                create: patientInput.referralInfo.map(info => ({
+                  referringClinicId: info.referringClinicId,
+                  referringProviderId: info.referringProviderId,
+                  referringEmail: info.referringEmail,
+                  referringPhone: info.referringPhone,
+                  referringFax: info.referringFax,
+                  referringAddress: info.referringAddress,
+                  referringCity: info.referringCity,
+                  referringStateZip: info.referringStateZip,
+                })),
+              }
+            : undefined,
+    
+          // Insurance Info
+          insuranceInfo: patientInput.insuranceInfo?.length
+            ? {
+                create: patientInput.insuranceInfo.map(info => ({
+                  primaryInsuranceProviderId: info.primaryInsuranceProviderId,
+                  primaryInsuranceProviderName: info.primaryInsuranceProviderName,
+                  primaryInsuranceIdNumber: info.primaryInsuranceIdNumber,
+                  primaryInsuranceGroupNumber: info.primaryInsuranceGroupNumber,
+                  secondaryInsuranceProviderId: info.secondaryInsuranceProviderId,
+                  secondaryInsuranceProviderName: info.secondaryInsuranceProviderName,
+                  secondaryInsuranceIdNumber: info.secondaryInsuranceIdNumber,
+                  secondaryInsuranceGroupNumber: info.secondaryInsuranceGroupNumber,
+                })),
+              }
+            : undefined,
+    
+          // Attached Files
+          attachedFiles: patientInput.attachedFiles?.length
+            ? { create: patientInput.attachedFiles.map(file => ({ name: file.name, url: file.url })) }
+            : undefined,
+    
+          // Optional Relationships
+          referringClinic: patientInput.referralInfo?.[0]?.referringClinicId
+            ? { connect: { id: patientInput.referralInfo[0].referringClinicId } }
+            : undefined,
+          referringProvider: patientInput.referralInfo?.[0]?.referringProviderId
+            ? { connect: { id: patientInput.referralInfo[0].referringProviderId } }
+            : undefined,
+          surgeonClinic: patientInput.surgeon?.clinics?.[0]?.id
+            ? { connect: { id: patientInput.surgeon.clinics[0].id } }
+            : undefined,
+          surgeon: patientInput.surgeon?.id
+            ? { connect: { id: patientInput.surgeon.id } }
+            : undefined,
+          organization: patientInput.organizationId
+            ? { connect: { id: patientInput.organizationId } }
+            : undefined,
+    
+          // Basic Information
           dob: patientInput.dob,
           email: patientInput.email,
           firstName: patientInput.firstName,
@@ -547,55 +570,23 @@ export const patientResolver = {
           address: patientInput.address,
           city: patientInput.city,
           zip: patientInput.zip,
-          fax: patientInput.fax || undefined, // Ensure `fax` is not null
+          fax: patientInput.fax || undefined,
           interpreterNeeded: patientInput.interpreterNeeded,
           language: patientInput.language,
           okToText: patientInput.okToText,
           urgentReferral: patientInput.urgentReferral,
           preferredLocations: patientInput.preferredLocations,
           consultationType: patientInput.consultationType,
-          attachedFiles: {
-            create: patientInput.attachedFiles?.map(file => ({
-              name: file.name,
-              url: file.url,
-            })),
-          },
           generalNotes: patientInput.generalNotes,
           notes: patientInput.notes,
           comanageNo: patientInput.comanageNo,
           comanageYes: patientInput.comanageYes,
           signUpNewsLetter: patientInput.signUpNewsLetter,
-          organization: {
-            connect: {
-              id: patientInput.organizationId,
-            },
-          },
-          providers: {
-            connect: patientInput.providers.map(id => ({ id })),
-          },
-          referringClinic: {
-            connect: { id: patientInput.referralInfo?.[0]?.referringClinicId },
-          },
-          referringProvider: {
-            connect: {
-              id: patientInput.referralInfo?.[0]?.referringProviderId,
-            },
-          },
-
-          // surgeonClinic: patientInput.surgeon?.clinics?.[0]?.id && {
-          //   connect: { id: patientInput.surgeon.clinics[0].id },
-          // },
-
-          surgeonClinic: patientInput.surgeon?.clinics && patientInput.surgeon.clinics.length > 0 && {
-            connect: { id: patientInput.surgeon.clinics[0].id },
-          },
-
-          surgeon: patientInput.surgeon?.id && {
-            connect: { id: patientInput.surgeon.id },
-          },
+          
         },
       });
     },
+    
     deletePatient: async (
       _parent: Patient,
       { id }: { id: string },
@@ -659,7 +650,7 @@ export const patientResolver = {
           okToText: patientInput.okToText,
           urgentReferral: patientInput.urgentReferral,
           preferredLocations: patientInput.preferredLocations,
-          consultationType: patientInput.consultationType,
+          consultationType: patientInput.consultationType?.[0] || null, // Adjusted for a single string
           attachedFiles: {
             upsert: patientInput.attachedFiles?.map(file => ({
               where: { name: file.name },

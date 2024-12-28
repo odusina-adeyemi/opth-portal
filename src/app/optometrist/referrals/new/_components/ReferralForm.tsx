@@ -559,53 +559,9 @@ interface ReferralFormProps {
   user: User;
 }
 
-// interface FormValuesProps {
-//   referrerEmail: string;
-//   referrerZip: string;
-//   referrerCity: string;
-//   referrerAddress: string;
-//   referrerFax: string;
-//   doctorSpecialty: string;
-//   clinic: string;
-//   email: string;
-//   notes: string;
-//   patientFirstName: string;
-//   patientLastName: string;
-//   patientDOB: string; // ISO date format (YYYY-MM-DD)
-//   phoneNumber: string;
-//   provider: string;
-//   surgeon: string;
-//   surgeonClinic: string;
-//   fax?: string; // Optional, for fax number
-//   address?: string; // Optional, for address
-//   city?: string; // Optional, for city
-//   zip?: string; // Optional, for ZIP code
-//   gender?: string; // Optional, male/female
-//   interpreterNeeded?: boolean; // Optional, yes/no
-//   language?: string; // Optional, for preferred language
-//   okToText?: boolean; // Optional, yes/no
-//   providerPhoneNumber?: string; // Add this property
-//   providerEmail?: string; // Add this property
-//   providerAddress?: string; // Add this property
-//   insuranceProvider?: string; // Optional, insurance provider
-//   insurancePolicyNumber?: string; // Optional, insurance policy number
-//   primaryInsuranceProvider?: string; // Optional, primary insurance provider
-//   primaryInsuranceIdNumber?: string; // Optional, primary insurance ID
-//   primaryInsuranceGroupNumber?: string; // Optional, primary insurance group number
-//   secondaryInsuranceProvider?: string; // Optional, secondary insurance provider
-//   secondaryInsuranceIdNumber?: string; // Optional, secondary insurance ID
-//   secondaryInsuranceGroupNumber?: string; // Optional, secondary insurance group number
-//   preferredLocations?: string[]; // Optional, array of preferred locations
-//   consultationType?: string[]; // Optional, array of consultation types
-//   urgentReferral?: boolean; // Optional, true if urgent
-//   attachedFiles?: File[]; // Optional, for file uploads
-//   additionalNotes?: string; // Optional, additional notes
-//   comanagement?: boolean; // Optional, for co-management preferences
-//   comanageYes?: boolean; // Optional, for co-management preferences
-//   comanageNo?: boolean; // Optional, for co-management preferences
-// }
 
 interface FormValuesProps {
+  surgeonClinic: any;
   // Patient Info
   patientFirstName?: string;
   patientLastName?: string;
@@ -726,6 +682,7 @@ const ReferralForm = ({
       comanageYes: values.comanageYes || undefined,
       comanageNo: values.comanageNo || undefined,
       signUpNewsLetter: values.signUpNewsLetter || undefined,
+      
     
       // Appointment Info
       appointmentInfo: {
@@ -740,8 +697,8 @@ const ReferralForm = ({
     
       // Referral Info
       referralInfo: {
-        referringClinicId: values.referringClinicId || undefined,
-        referringProviderId: values.referringProviderId || undefined,
+        referringClinicId: values.clinics || undefined,
+        referringProviderId: values.providers || undefined,
         referringEmail: values.referringEmail || undefined,
         referringPhone: values.referringPhone
           ? formatPhoneNumber(values.referringPhone)
@@ -772,8 +729,11 @@ const ReferralForm = ({
       // Surgeon Info
       surgeon: {
         id: values.surgeonId || undefined,
+        surgeonId: surgeonIdSelected === '' ? undefined : surgeonIdSelected,
         clinicId: values.surgeonClinicId || undefined,
+        surgeonClinicId: values.surgeonClinic,
       },
+
     
       // Organization and Relationships
       organizationId: user.organizationId || undefined,
@@ -822,13 +782,110 @@ const ReferralForm = ({
     }
   };
 
+    const submitPreview = (values: FormValuesProps, form: any) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    
+
+
+    const patientData = {
+      // Patient Basic Information
+      firstName: values.patientFirstName || undefined,
+      lastName: values.patientLastName || undefined,
+      dob: values.patientDOB,
+      gender: values.gender || undefined,
+      email: values.email || undefined,
+      phoneNumber: values.phoneNumber
+        ? undoPhoneNumberFormat(values.phoneNumber)
+        : undefined,
+      address: values.address || undefined,
+      city: values.city || undefined,
+      zip: values.zip || undefined,
+      fax: values.fax || undefined,
+      interpreterNeeded: values.interpreterNeeded || undefined,
+      language: values.language || undefined,
+      okToText: values.okToText || undefined,
+      notes: values.notes || undefined,
+      urgentReferral: values.urgentReferral || undefined,
+      preferredLocations: values.preferredLocations || [],
+      consultationType: values.consultationType || [],
+      comanageYes: values.comanageYes || undefined,
+      comanageNo: values.comanageNo || undefined,
+      signUpNewsLetter: values.signUpNewsLetter || undefined,
+      
+    
+      // Appointment Info
+      appointmentInfo: {
+        doctorSpecialty: values.doctorSpecialty || undefined,
+        preferredLocations: values.preferredLocations || [],
+        consultationType: values.consultationType?.[0] || undefined,
+        urgentReferral: values.urgentReferral || undefined,
+        additionalConditions: values.additionalConditions || undefined,
+        chartNotesAttachments:
+          values.chartNotesAttachments?.map(file => file.name) || [],
+      },
+    
+      // Referral Info
+      referralInfo: {
+        referringClinicId: values.clinics || undefined,
+        referringProviderId: values.providers || undefined,
+        referringEmail: values.referringEmail || undefined,
+        referringPhone: values.referringPhone
+          ? formatPhoneNumber(values.referringPhone)
+          : undefined,
+        referringFax: values.referringFax || undefined,
+        referringAddress: values.referringAddress || undefined,
+        referringCity: values.referringCity || undefined,
+        referringStateZip: values.referringStateZip || undefined,
+      },
+    
+      // Insurance Info
+      insuranceInfo: {
+        primaryInsuranceProviderId: values.primaryInsuranceProviderId || undefined,
+        primaryInsuranceProviderName:
+          values.primaryInsuranceProviderName || undefined,
+        primaryInsuranceIdNumber: values.primaryInsuranceIdNumber || undefined,
+        primaryInsuranceGroupNumber:
+          values.primaryInsuranceGroupNumber || undefined,
+        secondaryInsuranceProviderId:
+          values.secondaryInsuranceProviderId || undefined,
+        secondaryInsuranceProviderName:
+          values.secondaryInsuranceProviderName || undefined,
+        secondaryInsuranceIdNumber: values.secondaryInsuranceIdNumber || undefined,
+        secondaryInsuranceGroupNumber:
+          values.secondaryInsuranceGroupNumber || undefined,
+      },
+    
+      // Surgeon Info
+      surgeon: {
+        id: values.surgeonId || undefined,
+        surgeonId: surgeonIdSelected === '' ? undefined : surgeonIdSelected,
+        clinicId: values.surgeonClinicId || undefined,
+        surgeonClinicId: values.surgeonClinic,
+      },
+
+    
+      // Organization and Relationships
+      organizationId: user.organizationId || undefined,
+      clinics: Array.isArray(values.clinics)
+        ? values.clinics.filter(Boolean)
+        : [],
+      providers: Array.isArray(values.providers)
+        ? values.providers.filter(Boolean)
+        : [],
+    };
+
+    return console.log("PatientData:", patientData);
+  }
+
   const optom = optoms.find(optom => optom?.id === optomIdSelected);
   const surgeon = surgeons?.find(surgeon => surgeon?.id === surgeonIdSelected);
+  console.log("Surgeon:", surgeon)
 
   return (
+    
     <Form
-      onSubmit={onSubmit}
-      render={({ handleSubmit, submitting, values }) => (
+    onSubmit={onSubmit}
+    render={({ handleSubmit, submitting, values }) => (
         <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
           {/* Reffering Provider Information       */}
           <Grid item xs={12}>
@@ -852,7 +909,7 @@ const ReferralForm = ({
           <Grid item xs={6}>
             <Field
               name="providers"
-              initialValue={patient?.referringProviderId ?? ''}
+              initialValue={patient?.referralInfo?.[0]?.referringProviderId ?? ''}
               validate={required}>
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
@@ -894,7 +951,7 @@ const ReferralForm = ({
           <Grid item xs={6}>
             <Field
               name="clinics"
-              initialValue={optom?.clinics?.map(clinic => clinic?.id).join(',') ?? ''}
+              initialValue={patient?.referralInfo?.[0]?.referringClinicId ?? ""}
               validate={required}>
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
@@ -1309,11 +1366,11 @@ const ReferralForm = ({
           </Grid>
           <Grid item xs={4}>
             <Field
-              name="primaryInsuranceProvider"
+              name="primaryInsuranceProviderName"
               validate={required}
               initialValue={
                 (patient?.insuranceInfo?.[0]
-                  ?.primaryInsuranceProviderId as string) ?? ''
+                  ?.primaryInsuranceProviderName as string) ?? ''
               }>
               {({ input }) => (
                 <TextField
@@ -1370,9 +1427,9 @@ const ReferralForm = ({
           </Grid>
           <Grid item xs={4}>
             <Field
-              name="secondaryInsuranceProviderId"
+              name="secondaryInsuranceProviderName"
               initialValue={
-                patient?.insuranceInfo?.[0]?.secondaryInsuranceProviderId ?? ''
+                patient?.insuranceInfo?.[0]?.secondaryInsuranceProviderName ?? ''
               }>
               {({ input }) => (
                 <TextField
@@ -1486,7 +1543,7 @@ const ReferralForm = ({
           {/* Doctor/Specialty Selection */}
           <Grid item xs={6}>
             <Typography variant="subtitle1">Doctor/Specialty</Typography>
-            <Field name="provider" validate={required}>
+            <Field name="doctorSpecialty" validate={required} initialValue={patient?.doctorSpecialty ?? ''}>
               {({ input }) => {
                 // Ensure unique providers based on ID
                 const uniqueProviders = Array.from(
@@ -1507,7 +1564,7 @@ const ReferralForm = ({
                   >
                     <MenuItem value="">None selected</MenuItem>
                     {uniqueProviders.map(optom => (
-                      <MenuItem key={optom.id} value={optom.id}>
+                      <MenuItem key={optom.id} value={optom.specialties}>
                         {optom.firstName} {optom.lastName} -{' '}
                         {optom.specialties.join(', ')}
                       </MenuItem>
@@ -1773,6 +1830,14 @@ const ReferralForm = ({
             </Field>
           </Grid>
 
+<Grid item xs={12}>
+            <button
+              // type="submit"
+              className='bg-blue-400 w-full p-2 rounded-md'
+               onClick={(event) => submitPreview}>
+              Preview           
+            </button>
+          </Grid>
           <Grid item xs={12}>
             <Button
               type="submit"

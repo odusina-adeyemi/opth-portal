@@ -91,8 +91,7 @@ model InsuranceCompanies {
   patients_patients_primaryInsuranceIdToinsurance_companies                       Patient?         @relation("patients_primaryInsuranceIdToinsurance_companies")
   patients_patients_secondaryInsuranceIdToinsurance_companies                     Patient?         @relation("patients_secondaryInsuranceIdToinsurance_companies")
   patients_InsuranceCompaniesToPatient                                            Patient[]        @relation("InsuranceCompaniesToPatient")
-  primaryInsuranceInfo                                                            InsuranceInfo[]  @relation("PrimaryInsurance")
-  secondaryInsuranceInfo                                                          InsuranceInfo[]  @relation("SecondaryInsurance")
+  insuranceInfo                                                                   InsuranceInfo[] // One-to-many relationship
 
   @@map("insurance_companies")
 }
@@ -383,7 +382,6 @@ model referral_info {
   providers           Provider? @relation(fields: [referringproviderid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-
 model ReferralInfo {
   id                  String   @id @default(cuid())
   referringClinicId   String? // Foreign key to Clinic
@@ -406,7 +404,7 @@ model ReferralInfo {
 }
 
 model InsuranceInfo {
-  id                             String   @id @default(cuid())
+  id                             String              @id @default(cuid())
   primaryInsuranceProviderId     String? // ID for primary insurance provider
   primaryInsuranceProviderName   String? // ID for primary insurance provider name
   primaryInsuranceIdNumber       String? // Insurance ID number for primary provider
@@ -415,16 +413,12 @@ model InsuranceInfo {
   secondaryInsuranceProviderName String? // ID for secondary insurance provider name
   secondaryInsuranceIdNumber     String? // Insurance ID number for secondary provider
   secondaryInsuranceGroupNumber  String? // Group number for secondary insurance
+  insuranceCompaniesId           String?
+  insuranceCompanies             InsuranceCompanies? @relation(fields: [insuranceCompaniesId], references: [id])
   patientId                      String // Foreign key to Patient
-  createdAt                      DateTime @default(now()) @map("created_at")
-  updatedAt                      DateTime @default(now()) @updatedAt @map("updated_at")
-
-  // Relation to Patient
-  patient Patient @relation("PatientToInsuranceInfo", fields: [patientId], references: [id], onDelete: Cascade)
-
-  // Relations to insurance providers
-  primaryInsuranceProvider   InsuranceCompanies? @relation("PrimaryInsurance", fields: [primaryInsuranceProviderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  secondaryInsuranceProvider InsuranceCompanies? @relation("SecondaryInsurance", fields: [secondaryInsuranceProviderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  createdAt                      DateTime            @default(now()) @map("created_at")
+  updatedAt                      DateTime            @default(now()) @updatedAt @map("updated_at")
+  patient                        Patient             @relation("PatientToInsuranceInfo", fields: [patientId], references: [id], onDelete: Cascade)
 }
 
 model AppointmentInfo {

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 const LogoutButton = () => {
@@ -16,7 +17,7 @@ const LogoutButton = () => {
       onClick={handleLogout}
       className="cursor-pointer flex items-center gap-3 bg-white h-12 p-2 mt-4 w-[800px] ml-6 rounded-md shadow-sm "
     >
-      <img
+      <Image
         src="/assets/logout_icon.svg"
         alt="Logout Icon"
         className="w-5 h-5"

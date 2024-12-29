@@ -14,7 +14,7 @@ export const writeLogEntry = async (message: string, p0: string) => {
     console.warn('Attempted to log from the client-side; skipping log.');
     return;
   }
-
+  
   const logging = new Logging();
   const log = logging.log('viewpoint-co-management-log');
 

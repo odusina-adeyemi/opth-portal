@@ -1342,7 +1342,7 @@ const ReferralForm = ({
               style={{ marginTop: 'px' }}>
               If the patient has HMO insurance, we will require an
               authorization/referral from their PCP before they can be seen.
-              Please send a copy of the patient&aposs insurance cards and last
+              Please send a copy of the patient&apos;s insurance cards and last
               appointment notes.
             </Typography>
           </Grid>
@@ -1642,7 +1642,7 @@ const ReferralForm = ({
 
           <Grid item xs={6}>
             <Typography variant="subtitle1">
-              Select the patient's preferred location(s) *
+              Select the patient&apos;s preferred location(s) *
             </Typography>
             <Field
               name="preferredLocations"
@@ -1830,7 +1830,7 @@ const ReferralForm = ({
             <Typography variant="body2" color="textSecondary">
               Following our evaluation, we will communicate any findings and/or
               treatment recommendations. If surgery is necessary please indicate
-              below if you'd like to co-manage. Regardless, all patients will be
+              below if you&apos;d like to co-manage. Regardless, all patients will be
               sent back to the referring provider to resume general eye care as
               appropriate.
             </Typography>
@@ -1849,7 +1849,7 @@ const ReferralForm = ({
                   {({ input }) => (
                     <FormControlLabel
                       control={<Checkbox {...input} />}
-                      label="Yes - I'd like to co-manage the patient&apos post-op care"
+                      label="Yes - I&apos;d like to co-manage the patient&apos; post-op care"
                     />
                   )}
                 </Field>
@@ -1860,7 +1860,7 @@ const ReferralForm = ({
                   {({ input }) => (
                     <FormControlLabel
                       control={<Checkbox {...input} />}
-                      label="No - I&aposd prefer Snyder Eye Institute to assume the patient&aposs post-op care"
+                      label="No - I&apos;d prefer Snyder Eye Institute to assume the patient&apos;s post-op care"
                     />
                   )}
                 </Field>

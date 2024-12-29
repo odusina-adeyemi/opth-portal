@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "ophthalm-comanagement/src",
+    "baseUrl": "src",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -26,7 +26,9 @@
       "@/api": ["app/api/*"],
       "@/clinics": ["app/clinics/*"],
       "@/providers": ["app/providers/*"],
-      "@/referrals": ["app/referrals/*"]
+      "@/referrals": ["app/referrals/*"],
+      "@/optometrist": ["app/optometrist/*"]
+
     },
     "target": "ES2017"
   },

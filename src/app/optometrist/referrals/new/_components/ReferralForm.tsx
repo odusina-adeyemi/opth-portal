@@ -900,7 +900,8 @@ const ReferralForm = ({
               initialValue={
                 patient?.referralInfo?.[0]?.referringProviderId ?? ''
               }
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
                   <InputLabel id="provider">Provider *</InputLabel>
@@ -913,7 +914,8 @@ const ReferralForm = ({
                       setOptomIdSelected(event.target.value);
                     }}
                     value={optomIdSelected}
-                    variant="outlined">
+                    variant="outlined"
+                  >
                     <MenuItem value={''}>Select a provider</MenuItem>
                     {optoms?.map(optom => {
                       return (
@@ -942,7 +944,8 @@ const ReferralForm = ({
             <Field
               name="clinics"
               initialValue={patient?.referralInfo?.[0]?.referringClinicId ?? ''}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
                   <InputLabel id="clinics">Clinic *</InputLabel>
@@ -955,7 +958,8 @@ const ReferralForm = ({
                     onChange={input.onChange}
                     value={input.value}
                     variant="outlined"
-                    type="text">
+                    type="text"
+                  >
                     <MenuItem value={''}>Select a clinic</MenuItem>
                     {optom?.clinics?.map((clinic: Clinic) => {
                       {
@@ -991,7 +995,8 @@ const ReferralForm = ({
               initialValue={String(
                 patient?.referralInfo?.[0]?.referringEmail ?? '',
               )}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   label="Referrer Email *"
@@ -1012,7 +1017,8 @@ const ReferralForm = ({
               initialValue={String(
                 patient?.referralInfo?.[0]?.referringPhone ?? '',
               )}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   label="Referrer Phone *"
@@ -1031,7 +1037,8 @@ const ReferralForm = ({
           <Grid item xs={6}>
             <Field
               name="referringFax"
-              initialValue={patient?.referralInfo?.[0]?.referringFax ?? ''}>
+              initialValue={patient?.referralInfo?.[0]?.referringFax ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Referrer Fax"
@@ -1046,9 +1053,8 @@ const ReferralForm = ({
           <Grid item xs={6}>
             <Field
               name="referringStateZip"
-              initialValue={
-                patient?.referralInfo?.[0]?.referringStateZip ?? ''
-              }>
+              initialValue={patient?.referralInfo?.[0]?.referringStateZip ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Referrer ZIP Code"
@@ -1063,7 +1069,8 @@ const ReferralForm = ({
           <Grid className="flex gap-2" item xs={6}>
             <Field
               name="referringAddress"
-              initialValue={patient?.referralInfo?.[0]?.referringAddress ?? ''}>
+              initialValue={patient?.referralInfo?.[0]?.referringAddress ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Referrer Address"
@@ -1076,7 +1083,8 @@ const ReferralForm = ({
 
             <Field
               name="referringCity"
-              initialValue={patient?.referralInfo?.[0]?.referringCity ?? ''}>
+              initialValue={patient?.referralInfo?.[0]?.referringCity ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Referrer City"
@@ -1098,7 +1106,8 @@ const ReferralForm = ({
             <Field
               name="patientFirstName"
               initialValue={String(patient?.firstName ?? '')}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1115,7 +1124,8 @@ const ReferralForm = ({
             <Field
               name="patientLastName"
               initialValue={String(patient?.lastName ?? '')}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1132,7 +1142,8 @@ const ReferralForm = ({
             <Field
               name="patientDOB"
               initialValue={patient?.dob ? String(patient.dob) : ''}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1150,7 +1161,8 @@ const ReferralForm = ({
             <Field
               name="email"
               initialValue={String(patient?.email ?? '')}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1173,7 +1185,8 @@ const ReferralForm = ({
               initialValue={
                 patient?.phoneNumber ? String(patient.phoneNumber) : ''
               }
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <TextField
                   error={meta.error && meta.touched}
@@ -1193,7 +1206,8 @@ const ReferralForm = ({
             <Field
               name="address"
               initialValue={patient?.address ? String(patient.address) : ''}
-              validate={required}>
+              validate={required}
+            >
               {({ input }) => (
                 <TextField
                   label="Address *"
@@ -1209,7 +1223,8 @@ const ReferralForm = ({
             <Field
               name="gender"
               initialValue={patient?.gender ? String(patient.gender) : ''}
-              validate={required}>
+              validate={required}
+            >
               {({ input, meta }) => (
                 <FormControl fullWidth error={meta.error && meta.touched}>
                   <InputLabel id="gender">Gender *</InputLabel>
@@ -1217,7 +1232,8 @@ const ReferralForm = ({
                     id="gender"
                     label="Gender *"
                     {...input}
-                    variant="outlined">
+                    variant="outlined"
+                  >
                     <MenuItem value="male">Male</MenuItem>
                     <MenuItem value="female">Female</MenuItem>
                   </Select>
@@ -1262,7 +1278,8 @@ const ReferralForm = ({
             {/* Interpreter Needed - Radio Buttons - interpreterNeeded */}
             <Field
               name="interpreterNeeded"
-              initialValue={patient?.interpreterNeeded ?? false}>
+              initialValue={patient?.interpreterNeeded ?? false}
+            >
               {({ input }) => (
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Interpreter Needed?</FormLabel>
@@ -1270,7 +1287,8 @@ const ReferralForm = ({
                     {...input}
                     row
                     value={input.value === true ? 'true' : 'false'}
-                    onChange={e => input.onChange(e.target.value === 'true')}>
+                    onChange={e => input.onChange(e.target.value === 'true')}
+                  >
                     <FormControlLabel
                       value="true"
                       control={<Radio color="primary" />}
@@ -1290,7 +1308,8 @@ const ReferralForm = ({
               <Field
                 name="language"
                 initialValue={String(patient?.language ?? '')}
-                validate={required}>
+                validate={required}
+              >
                 {({ input }) => (
                   <TextField
                     label="Language *"
@@ -1311,7 +1330,8 @@ const ReferralForm = ({
                     {...input}
                     row
                     value={input.value === true ? 'true' : 'false'}
-                    onChange={e => input.onChange(e.target.value === 'true')}>
+                    onChange={e => input.onChange(e.target.value === 'true')}
+                  >
                     <FormControlLabel
                       value="true"
                       control={<Radio color="primary" />}
@@ -1331,7 +1351,8 @@ const ReferralForm = ({
           <Grid item xs={12}>
             <Typography
               variant="subtitle1"
-              sx={{ fontWeight: 'bold', m: 1, marginTop: '4px' }}>
+              sx={{ fontWeight: 'bold', m: 1, marginTop: '4px' }}
+            >
               Insurance Information
             </Typography>
           </Grid>
@@ -1339,7 +1360,8 @@ const ReferralForm = ({
             <Typography
               variant="body2"
               color="textSecondary"
-              style={{ marginTop: 'px' }}>
+              style={{ marginTop: 'px' }}
+            >
               If the patient has HMO insurance, we will require an
               authorization/referral from their PCP before they can be seen.
               Please send a copy of the patient&apos;s insurance cards and last
@@ -1361,7 +1383,8 @@ const ReferralForm = ({
               initialValue={
                 (patient?.insuranceInfo?.[0]
                   ?.primaryInsuranceProviderName as string) ?? ''
-              }>
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Primary Insurance Provider *"
@@ -1380,7 +1403,8 @@ const ReferralForm = ({
                 patient?.insuranceInfo?.[0]?.primaryInsuranceIdNumber
                   ? String(patient.insuranceInfo[0].primaryInsuranceIdNumber)
                   : ''
-              }>
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Insurance ID Number *"
@@ -1397,7 +1421,8 @@ const ReferralForm = ({
               validate={required}
               initialValue={String(
                 patient?.insuranceInfo?.[0]?.primaryInsuranceGroupNumber ?? '',
-              )}>
+              )}
+            >
               {({ input }) => (
                 <TextField
                   label="Insurance Group Number *"
@@ -1421,7 +1446,8 @@ const ReferralForm = ({
               initialValue={
                 patient?.insuranceInfo?.[0]?.secondaryInsuranceProviderName ??
                 ''
-              }>
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Secondary Insurance Provider"
@@ -1437,7 +1463,8 @@ const ReferralForm = ({
               name="secondaryInsuranceIdNumber"
               initialValue={
                 patient?.insuranceInfo?.[0]?.secondaryInsuranceIdNumber ?? ''
-              }>
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Insurance ID Number"
@@ -1453,7 +1480,8 @@ const ReferralForm = ({
               name="secondaryInsuranceGroupNumber"
               initialValue={
                 patient?.insuranceInfo?.[0]?.secondaryInsuranceGroupNumber ?? ''
-              }>
+              }
+            >
               {({ input }) => (
                 <TextField
                   label="Insurance Group Number"
@@ -1470,7 +1498,8 @@ const ReferralForm = ({
             <Typography
               variant="body2"
               color="#4BA7C1"
-              style={{ marginTop: '16px' }}>
+              style={{ marginTop: '16px' }}
+            >
               Due to certain limitations within our Ambulatory Surgery Centers,
               and in an attempt to provide the best possible care to your
               surgical patients, some procedures offered by our providers must
@@ -1487,7 +1516,8 @@ const ReferralForm = ({
           <Grid item xs={12}>
             <Typography
               variant="subtitle1"
-              sx={{ fontWeight: 'bold', marginTop: 3 }}>
+              sx={{ fontWeight: 'bold', marginTop: 3 }}
+            >
               Preferred Clinic Location
             </Typography>
           </Grid>
@@ -1537,7 +1567,8 @@ const ReferralForm = ({
             <Field
               name="doctorSpecialty"
               validate={required}
-              initialValue={patient?.doctorSpecialty ?? ''}>
+              initialValue={patient?.doctorSpecialty ?? ''}
+            >
               {({ input }) => {
                 // Ensure unique providers based on ID
                 const uniqueProviders = Array.from(
@@ -1647,7 +1678,8 @@ const ReferralForm = ({
             <Field
               name="preferredLocations"
               initialValue={patient?.preferredLocations?.join(', ') ?? ''}
-              validate={required}>
+              validate={required}
+            >
               {({ input }) => {
                 // Ensure unique cities
                 const uniqueCities = Array.from(
@@ -1673,7 +1705,8 @@ const ReferralForm = ({
                         input.onChange(value);
                       }}
                       onClose={() => input.onBlur()} // Ensure blur event is triggered
-                      variant="outlined">
+                      variant="outlined"
+                    >
                       {uniqueCities.map(city => (
                         <MenuItem key={city} value={city}>
                           {city}
@@ -1699,7 +1732,8 @@ const ReferralForm = ({
                   ? patient?.consultationType.join(', ')
                   : (patient?.consultationType ?? '')
               }
-              validate={required}>
+              validate={required}
+            >
               {({ input }) => (
                 <FormGroup>
                   {[
@@ -1764,7 +1798,8 @@ const ReferralForm = ({
             <Field
               name="urgentReferral"
               type="checkbox"
-              initialValue={patient?.urgentReferral ?? false}>
+              initialValue={patient?.urgentReferral ?? false}
+            >
               {({ input }) => (
                 <FormControlLabel
                   control={<Checkbox {...input} />}
@@ -1830,9 +1865,9 @@ const ReferralForm = ({
             <Typography variant="body2" color="textSecondary">
               Following our evaluation, we will communicate any findings and/or
               treatment recommendations. If surgery is necessary please indicate
-              below if you&apos;d like to co-manage. Regardless, all patients will be
-              sent back to the referring provider to resume general eye care as
-              appropriate.
+              below if you&apos;d like to co-manage. Regardless, all patients
+              will be sent back to the referring provider to resume general eye
+              care as appropriate.
             </Typography>
           </Grid>
 
@@ -1845,22 +1880,24 @@ const ReferralForm = ({
                 <Field
                   name="comanageYes"
                   type="checkbox"
-                  initialValue={patient?.comanageYes ?? false}>
+                  initialValue={patient?.comanageYes ?? false}
+                >
                   {({ input }) => (
                     <FormControlLabel
                       control={<Checkbox {...input} />}
-                      label="Yes - I&apos;d like to co-manage the patient&apos; post-op care"
+                      label="Yes - I'd like to co-manage the patient' post-op care"
                     />
                   )}
                 </Field>
                 <Field
                   name="comanageNo"
                   type="checkbox"
-                  initialValue={patient?.comanageNo ?? false}>
+                  initialValue={patient?.comanageNo ?? false}
+                >
                   {({ input }) => (
                     <FormControlLabel
                       control={<Checkbox {...input} />}
-                      label="No - I&apos;d prefer Snyder Eye Institute to assume the patient&apos;s post-op care"
+                      label="No - I'd prefer Snyder Eye Institute to assume the patient's post-op care"
                     />
                   )}
                 </Field>
@@ -1872,7 +1909,8 @@ const ReferralForm = ({
             <Field
               name="signUpNewsLetter"
               type="checkbox"
-              initialValue={patient?.signUpNewsLetter ?? false}>
+              initialValue={patient?.signUpNewsLetter ?? false}
+            >
               {({ input }) => (
                 <FormControlLabel
                   control={<Checkbox {...input} />}
@@ -1885,7 +1923,8 @@ const ReferralForm = ({
           <Grid item xs={12}>
             <Field
               name="generalNotes"
-              initialValue={patient?.generalNotes ?? ''}>
+              initialValue={patient?.generalNotes ?? ''}
+            >
               {({ input }) => (
                 <TextField
                   label="Additional Notes"
@@ -1913,7 +1952,8 @@ const ReferralForm = ({
               variant="contained"
               color="primary"
               fullWidth
-              disabled={submitting}>
+              disabled={submitting}
+            >
               {submitting ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (

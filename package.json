@@ -63,22 +63,30 @@
     "eslint-config-next": "^14.2.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
-    "lint-staged": "^15.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.3.0",
     "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
     "pretty-quick": "^4.0.0",
     "prisma": "^5.22.0",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.4.2"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "*.{js,ts,jsx}": [
       "pretty-quick --staged",
       "eslint --fix",
-      "git add"
+      "git add",
+      "prettier --write"
     ],
     "*.js": "eslint --cache --fix"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

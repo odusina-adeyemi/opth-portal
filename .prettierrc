@@ -2,7 +2,7 @@
   "arrowParens": "avoid",
   "bracketSpacing": true,
   "endOfLine": "auto",
-  "jsxBracketSameLine": true,
+  "bracketSameLine": true,
   "semi": true,
   "singleQuote": true,
   "tabWidth": 2,

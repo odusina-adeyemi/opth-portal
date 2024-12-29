@@ -80,7 +80,8 @@ export default function UsersTables({ users }: UsersTablesProps) {
             style: {
               display: 'none',
             },
-          }}>
+          }}
+        >
           <Tab
             className={`!capitalize ${activeTab === 0 ? 'bg-primary text-white   rounded-full px-4 py-1' : ''}`}
             label="Optometrist Users"

@@ -28,5 +28,7 @@ export const typeDef = `#graphql
         createUser(userInput: UserCreateUpdateInput): User @auth
         deleteUser(id: ID!): User @auth
         updateUser(id: ID!, userInput: UserCreateUpdateInput): User @auth
+        syncUser(userInput: UserCreateUpdateInput): User @auth
+
     }
 `;

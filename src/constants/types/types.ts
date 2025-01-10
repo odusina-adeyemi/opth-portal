@@ -214,7 +214,7 @@ type InsuranceInfo = {
   secondaryInsuranceProviderName?: string; // Name of secondary insurance provider
   secondaryInsuranceIdNumber?: string; // Insurance ID number for secondary provider
   secondaryInsuranceGroupNumber?: string; // Group number for secondary insurance
-  patientId: string; // Foreign key to Patient
+  patientId: string; // Foreign key to Patient        
   createdAt: Date; // Creation timestamp
   updatedAt: Date; // Last update timestamp
 

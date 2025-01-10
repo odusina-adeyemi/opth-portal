@@ -82,6 +82,111 @@ export const providerResolver = {
         },
         include: { providers: true, clinics: true },
       }),
+
+    providerPatients: async (
+      _parent: Provider,
+      { providerId }: { providerId: string },
+      context: any,
+    ) => {
+      return await context.prisma.patient.findMany({
+        where: {
+          providers: {
+            some: {
+              id: providerId,
+            },
+          },
+        },
+        include: {
+          preOperations: true,
+          postOperations: true,
+          patientContacts: true,
+        },
+      });
+    },
+
+    // organizationPatients: async (
+    //   _parent: Provider,
+    //   { orgId }: { orgId: string },
+    //   context: any,
+    // ) => {
+    //   return await context.prisma.patient.findMany({
+    //     where: {
+    //       organizationId: orgId,
+    //     },
+    //     include: {
+    //       preOperations: true,
+    //       postOperations: true,
+    //       patientContacts: true,
+    //     },
+    //   });
+    // },
+
+// currentProviderPatients: async (_parent: any, _args: any, context: any) => {
+//   const { userId } = context;
+
+//   if (!userId) {
+//     throw new Error('Not authenticated');
+//   }
+
+//   // Fetch the logged-in provider and ensure they are an optometrist
+//   const provider = await context.prisma.provider.findUnique({
+//     where: { id: userId },
+//     select: { type: true },
+//   });
+
+//   if (!provider || provider.type !== 'optometrist') {
+//     throw new Error(
+//       'Access denied. Only optometrists can access this data.',
+//     );
+//   }
+
+//   // Fetch patients referred by the current provider
+//   return await context.prisma.patient.findMany({
+//     where: {
+//       referringProviderId: userId, // Match referring provider
+//     },
+//     include: {
+//       preOperations: true,
+//       postOperations: true,
+//       patientContacts: true,
+//     },
+//   });
+// },
+
+currentProviderPatients: async (_parent: any, _args: any, context: any) => {
+  const userId = context.user.id;
+
+  // Fetch the Action_Item linking User and Provider
+  const actionItem = await context.prisma.action_Item.findUnique({
+    where: { userId },
+    select: { providerId: true },
+  });
+
+  // Validate if the Action_Item and providerId exist
+  if (!actionItem || !actionItem.providerId) {
+    throw new Error('No provider found for the current user');
+  }
+
+  // Use the providerId to fetch the Provider's patients
+  const providerId = actionItem.providerId;
+  return await context.prisma.patient.findMany({
+    where: {
+      providers: { some: { id: providerId } },
+      postOperations: { none: { transferOfCare: true } },
+    },
+    include: {
+      preOperations: true,
+      postOperations: true,
+      patientContacts: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+},
+
+
+
+    
+
     clinics: async (parent: Provider, _args: any, context: any) =>
       await context.prisma.clinic.findMany({
         where: {
@@ -133,20 +238,28 @@ export const providerResolver = {
           type: providerInput.type,
         },
       });
-      // Check if the provider type is "optometrist" and has an email, then create a user
-      if (providerInput.type === 'optometrist' && providerInput.email) {
+      // If the provider is an optometrist with an email, create a user
+      if (
+        providerInput.type === 'optometrist' &&
+        providerInput.email &&
+        providerInput.email.trim() !== ''
+      ) {
         await context.prisma.user.create({
           data: {
             email: providerInput.email,
+            firstName: providerInput.firstName,
+            lastName: providerInput.lastName,
             role: 'optometrist',
-            provider: {
-              connect: { id: provider.id },
+            organization: {
+              connect: { id: providerInput.organizationId },
             },
           },
         });
       }
       return provider;
     },
+
+
     deleteProvider: async (
       _parent: Provider,
       { id }: { id: string },

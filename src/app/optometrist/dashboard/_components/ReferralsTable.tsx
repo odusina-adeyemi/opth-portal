@@ -21,6 +21,7 @@ import {
 import CustomDialogContent from '../../../_components/CustomDialogContent';
 import DetailPanelContent from './DetailPanelContent';
 import { referralsColumns } from '../../../../constants/dataGridColumnNames/referralsColumns';
+import {ProviderPatientsColumns} from '../../../../constants/dataGridColumnNames/providerPatientTable';
 import { useModal } from '../../../_components/ModalProvider';
 import { useSnackbar } from '../../../_components/SnackbarProvider';
 import { DELETE_PATIENT } from '../../../api/graphql/mutations/patientMutations';
@@ -30,7 +31,9 @@ import { preOpDataColumns } from '../../../../constants/dataGridColumnNames/preO
 import { postOpDataColumns } from '../../../../constants/dataGridColumnNames/postOpDataColumns';
 import { pageTitleHeaderBackgroundColor } from '../../../../lib/css/utils';
 
+
 const EditToolbar = () => {
+  console.log("PreOpDataColumns:", preOpDataColumns)
   return (
     <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
       <Link href="/optometrist/referrals/new">
@@ -137,7 +140,7 @@ export default function ReferralsTable({
   return (
     <DataGridPro
       autoHeight
-      columns={referralsColumns}
+      columns={ProviderPatientsColumns}
       columnVisibilityModel={{ createdAt: false, id: false }}
       // columnVisibilityModel={REFERRAL_TABLE_COLUMN_VISIBILITY} // TODO to be used with filterMode="server"
       disableColumnSelector

@@ -549,7 +549,7 @@ import {
 } from '../../../../../lib/utils/utils';
 import AddProvider from '../../../../_components/AddProvider';
 import AddClinic from '../../../../_components/AddClinic';
-import LocationDropdowns from '../../_components/StatesFetch';
+import LocationDropdowns from '../../../dashboard/_components/StatesFetch';
 // import FileUpload from '../../../../_components/FileUpload';
 
 interface ReferralFormProps {

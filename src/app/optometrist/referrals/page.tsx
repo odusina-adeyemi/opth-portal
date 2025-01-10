@@ -1,5 +1,5 @@
 import React from 'react';
-import ReferralsTable from './_components/ReferralsTable';
+import ReferralsTable from '../dashboard/_components/ReferralsTable';
 import { getLoggedInUser } from '../../../lib/getLoggedInUser';
 import { Grid } from '@mui/material';
 import PageTitleHeader from '../../../ui/components/PageTitleHeader';

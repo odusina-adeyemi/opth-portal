@@ -50,7 +50,7 @@ import { GET_PATIENT_POST_OPERATION } from '../../../api/graphql/queries/postOpe
 import { pageTitleHeaderBackgroundColor } from '../../../../lib/css/utils';
 
 export type ButtonName = 'contact' | 'preop' | 'postop';
-
+ 
 const DetailPanelContent = ({
   orgId,
   patientId,

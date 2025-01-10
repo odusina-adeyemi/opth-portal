@@ -46,12 +46,21 @@ export const typeDef = `#graphql
         status: String
         type: String
         users: [User]
+        providerPatients: [Patient]
+            currentProviderPatients: [Patient] # Add this field
+
     }
 
+
     type Query {
+        providerPatients(providerId: ID!): [Patient]
+        currentProviderPatients: [Patient]
         organizationProviders(organizationId: ID!): [Provider]       
         providers(state: String, type: String): [Provider]
         provider(id: ID!): Provider
+        #organizationPatients(orgId: ID!): [Patient]
+        
+
     }
 
     type Mutation {
@@ -61,3 +70,7 @@ export const typeDef = `#graphql
     }
 
 `;
+
+
+
+

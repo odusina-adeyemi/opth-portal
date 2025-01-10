@@ -153,6 +153,7 @@ const DetailPanelToolbar = ({
           }
         },
         variables: {
+          
           postOperationInput: {
             amountToBePaidFromInsurance: null,
             amountToPayProvider: null,

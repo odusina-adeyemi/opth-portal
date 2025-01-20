@@ -55,8 +55,40 @@
 //   }
 // };
 
+// import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+// import client from '../app/api/_apolloClient/apolloClientServerSide'; // Apollo client import
+// import { GET_USER_WITH_EMAIL } from '../app/api/graphql/queries/users';
+// import { User } from '../constants/types/types';
+
+// export const getLoggedInUser = async (): Promise<User> => {
+//   const { getUser } = getKindeServerSession();
+
+//   const kindeUserObj = await getUser();
+
+//   if (!kindeUserObj) {
+//     return {} as User; // Return empty object if user is not found
+//   }
+
+//   try {
+//     const { data } = await client.query({
+//       query: GET_USER_WITH_EMAIL,
+//       variables: { email: kindeUserObj.email },
+//       fetchPolicy: 'cache-first', // Use cache-first policy for the query
+//     });
+
+//     return data?.me ?? ({} as User); // Safely return user data
+//   } catch (error) {
+//     console.error('Error fetching logged-in user:', error);
+//     return {} as User; // Return empty object on error
+//   }
+// };
+
+
+
+
+
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import client from '../app/api/_apolloClient/apolloClientServerSide'; // Apollo client import
+import client from '../app/api/_apolloClient/apolloClientServerSide';
 import { GET_USER_WITH_EMAIL } from '../app/api/graphql/queries/users';
 import { User } from '../constants/types/types';
 
@@ -66,19 +98,20 @@ export const getLoggedInUser = async (): Promise<User> => {
   const kindeUserObj = await getUser();
 
   if (!kindeUserObj) {
-    return {} as User; // Return empty object if user is not found
+    return {} as User;
   }
 
   try {
-    const { data } = await client.query({
+    const {
+      data: { me },
+    } = await client.query({
+      fetchPolicy: 'cache-first',
       query: GET_USER_WITH_EMAIL,
-      variables: { email: kindeUserObj.email },
-      fetchPolicy: 'cache-first', // Use cache-first policy for the query
+      variables: { email: kindeUserObj?.email },
     });
 
-    return data?.me ?? ({} as User); // Safely return user data
+    return me;
   } catch (error) {
-    console.error('Error fetching logged-in user:', error);
-    return {} as User; // Return empty object on error
+    return {} as User;
   }
 };

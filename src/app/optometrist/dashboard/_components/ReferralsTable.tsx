@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { eventEmitter } from '../../../_components/EventEmitter';
 import Link from 'next/link';
 import { Patient } from '../../../../constants/types/types';
@@ -30,10 +30,18 @@ import { patientContactColumns } from '../../../../constants/dataGridColumnNames
 import { preOpDataColumns } from '../../../../constants/dataGridColumnNames/preOpDataColumns';
 import { postOpDataColumns } from '../../../../constants/dataGridColumnNames/postOpDataColumns';
 import { pageTitleHeaderBackgroundColor } from '../../../../lib/css/utils';
+// import { getLoggedInUser } from 'lib/getLoggedInUser';
 
 
-const EditToolbar = () => {
-  console.log("PreOpDataColumns:", preOpDataColumns)
+const EditToolbar = async() => {
+  // console.log("PreOpDataColumns:", preOpDataColumns)
+  // console.log("PostOpDataColumns:", postOpDataColumns)
+  // console.log("PatientContactColumns:", patientContactColumns)
+  
+
+
+
+  
   return (
     <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
       <Link href="/optometrist/referrals/new">
@@ -68,6 +76,9 @@ export default function ReferralsTable({
 }: ReferralsTableProps) {
   const [currentPatientData, setCurrentPatientData] =
     useState<Patient[]>(patientData);
+
+    console.log("PatientData:", patientData)
+    console.log("OrgId:", orgId)
 
   const [deletePatient, { data, loading: deleteLoading, error }] =
     useMutation(DELETE_PATIENT);

@@ -22,6 +22,10 @@ const GET_USER = gql`
       firstName
       lastName
       organizationId
+      provider{
+      providerId
+      }
+      
       organization {
         name
       }
@@ -38,6 +42,7 @@ export const GET_USER_WITH_EMAIL = gql`
       firstName
       lastName
       organizationId
+      providerId
       organization {
         name
       }
@@ -45,6 +50,35 @@ export const GET_USER_WITH_EMAIL = gql`
     }
   }
 `;
+
+
+const GET_USER_BY_EMAIL = gql`
+  query GetUserByEmail($email: String!) {
+    user(email: $email) {
+      id
+      email
+      firstName
+      lastName
+      organizationId
+      providerId
+    }
+  }
+`;
+
+export const fetchUserByEmail = async (email: string) => {
+  try {
+    const { data } = await client.query({
+      query: GET_USER_BY_EMAIL,
+      variables: { email },
+    });
+
+    console.log("Fetched User by Email:", data.user);
+    return data.user;
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+    return null;
+  }
+};
 
 export const fetchUser = async (id: string): Promise<User> => {
   try {

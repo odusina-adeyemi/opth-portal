@@ -1,11 +1,13 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { DocumentNode, useMutation, useQuery as useApolloQuery } from '@apollo/client';
 import { eventEmitter } from '../../_components/EventEmitter';
 import Link from 'next/link';
 import { Patient } from '../../../constants/types/types';
 import { Box, Button, LinearProgress } from '@mui/material';
 import Add from '@mui/icons-material/Add';
+import { useQuery } from '@apollo/client';
+
 import {
   DataGridPro,
   // GridFilterModel,
@@ -24,12 +26,19 @@ import { referralsColumns } from '../../../constants/dataGridColumnNames/referra
 import { useModal } from '../../_components/ModalProvider';
 import { useSnackbar } from '../../_components/SnackbarProvider';
 import { DELETE_PATIENT } from '../../api/graphql/mutations/patientMutations';
+import { GET_REVENUE_STATS, useRevenueStats } from '../../api/graphql/queries/providers';
 // import { GET_ORGANIZATION } from '../../api/graphql/queries/organizations';
 import { patientContactColumns } from '../../../constants/dataGridColumnNames/patientContactColumns';
 import { preOpDataColumns } from '../../../constants/dataGridColumnNames/preOpDataColumns';
 import { postOpDataColumns } from '../../../constants/dataGridColumnNames/postOpDataColumns';
 import { pageTitleHeaderBackgroundColor } from '../../../lib/css/utils';
 
+
+// const { data, loading, error } = useQuery(GET_REVENUE_STATS, {
+//   variables: { providerId },
+// });
+const revenue = useRevenueStats("cm2tm71wb000034ijwb44ly7y")
+console.log(revenue)
 const EditToolbar = () => {
   return (
     <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
@@ -58,6 +67,11 @@ interface ReferralsTableProps {
   orgId: string;
   patientData: Patient[];
 }
+
+const providerId = 'cm2tm71wb000034ijwb44ly7y'; // Initialize providerId with an appropriate value
+const { data, loading, error } = useQuery(GET_REVENUE_STATS, {
+  variables: { providerId },
+});
 
 export default function ReferralsTable({
   orgId,
@@ -192,3 +206,6 @@ export default function ReferralsTable({
     />
   );
 }
+
+
+

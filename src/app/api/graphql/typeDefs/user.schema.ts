@@ -6,6 +6,8 @@ export const typeDef = `#graphql
         lastName: String!
         organizationId: ID!
         role: String!
+        providerId: ID # Include this field
+
     }
 
     type User {
@@ -16,6 +18,10 @@ export const typeDef = `#graphql
         organizationId: ID
         organization: Organization
         role: String
+        provider: Provider
+        providerId: ID # Include this field
+
+
     }
 
     type Query {

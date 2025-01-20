@@ -367,6 +367,7 @@ type Provider = {
   specialties: string[]; // LASIK, cataract, | optometry, etc.
   status: string; // high-risk, new referring provider, etc.
   type: string; // ophthalmologist | optometrist
+  user: User;
 };
 
 type ProviderClinic = {
@@ -460,12 +461,13 @@ type User = {
   email: string;
   organizationId: string;
   organization: Organization; // organization
-  providerId: number;
+  providerId: string;
   firstName: string;
   lastName: string;
-  providers: Provider[]; // array of providers
+  provider: Provider; // provider
   role: string; // admin, staff, surgeon, etc.
 };
+
 
 type ProviderType = 'ophthalmologist' | 'optometrist';
 type ReferringProviderStatusType =

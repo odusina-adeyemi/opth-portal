@@ -172,7 +172,7 @@ model Patient {
   appointmentInfo                                                        AppointmentInfo?     @relation("PatientToAppointmentInfo")
   referralInfo                                                           ReferralInfo[]       @relation("PatientToReferralInfo")
   insuranceInfo                                                          InsuranceInfo[]      @relation("PatientToInsuranceInfo")
-  view                                                                   String?      @default("View")
+  view                                                                   String?              @default("View")
 
   @@map("patients")
 }
@@ -257,6 +257,7 @@ model Provider {
   postOperations                                                       PostOperation[]  @relation("PostOperationToProvider")
   preOperations                                                        PreOperation[]   @relation("PreOperationToProvider")
   referralInfos                                                        ReferralInfo[]   @relation("ReferralInfoToReferringProvider")
+  user                                                                 User?
 
   @@map("providers")
 }
@@ -331,6 +332,8 @@ model User {
   actionItem     Action_Item?
   files          File[]
   organization   Organization? @relation(fields: [organizationId], references: [id])
+  providerId     String?       @unique // Field to reference Provider
+  provider       Provider?     @relation(fields: [providerId], references: [id]) // Defines the relation to Provider
 
   @@map("users")
 }

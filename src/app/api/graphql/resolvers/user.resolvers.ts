@@ -104,38 +104,82 @@ import {
 } from '../../../api/graphql/mutations/userMutations';
 import { handleAssertDataValidationError } from '../../../../lib/utils/utils';
 
+interface Context {
+  prisma: {
+    user: {
+      findMany: (args: any) => Promise<any>;
+      findUnique: (args: any) => Promise<any>;
+      create: (args: any) => Promise<any>;
+      update: (args: any) => Promise<any>;
+      delete: (args: any) => Promise<any>;
+    };
+    provider: {
+      findUnique: (args: any) => Promise<any>;
+    };
+  };
+}
+
+interface OrganizationUsersArgs {
+  organizationId: string;
+}
+
+interface UserArgs {
+  id: string;
+}
+
+interface MeArgs {
+  email: string;
+}
+
+interface ProviderArgs {
+  providerId: string;
+}
+
+interface CreateUserArgs {
+  userInput: UserCreateUpdateInput;
+}
+
+interface UpdateUserArgs {
+  id: string;
+  userInput: UserCreateUpdateInput;
+}
+
+interface SyncUserArgs {
+  userInput: UserCreateUpdateInput;
+}
+
 export const userResolver = {
   Query: {
     organizationUsers: async (
       _parent: User,
-      { organizationId }: { organizationId: string },
-      context: any,
+      { organizationId }: OrganizationUsersArgs,
+      context: Context,
     ) =>
       await context.prisma.user.findMany({
         where: { organizationId },
         include: { organization: true },
       }),
-    user: async (_parent: User, { id }: { id: string }, context: any) =>
+    user: async (_parent: User, { id }: UserArgs, context: Context) =>
       await context.prisma.user.findUnique({
         where: { id },
         include: { organization: true },
       }),
-    me: async (_parent: User, { email }: { email: string }, context: any) =>
+    me: async (_parent: User, { email }: MeArgs, context: Context) =>
       await context.prisma.user.findUnique({
         where: { email },
         include: { organization: true },
+      }),
+    provider: async (_parent: User, { providerId }: ProviderArgs, context: Context) =>
+      await context.prisma.provider.findUnique({
+        where: { id: providerId },
       }),
   },
 
   Mutation: {
     createUser: async (
       _parent: User,
-      {
-        userInput,
-      }: {
-        userInput: UserCreateUpdateInput;
-      },
-      context: any,
+      { userInput }: CreateUserArgs,
+      context: Context,
     ) => {
       try {
         assert(userInput, CreateUserStruct);
@@ -157,14 +201,8 @@ export const userResolver = {
     },
     updateUser: async (
       _parent: User,
-      {
-        id,
-        userInput,
-      }: {
-        id: string;
-        userInput: UserCreateUpdateInput;
-      },
-      context: any,
+      { id, userInput }: UpdateUserArgs,
+      context: Context,
     ) => {
       try {
         assert(userInput, UpdateUserStruct);
@@ -182,19 +220,15 @@ export const userResolver = {
         },
       });
     },
-    deleteUser: async (_parent: User, args: any, context: any) => {
+    deleteUser: async (_parent: User, args: UserArgs, context: Context) => {
       return await context.prisma.user.delete({
         where: { id: args.id },
       });
     },
     syncUser: async (
       _parent: User,
-      {
-        userInput,
-      }: {
-        userInput: UserCreateUpdateInput;
-      },
-      context: any,
+      { userInput }: SyncUserArgs,
+      context: Context,
     ) => {
       try {
         assert(userInput, CreateUserStruct); // Validate the input

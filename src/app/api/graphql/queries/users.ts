@@ -60,7 +60,7 @@ const GET_USER_BY_EMAIL = gql`
       firstName
       lastName
       organizationId
-      providerId
+    #  providerId
     }
   }
 `;

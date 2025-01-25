@@ -46,39 +46,11 @@ export const typeDef = `#graphql
         status: String
         type: String
         users: User
+        providerPatients: [Provider!]!
     }
 
 
 
-
-    type Patient {
-  id: ID!
-  firstName: String
-  lastName: String
-  surgeryType: String
-  firstEyeSurgeryDate: String
-  secondEyeSurgeryDate: String
-  generalNotes: String
-  delayInSurgery: Boolean
-  delayReason: String
-  eyesToBeDone: String
-  reasonNoSurgeryScheduled: String
-  initialAppointmentCompleted: Boolean
-  consultationReportSent: Boolean
-  transferOfCare: Boolean
-  transferOfCareDate: String
-  paidOptomDate: String
-  checkNumber: Int
-  amountToPayProvider: Float
-  insuranceType: String
-  reasonNotReferredBack: String
-  referralCanceled: Boolean
-  referralCompleted: Boolean
-  postOpVisitDate: String
-  postOpVisitType: String
-  surgeonName: String
-  receivedOptomPostOpNotes: Boolean
-}
 
 
 
@@ -87,8 +59,12 @@ export const typeDef = `#graphql
         organizationProviders(organizationId: ID!): [Provider]       
         providers(state: String, type: String): [Provider]
         provider(id: ID!): Provider
-        providerPatients: [Patient!]!
-  organizationPatients(orgId: String!): [Patient!]!
+       # providerPatients: [Patient!]!
+        providerPatients(providerId: ID!): [Provider!]!
+        organizationPatients(orgId: String!): [Patient!]!
+        
+        
+  
     }
 
     type Mutation {

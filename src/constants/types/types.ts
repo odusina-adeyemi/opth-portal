@@ -349,6 +349,7 @@ type Patient = {
 
 // providers table - ophthalmologists, optometrists, etc.
 type Provider = {
+  dob: string;
   id: string;
   clinics: Clinic[]; // array of clinics m-m relationship
   consentFormOnFile: boolean;

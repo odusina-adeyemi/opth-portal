@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { eventEmitter } from '../../../_components/EventEmitter';
 import Link from 'next/link';
-import { Patient } from '../../../../constants/types/types';
+import { Patient, Provider } from '../../../../constants/types/types';
 import { Box, Button, LinearProgress } from '@mui/material';
 import Add from '@mui/icons-material/Add';
 import {
@@ -30,10 +30,11 @@ import { patientContactColumns } from '../../../../constants/dataGridColumnNames
 import { preOpDataColumns } from '../../../../constants/dataGridColumnNames/preOpDataColumns';
 import { postOpDataColumns } from '../../../../constants/dataGridColumnNames/postOpDataColumns';
 import { pageTitleHeaderBackgroundColor } from '../../../../lib/css/utils';
+import {GET_PROVIDER_PATIENTS} from '../../../api/graphql/queries/providers';
 // import { getLoggedInUser } from 'lib/getLoggedInUser';
 
 
-const EditToolbar = async() => {
+const EditToolbar = () => {
   // console.log("PreOpDataColumns:", preOpDataColumns)
   // console.log("PostOpDataColumns:", postOpDataColumns)
   // console.log("PatientContactColumns:", patientContactColumns)
@@ -67,20 +68,27 @@ const EditToolbar = async() => {
 };
 interface ReferralsTableProps {
   orgId: string;
-  patientData: Patient[];
+  patientData: Provider[];
+  providerId: string;
+
 }
 
 export default function ReferralsTable({
   orgId,
   patientData,
+  providerId
 }: ReferralsTableProps) {
   const [currentPatientData, setCurrentPatientData] =
-    useState<Patient[]>(patientData);
+    useState<Provider[]>(patientData);
+    const { data: providerData, loading: providerLoading, error: providerError } = useQuery(GET_PROVIDER_PATIENTS, {
+      variables: { providerId },
+    });
 
-    console.log("PatientData:", patientData)
+    console.log("ProviderData:", providerData)
     console.log("OrgId:", orgId)
+    console.log("providerId:", providerId)  
 
-  const [deletePatient, { data, loading: deleteLoading, error }] =
+  const [deletePatient, { data: deleteData, loading: deleteLoading, error: deleteError }] =
     useMutation(DELETE_PATIENT);
   const { showModal, hideModal } = useModal();
   const { openSnackbar } = useSnackbar();

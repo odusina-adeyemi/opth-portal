@@ -4,9 +4,38 @@ import {
   // DocumentNode,
   useQuery as apolloUseQuery,
 } from '@apollo/client';
-import { Provider, Patient } from '../../../../constants/types/types';
+import { Provider, Patient, PostOperation, PreOperationData} from '../../../../constants/types/types';
 import client from '../../_apolloClient/apolloClientServerSide';
 import { DocumentNode } from 'graphql';
+
+export interface ProviderWithPatients extends Provider {
+  patients: Patient[];
+}
+
+export interface ProviderPatientsQuery {
+  providerPatients: Provider[]; // Or your equivalent `Provider` type
+}
+
+
+export interface ProviderWithRevenue extends Provider {
+  revenue: {
+    ytd: number;
+    mtd: number;
+    totalPatientsYTD: number;
+    totalPatientsMTD: number;
+  };
+}
+
+export interface ProviderWithPatientsAndRevenue extends ProviderWithPatients {
+  revenue: {
+    ytd: number;
+    mtd: number;
+    totalPatientsYTD: number;
+    totalPatientsMTD: number;
+  };
+}
+
+
 export interface ProviderWithReferral extends Provider {
   lastReferralDate: Date | null | undefined;
 }
@@ -67,7 +96,6 @@ export const GET_PROVIDER = gql`
   }
 `;
 
-
 export const GET_CURRENT_PROVIDER_PATIENTS = gql`
   query GetCurrentProviderPatients {
     currentProviderPatients {
@@ -107,22 +135,19 @@ export const GET_CURRENT_PROVIDER_PATIENTS = gql`
 `;
 
 export const GET_PROVIDER_PATIENTS = gql`
-  query GetProviderPatients($providerId: ID!) {
+ query providerPatients($providerId: ID!) {
     providerPatients(providerId: $providerId) {
       id
       firstName
       lastName
-      generalNotes
-      preOperations {
-        eyesToBeDone
-        delayInSurgery
-        delayReason
-        firstEyeSurgeryDate
-        secondEyeSurgeryDate
-        initialAppointmentCompleted
-        consultationReportSent
-      }
-      postOperations {
+      patients {
+        id
+        firstName
+        lastName
+        dob
+        referringProviderId
+        postOperations {
+        id
         transferOfCare
         transferOfCareDate
         postOpVisitDate
@@ -135,8 +160,23 @@ export const GET_PROVIDER_PATIENTS = gql`
         insuranceType
         reasonNotReferredBack
         receivedOptomPostOpNotes
-      }
-      
+        }
+          preOperations { 
+          id
+          eyesToBeDone
+          delayInSurgery
+          delayReason
+          firstEyeSurgeryDate
+          secondEyeSurgeryDate
+          initialAppointmentCompleted
+          consultationReportSent
+
+
+        }
+
+       }
+     
+     
     }
   }
 `;
@@ -158,7 +198,6 @@ export const GET_PROVIDER_PATIENTS_WITH_DETAILS = gql`
   }
 `;
 
-
 export const GET_REVENUE_STATS = gql`
   query GetRevenueStats($providerId: ID!) {
     revenueStats(providerId: $providerId) {
@@ -167,9 +206,8 @@ export const GET_REVENUE_STATS = gql`
       ytdPatients
       mtdPatients
     }
-  }`;
-
-  
+  }
+`;
 
 const GET_PROVIDER_REVENUE = gql`
   query GetProviderRevenue($providerId: ID!) {
@@ -182,30 +220,63 @@ const GET_PROVIDER_REVENUE = gql`
   }
 `;
 
-
-
 // Fetch patients for the logged-in provider
-export const fetchProviderPatients = async (providerId: string) => {
+// export const fetchProviderPatients = async (providerId: string) => {
+//   try {
+//     const { data } = await client.query({
+//       query: GET_PROVIDER_PATIENTS,
+//       variables: { providerId },
+//       fetchPolicy: 'network-only', // Always fetch fresh data
+//     });
+
+//     if (data?.providerPatients) {
+//       return data.providerPatients;
+//     } else {
+//       console.warn('No patients found for the provider.');
+//       return [];
+//     }
+//   } catch (error) {
+//     console.error('Error fetching provider patients:', error);
+//     return [];
+//   }
+// };
+
+// export const fetchProviderPatients = async (providerId: string) => {
+//   try {
+//     const { data } = await client.query({
+//       query: GET_PROVIDER_PATIENTS,
+//       variables: { providerId },
+//       fetchPolicy: "network-only", // Always fetch fresh data
+//     });
+
+//     if (data?.providerPatients) {
+//       return data.providerPatients;
+//     } else {
+//       console.warn("No patients found for the provider.");
+//       return [];
+//     }
+//   } catch (error) {
+//     console.error("Error fetching provider patients:", error);
+//     return [];
+//   }
+// };
+
+export const fetchProviderPatients = async (providerId: string) : Promise<Provider[]> => {
   try {
-    const { data } = await client.query({
+    const {
+      data: { providerPatients },
+    } = await client.query({
+      fetchPolicy: 'network-only',
       query: GET_PROVIDER_PATIENTS,
       variables: { providerId },
-      fetchPolicy: 'network-only', // Always fetch fresh data
     });
-
-    if (data?.providerPatients) {
-      return data.providerPatients;
-    } else {
-      console.warn('No patients found for the provider.');
-      return [];
-    }
+    return providerPatients ?? [];
+    
   } catch (error) {
     console.error('Error fetching provider patients:', error);
     return [];
   }
 };
-
-
 
 export const fetchOrganizationProviders = async (
   organizationId: string,
@@ -223,12 +294,12 @@ export const fetchOrganizationProviders = async (
     return [];
   }
 };
-export const useRevenueStats = (providerId: string) => {
-  const { data, loading, error } = useQuery(GET_REVENUE_STATS, {
-    variables: { providerId },
-  });
-  return { data, loading, error };
-};
+// export const useRevenueStats = (providerId: string) => {
+//   const { data, loading, error } = useQuery(GET_REVENUE_STATS, {
+//     variables: { providerId },
+//   });
+//   return { data, loading, error };
+// };
 
 // export const GET_PROVIDER_PATIENTS = gql`
 //   query GetProviderPatients($providerId: ID!) {
@@ -290,8 +361,6 @@ export const fetchProvider = async (id: string): Promise<Provider> => {
   }
 };
 
-
-
 // async function query({
 //   fetchPolicy,
 //   query,
@@ -327,29 +396,20 @@ export const fetchProvider = async (id: string): Promise<Provider> => {
 //   }
 // };
 
+// export const fetchCurrentProviderPatients = async (): Promise<Patient[]> => {
+//   try {
+//     const { data } = await client.query({
+//       query: GET_CURRENT_PROVIDER_PATIENTS,
+//       fetchPolicy: 'network-only',
+//     });
 
+//     return data.currentProviderPatients || [];
+//   } catch (error) {
+//     console.error('Error fetching current provider patients:', error);
+//     return [];
+//   }
+// };
 
-export const fetchCurrentProviderPatients = async (): Promise<Patient[]> => {
-  try {
-    const { data } = await client.query({
-      query: GET_CURRENT_PROVIDER_PATIENTS,
-      fetchPolicy: 'network-only',
-    });
-
-    return data.currentProviderPatients || [];
-  } catch (error) {
-    console.error('Error fetching current provider patients:', error);
-    return [];
-  }
-};
-
-
-function useQuery(
-  GET_PROVIDER_PATIENTS: DocumentNode,
-  arg1: { variables: { providerId: string } },
-): { loading: any; error: any; data: any } {
-  throw new Error('Function not implemented.');
-}
 async function query({
   fetchPolicy,
   query,

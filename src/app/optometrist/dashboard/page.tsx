@@ -4,48 +4,62 @@ import React from 'react';
 import ReferralsTable from './_components/ReferralsTable';
 import { getLoggedInUser } from '../../../lib/getLoggedInUser';
 import { fetchOrganizationPatients } from '../../api/graphql/queries/patients';
-import { fetchCurrentProviderPatients } from '../../api/graphql/queries/providers';
-import { GET_PROVIDER_PATIENTS, fetchProviderPatients} from '../../api/graphql/queries/providers';
+import { GET_PROVIDER_PATIENTS, fetchProviderPatients } from '../../api/graphql/queries/providers';
 import { useQuery } from '@apollo/client';
 import { fetchUser, fetchUserByEmail } from '../../api/graphql/queries/users';
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+// import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import client from '../../../../src/app/api/_apolloClient/apolloClientServerSide';
+import { User, Patient, Provider } from '../../../constants/types/types';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
 
 
 
 
-interface Patient {
-    id: number;
-    name: string;
-    // Add other patient properties here
-}
-
-interface User {
-    providerId?: string;
-    organizationId?: string;
-    id: string;
-    // Add other user properties here
-}
-
-// const user: User = await getLoggedInUser();
-// console.log("User:", user)
-// const patients = await fetchOrganizationPatients(user?.organizationId);
-// const patients = await fetchCurrentProviderPatients();
-//   const { data, loading, error } = useQuery(GET_PROVIDER_PATIENTS);
-// console.log("dataPatients:",data)
-
-// const patients = await fetchProviderPatients(user?.providerId!);/
-// console.log("ProviderID:", user)
 
 
 
 
 
 const page = async () => {
+    const kindeClient = getKindeServerSession();
+    const user = await kindeClient.getUser();
+
+    // const user: User = await getLoggedInUser();
+    // console.log("User:", user);
+    //  const patients = await fetchOrganizationPatients(user?.organizationId);
+    // // const patients = await fetchCurrentProviderPatients();
+    // //   const { data, loading, error } = useQuery(GET_PROVIDER_PATIENTS);
+    // // // console.log("dataPatients:",data)
+    // const providerId = user?.providerId;
+    // // const patients = user?.providerId ? await fetchProviderPatients(providerId) : [];
+    // // // const patients: Patient[] = providerPatients.map(provider => ({
+    // // //     ...provider,
+    // // //     dob: provider.dob || '', // Ensure dob is provided
+    // // // }));
+    // // // const patients = user?.providerId ? await fetchProviderPatients(providerId) : [];
+    // // console.log("Patient:", patients);
     
-    try {
-//         // Fetch the session
+    let patients: Provider[] = [];
+    
+    // // Check if the user has a providerId before calling fetchProviderPatients
+    // if (user?.providerId) {
+    //   try {
+    //     const providerId = user?.providerId;
+    //     patients = await fetchProviderPatients(providerId);
+    //   } catch (error) {
+    //     console.error("Error fetching provider patients:", error);
+    //     patients = []; // Fallback to an empty array on error
+    //   }
+    // } else {
+    //   console.warn("No providerId found for the user.");
+    // }
+    
+    // console.log("Patients:", patients);
+    
+    // try {
+   
+        // Fetch the session
 //         const {getUser} = getKindeServerSession();
 // const user = await getUser();
 
@@ -98,11 +112,11 @@ const page = async () => {
 
 
 
-    } 
-        catch (error) {
-        console.error("Unexpected error:", error);
-        return <div>Error: Something went wrong</div>;
-    }
+    // } 
+    //     catch (error) {
+    //     console.error("Unexpected error:", error);
+    //     return <div>Error: Something went wrong</div>;
+    // }
 
 
 
@@ -196,7 +210,7 @@ const page = async () => {
 
             <div>
                 <Grid item xs={12}>
-                    {/* <ReferralsTable patientData={patients} orgId={user.organizationId} /> */}
+                    {/* <ReferralsTable patientData={patients} orgId={user.organizationId! || ''} providerId={providerId} /> */}
                 </Grid>
             </div>
         </div>

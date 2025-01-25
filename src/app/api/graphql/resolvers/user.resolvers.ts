@@ -169,10 +169,10 @@ export const userResolver = {
         where: { email },
         include: { organization: true },
       }),
-    provider: async (_parent: User, { providerId }: ProviderArgs, context: Context) =>
-      await context.prisma.provider.findUnique({
-        where: { id: providerId },
-      }),
+    // provider: async (_parent: User, { providerId }: ProviderArgs, context: Context) =>
+    //   await context.prisma.provider.findUnique({
+    //     where: { id: providerId },
+    //   }),
   },
 
   Mutation: {

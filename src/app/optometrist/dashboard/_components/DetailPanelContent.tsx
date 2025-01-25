@@ -65,10 +65,6 @@ const DetailPanelContent = ({
   const [buttonName, setButtonName] = useState<ButtonName | ''>('');
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
 
-
-
-  
-
   const { data: insuranceCompanyData } = useQuery(
     GET_INSURANCE_COMPANIES_BY_ORG,
     { variables: { id: orgId } },

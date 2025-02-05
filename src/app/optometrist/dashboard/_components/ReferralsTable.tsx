@@ -1,11 +1,15 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { eventEmitter } from '../../../_components/EventEmitter';
 import Link from 'next/link';
 import { Patient, Provider } from '../../../../constants/types/types';
 import { Box, Button, LinearProgress } from '@mui/material';
 import Add from '@mui/icons-material/Add';
+import client from '../../../api/_apolloClient/apolloClientServerSide';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+
+
 import {
   DataGridPro,
   // GridFilterModel,
@@ -31,6 +35,7 @@ import { preOpDataColumns } from '../../../../constants/dataGridColumnNames/preO
 import { postOpDataColumns } from '../../../../constants/dataGridColumnNames/postOpDataColumns';
 import { pageTitleHeaderBackgroundColor } from '../../../../lib/css/utils';
 import {GET_PROVIDER_PATIENTS} from '../../../api/graphql/queries/providers';
+import { getLoggedInUser } from 'lib/getLoggedInUser';
 // import { getLoggedInUser } from 'lib/getLoggedInUser';
 
 
@@ -40,8 +45,9 @@ const EditToolbar = () => {
   // console.log("PatientContactColumns:", patientContactColumns)
   
 
+//   const { data, loading, error } = useQuery(GET_PROVIDER_PATIENTS);
 
-
+// console.log("Data:", data)
   
   return (
     <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
@@ -68,25 +74,25 @@ const EditToolbar = () => {
 };
 interface ReferralsTableProps {
   orgId: string;
-  patientData: Provider[];
-  providerId: string;
+  patientData:Patient[];
 
 }
 
 export default function ReferralsTable({
   orgId,
   patientData,
-  providerId
 }: ReferralsTableProps) {
   const [currentPatientData, setCurrentPatientData] =
-    useState<Provider[]>(patientData);
-    const { data: providerData, loading: providerLoading, error: providerError } = useQuery(GET_PROVIDER_PATIENTS, {
-      variables: { providerId },
-    });
+    useState<Patient[]>(patientData);
+    // const { data: providerData, loading: providerLoading, error: providerError } = useQuery(GET_PROVIDER_PATIENTS, {
+    //   variables: { providerId },
+    // });
 
-    console.log("ProviderData:", providerData)
+
+     
+
+    console.log("PatientData:", patientData)
     console.log("OrgId:", orgId)
-    console.log("providerId:", providerId)  
 
   const [deletePatient, { data: deleteData, loading: deleteLoading, error: deleteError }] =
     useMutation(DELETE_PATIENT);
@@ -101,6 +107,9 @@ export default function ReferralsTable({
     [orgId],
   );
 
+
+
+  
   const handleDeleteClick = async (id: string) => {
     deletePatient({
       onCompleted: () => {
@@ -214,3 +223,5 @@ export default function ReferralsTable({
     />
   );
 }
+
+

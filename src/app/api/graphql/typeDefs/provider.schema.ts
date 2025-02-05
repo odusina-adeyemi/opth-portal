@@ -60,7 +60,7 @@ export const typeDef = `#graphql
         providers(state: String, type: String): [Provider]
         provider(id: ID!): Provider
        # providerPatients: [Patient!]!
-        providerPatients(providerId: ID!): [Provider!]!
+        providerPatients: [Patient!]!  # Corrected to return Patient[]
         organizationPatients(orgId: String!): [Patient!]!
         
         

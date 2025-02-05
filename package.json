@@ -38,6 +38,7 @@
     "@vercel/postgres": "^0.10.0",
     "final-form": "^4.20.10",
     "graphql": "^16.8.1",
+    "graphql-request": "^7.1.2",
     "graphql-tools": "^9.0.1",
     "is-email": "^1.0.2",
     "next": "^14.2.11",

@@ -134,52 +134,19 @@ export const GET_CURRENT_PROVIDER_PATIENTS = gql`
   }
 `;
 
+
 export const GET_PROVIDER_PATIENTS = gql`
- query providerPatients($providerId: ID!) {
+  query GetProviderPatients($providerId: ID!) {
     providerPatients(providerId: $providerId) {
       id
       firstName
       lastName
-      patients {
-        id
-        firstName
-        lastName
-        dob
-        referringProviderId
-        postOperations {
-        id
-        transferOfCare
-        transferOfCareDate
-        postOpVisitDate
-        postOpVisitType
-        referralCompleted
-        referralCanceled
-        amountToPayProvider
-        checkNumber
-        paidOptomDate
-        insuranceType
-        reasonNotReferredBack
-        receivedOptomPostOpNotes
-        }
-          preOperations { 
-          id
-          eyesToBeDone
-          delayInSurgery
-          delayReason
-          firstEyeSurgeryDate
-          secondEyeSurgeryDate
-          initialAppointmentCompleted
-          consultationReportSent
-
-
-        }
-
-       }
-     
-     
+      dob
     }
   }
 `;
+
+
 
 export const GET_PROVIDER_PATIENTS_WITH_DETAILS = gql`
   query GetProviderPatients($providerId: String!) {
@@ -261,22 +228,84 @@ const GET_PROVIDER_REVENUE = gql`
 //   }
 // };
 
-export const fetchProviderPatients = async (providerId: string) : Promise<Provider[]> => {
+// export const fetchProviderPatients = async (providerId: string) : Promise<Provider[]> => {
+//   try {
+//     const {
+//       data: { providerPatients },
+//     } = await client.query({
+//       fetchPolicy: 'network-only',
+//       query: GET_PROVIDER_PATIENTS,
+//       variables: { providerId },
+//     });
+//     return providerPatients ?? [];
+    
+//   } catch (error) {
+//     console.error('Error fetching provider patients:', error);
+//     return [];
+//   }
+// };
+
+
+// Function to fetch provider patients (matching the resolver)
+// export const fetchProviderPatients = async (): Promise<Patient[]> => {
+//   try {
+//     const {
+//       data: { provider: { patients: providerPatients } },
+//     } = await query({
+//       fetchPolicy: "network-only",
+//       query: GET_PROVIDER_PATIENTS,
+//       variables: { id: '' }, // Add appropriate id value here
+//     });
+
+//     return providerPatients ?? [];
+//   } catch (error) {
+//     console.error("Error fetching provider patients:", error);
+//     return [];
+//   }
+// };
+
+
+// export const fetchProviderPatients = async (providerId: string): Promise<Patient[]> => {
+//   if (!providerId) throw new Error("Provider ID is required.");
+
+//   try {
+//     const {
+//    data: { provider: { patients: providerPatients } },
+// } = await query({
+//       fetchPolicy: "network-only",
+//       query: GET_PROVIDER_PATIENTS,
+//       variables: { id: providerId }, // Correctly pass providerId as id
+//     });
+
+//     return providerPatients ?? [];
+//   } catch (error) {
+//     console.error("Error fetching provider patients:", error);
+//     return [];
+//   }
+// };
+
+
+export const fetchProviderPatients = async (providerId: string) => {
+  if (!providerId) throw new Error("Provider ID is required.");
+
   try {
     const {
-      data: { providerPatients },
-    } = await client.query({
-      fetchPolicy: 'network-only',
+      data: { provider: { patients: providerPatients } },
+    } = await query({
+      fetchPolicy: "network-only",
       query: GET_PROVIDER_PATIENTS,
-      variables: { providerId },
+      variables: { id: providerId },
     });
+
     return providerPatients ?? [];
-    
   } catch (error) {
-    console.error('Error fetching provider patients:', error);
+    console.error("Error fetching provider patients:", error);
     return [];
   }
 };
+
+
+
 
 export const fetchOrganizationProviders = async (
   organizationId: string,

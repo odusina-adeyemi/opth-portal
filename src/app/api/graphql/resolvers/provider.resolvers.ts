@@ -17,6 +17,7 @@ import {
 import { assert } from 'superstruct';
 import { handleAssertDataValidationError } from '../../../../lib/utils/utils';
 import { PrismaClient } from '@prisma/client';
+import { getLoggedInUser } from 'lib/getLoggedInUser';
 
 interface RevenueCalculation {
   ytdRevenue: number;
@@ -112,150 +113,69 @@ export const providerResolver = {
 
 
 
-      providerPatients: async (
-        _parent: Provider,
-        args: { providerId: string },
-        context: any
-      ) => {
-        try {
-          const { providerId } = args;
-      
-          if (!providerId) {
-            throw new Error("Provider ID is required.");
-          }
-      
-          // Step 1: Fetch the provider and include related patients
-          const provider = await context.prisma.provider.findUnique({
-            where: { providerId },
-            include: {
-              patients: {
-                include: {
-                  preOperations: true,
-                  postOperations: true,
-                 
-                },
+
+
+
+
+
+
+      providerPatients: async (_parent: Provider, _args: Record<string, any>, context: any): Promise<Patient[]> => {
+        // Get the logged-in user from Kinde
+        const loggedInUser = await getLoggedInUser();
+  
+        if (!loggedInUser || !loggedInUser.id) {
+          throw new Error("User not authenticated.");
+        }
+  
+        // Find the provider ID for this user
+        const user = await context.prisma.user.findUnique({
+          where: { email: loggedInUser.email }, // Use email since it's unique
+          include: { provider: true },
+        });
+  
+        if (!user || !user.provider) {
+          throw new Error("Provider not found for this user.");
+        }
+  
+        const providerId = user.providerId;
+  
+        // Get all patients associated with this provider
+        const patients = await context.prisma.patient.findMany({
+          where: { referringProviderId: providerId },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            surgeryType: true,
+            patientContacts: { select: { dateInitialAppointmentScheduled: true } },
+            preOperations: {
+              select: {
+                id: true,
+                initialAppointmentCompleted: true,
+                eyesToBeDone: true,
+                firstEyeSurgeryDate: true,
+                secondEyeSurgeryDate: true,
               },
             },
-          });
-      
-          if (!provider) {
-            throw new Error(`Provider with ID ${providerId} not found.`);
-          }
-      
-         
-
-          const filteredPatients: (Patient & {
-            preOperations: PreOperationData[];
-            postOperations: PostOperation[];
-          })[] = (provider as ProviderWithPatients).patients.filter(
-            (patient) =>
-              patient.preOperations.length > 0 || patient.postOperations.length > 0
-          );
-      
-          return filteredPatients;
-        } catch (error) {
-          console.error("Error in providerPatients resolver:", error);
-          throw new Error("Failed to fetch provider patients.");
-        }
+            postOperations: {
+              select: {
+                id: true,
+                transferOfCare: true,
+                postOpVisitDate: true,
+                amountToPayProvider: true,
+                paidOptomDate: true,
+                receivedOptomPostOpNotes: true,
+              },
+            },
+          },
+        });
+  
+        return patients;
       },
-      
 
 
 
 
-
-      // providerPatients: async (
-      //   _parent: any,
-      //   { providerId }: { providerId: string },
-      //   context: any
-      // ) => {
-      //   try {
-      //     return await context.prisma.patient.findMany({
-      //       where: {
-      //         providers: {
-      //           some: {
-      //             id: "cm679dfsh00005ne52ft832ij", // Match the providerId correctly
-      //           },
-      //         },
-      //       },
-      //       include: {
-      //         preOperations: true,
-      //         postOperations: true,
-      //       },
-      //     });
-      //   } catch (error) {
-      //     console.error("Error fetching provider patients:", error);
-      //     throw new Error("Failed to fetch provider patients.");
-      //   }
-      // },
-
-
-      // providerPatients: async (
-      //   _parent: any,
-      //   { providerId }: { providerId?: string },
-      //   context: any
-      // ) => {
-      //   try {
-      //     const user = context.user;
-      
-      //     if (!user) {
-      //       console.error("No user found in context.");
-      //       throw new Error("User not authenticated.");
-      //     }
-      
-      //     const effectiveProviderId = providerId ?? user.providerId;
-      
-      //     if (!effectiveProviderId) {
-      //       console.error("No provider ID available.");
-      //       throw new Error("Provider ID is required.");
-      //     }
-      
-      //     console.log("Fetching patients for provider ID:", effectiveProviderId);
-      
-      //     const patients = await context.prisma.patient.findMany({
-      //       where: {
-      //         providers: {
-      //           some: {
-      //             id: effectiveProviderId,
-      //           },
-      //         },
-      //       },
-      //       include: {
-      //         preOperations: true,
-      //         postOperations: true,
-      //       },
-      //     });
-      
-      //     console.log("Fetched patients:", patients);
-      //     return patients;
-      //   } catch (error) {
-      //     console.error("Error in providerPatients resolver:", error);
-      //     throw new Error("Failed to fetch provider patients.");
-      //   }
-      // },
-      
-      
-
-    // providerPatients: async (
-    //   _parent: Provider,
-    //   { providerId }: { providerId: string },
-    //   context: any,
-    // ) => {
-    //   return await context.prisma.patient.findMany({
-    //     where: {
-    //       providers: {
-    //         some: {
-    //           id: providerId,
-    //         },
-    //       },
-    //     },
-    //     include: {
-    //       preOperations: true,
-    //       postOperations: true,
-         
-    //     },
-    //   });
-    // },
 
 
     // revenueStats..............

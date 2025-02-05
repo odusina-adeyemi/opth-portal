@@ -8,10 +8,8 @@ import { GET_PROVIDER_PATIENTS, fetchProviderPatients } from '../../api/graphql/
 import { useQuery } from '@apollo/client';
 import { fetchUser, fetchUserByEmail } from '../../api/graphql/queries/users';
 // import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import client from '../../../../src/app/api/_apolloClient/apolloClientServerSide';
-import { User, Patient, Provider } from '../../../constants/types/types';
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-
+import { GraphQLClient, gql } from "graphql-request";
+import { Patient, Provider } from '../../../constants/types/types';
 
 
 
@@ -22,110 +20,33 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
 
 const page = async () => {
-    const kindeClient = getKindeServerSession();
-    const user = await kindeClient.getUser();
-
-    // const user: User = await getLoggedInUser();
-    // console.log("User:", user);
-    //  const patients = await fetchOrganizationPatients(user?.organizationId);
-    // // const patients = await fetchCurrentProviderPatients();
-    // //   const { data, loading, error } = useQuery(GET_PROVIDER_PATIENTS);
-    // // // console.log("dataPatients:",data)
-    // const providerId = user?.providerId;
-    // // const patients = user?.providerId ? await fetchProviderPatients(providerId) : [];
-    // // // const patients: Patient[] = providerPatients.map(provider => ({
-    // // //     ...provider,
-    // // //     dob: provider.dob || '', // Ensure dob is provided
-    // // // }));
-    // // // const patients = user?.providerId ? await fetchProviderPatients(providerId) : [];
-    // // console.log("Patient:", patients);
-    
-    let patients: Provider[] = [];
-    
-    // // Check if the user has a providerId before calling fetchProviderPatients
-    // if (user?.providerId) {
-    //   try {
-    //     const providerId = user?.providerId;
-    //     patients = await fetchProviderPatients(providerId);
-    //   } catch (error) {
-    //     console.error("Error fetching provider patients:", error);
-    //     patients = []; // Fallback to an empty array on error
-    //   }
-    // } else {
-    //   console.warn("No providerId found for the user.");
-    // }
-    
-    // console.log("Patients:", patients);
-    
-    // try {
    
-        // Fetch the session
-//         const {getUser} = getKindeServerSession();
-// const user = await getUser();
+    // const GRAPHQL_ENDPOINT = process.env.GRAPHQL_API_URL as string; // Load from .env
 
-// console.log(user);
-    
-        // if (!user) {
-        //   console.error("user not found!.");
-        //   return <div>Error: User not found!</div>;
-        // }
-    
-    
-     
-    
-
-    
-    //     if (!user) {
-    //       console.log("Fetching user details from the database...");
-    //       const dbUser = await fetchUser(userId);
-    //       if (dbUser && dbUser.providerId) {
-    //         resolvedProviderId = dbUser.providerId;
-    //         resolvedOrganizationId = dbUser.organizationId;
-    //         console.log("Resolved ProviderID from Database:", resolvedProviderId);
-    //       } else {
-    //         console.error("User not found in the database.");
-    //         return <div>Error: User not found in the database</div>;
-    //       }
+    // const fetchProviderPatients = async (): Promise<Patient[]> => {
+    //     if (!GRAPHQL_ENDPOINT) {
+    //       throw new Error("GRAPHQL_API_URL is not set in .env file");
     //     }
-    
-    //     if (!resolvedProviderId) {
-    //       console.error("Provider ID could not be resolved.");
-    //       return <div>Error: Provider ID not found</div>;
+      
+    //     try {
+    //       const client = new GraphQLClient(GRAPHQL_ENDPOINT, {
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //       });
+      
+    //       const data = await client.request<{ providerPatients: Patient[] }>(GET_PROVIDER_PATIENTS);
+    //       return data.providerPatients;
+    //     } catch (error) {
+    //       console.error("Error fetching provider patients:", error);
+    //       return [];
     //     }
-    
-    //     // Fetch provider patients
-    //     console.log("Fetching patients for ProviderID:", resolvedProviderId);
-    //     const { data, errors } = await client.query({
-    //       query: GET_PROVIDER_PATIENTS,
-    //       variables: { providerId: resolvedProviderId },
-    //     });
-    
-    //     if (errors || !data) {
-    //       console.error("Error fetching patients:", errors);
-    //       return <div>Error loading patients</div>;
-    //     }
-    
-    //     const patients = data.providerPatients;
-    //     console.log("Fetched Patients:", patients);
-
-
-
-
-
-    // } 
-    //     catch (error) {
-    //     console.error("Unexpected error:", error);
-    //     return <div>Error: Something went wrong</div>;
-    // }
-
-
-
-    // const user = await getLoggedInUser();    
-    // const patients = await fetchProviderPatients(user?.providerId);
-    // console.log("ProviderID:", user?.provider?.id)
-    // console.log("Patients:", patients)
-
-
+    //   };
+const user = await getLoggedInUser();
+const providerId = user.providerId || '';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+const patients = await fetchProviderPatients(providerId);
+console.log("Patients:", patients);
+// console.log("User:", user);
 
     return (
         <div>
@@ -210,7 +131,7 @@ const page = async () => {
 
             <div>
                 <Grid item xs={12}>
-                    {/* <ReferralsTable patientData={patients} orgId={user.organizationId! || ''} providerId={providerId} /> */}
+                    <ReferralsTable patientData={patients} orgId={user.organizationId || ''}/>
                 </Grid>
             </div>
         </div>

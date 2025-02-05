@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Grid, Tooltip, Typography } from '@mui/material';
 import ButtonGroupPatientData from './ButtonGroupPatientData';
 import {
@@ -23,7 +23,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
+import { useMutation, useQuery, useLazyQuery, ApolloClient, InMemoryCache } from '@apollo/client';
 import { useModal } from '../../../_components/ModalProvider';
 import { useSnackbar } from '../../../_components/SnackbarProvider';
 import {
@@ -48,6 +48,9 @@ import { GET_PATIENT_CONTACT } from '../../../api/graphql/queries/patientContact
 import { GET_PATIENT_PRE_OPERATION } from '../../../api/graphql/queries/preOperations';
 import { GET_PATIENT_POST_OPERATION } from '../../../api/graphql/queries/postOperations';
 import { pageTitleHeaderBackgroundColor } from '../../../../lib/css/utils';
+import client from '../../../api/_apolloClient/apolloClientServerSide';
+import { getLoggedInUser } from 'lib/getLoggedInUser';
+import { gql } from '@apollo/client';
 
 export type ButtonName = 'contact' | 'preop' | 'postop';
  
@@ -60,10 +63,46 @@ const DetailPanelContent = ({
   patientId: GridRowId;
   rowData: GridRowModel;
 }) => {
+ 
+
   const [rows, setRows] = useState<GridValidRowModel[]>([]);
   const [columns, setColumns] = useState<GridColDef[]>([]);
   const [buttonName, setButtonName] = useState<ButtonName | ''>('');
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    const fetchPreOperations = async (patientId: string) => {
+//     if (!patientId) throw new Error("Patient ID is required.");
+  
+//     try {
+//       const {
+//         data: { patientPreOperation },
+//       } = await client.query({
+//         fetchPolicy: "network-only",
+//         query: GET_PATIENT_PRE_OPERATION,
+//         variables: { patientId },
+//       });
+  
+//       return patientPreOperation ?? null;
+//     } catch (error) {
+//       console.error(`Error fetching pre-operation data for patient ${patientId}:`, error);
+//       return null;
+//     }
+//   };
+
+
 
   const { data: insuranceCompanyData } = useQuery(
     GET_INSURANCE_COMPANIES_BY_ORG,
